@@ -17,4 +17,8 @@ if [ -z "$flake8_result" ]; then
         exit 0  # always succeed so commit can proceed
     fi
 else
-     echo "flake8 FAILED with return val
+     echo "flake8 FAILED with return value: $flake8_result"
+     exit 0  # always succeed so commit can proceed
+fi
+
+
