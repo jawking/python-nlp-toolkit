@@ -196,4 +196,30 @@ html_static_path = ['_static']
 htmlhelp_basename = ''pug'-doc'
 
 
-# -- Options for LaTeX output -------------------------------------------------
+# -- Options for LaTeX output --------------------------------------------------
+
+latex_elements = {
+# The paper size ('letterpaper' or 'a4paper').
+# 'papersize': 'letterpaper',
+
+# The font size ('10pt', '11pt' or '12pt').
+# 'pointsize': '10pt',
+
+# Additional stuff for the LaTeX preamble.
+# 'preamble': '',
+}
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title, author, documentclass [howto/manual]).
+latex_documents = [
+  ('index', 'user_guide.tex', u'pug-nlp Documentation',
+   u'Hobson Lane', 'manual'),
+]
+
+# The name of an image file (relative to this directory) to place at the top of
+# the title page.
+# latex_logo = ""
+
+# For "manual" documents, if this is true, then toplevel headings are parts,
+# not chapters.
+# latex_use_parts = Fals
