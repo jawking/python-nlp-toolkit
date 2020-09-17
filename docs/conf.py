@@ -178,4 +178,22 @@ html_static_path = ['_static']
 # If true, links to the reST sources are added to the pages.
 # html_show_sourcelink = True
 
-# If true, "Creat
+# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
+# html_show_sphinx = True
+
+# If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
+# html_show_copyright = True
+
+# If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+# html_use_opensearch = ''
+
+# This is the file name suffix for HTML files (e.g. ".xhtml").
+# html_file_suffix = None
+
+# Output file base name for HTML help builder.
+htmlhelp_basename = ''pug'-doc'
+
+
+# -- Options for LaTeX output -------------------------------------------------
