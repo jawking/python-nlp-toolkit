@@ -1939,4 +1939,26 @@
                             
                             
                         </h3>
-                    <
+                    </div>
+                    
+              </div>
+            </article>
+    </section>
+
+    <script>
+      // Provide your access token
+      L.mapbox.accessToken = 'pk.eyJ1IjoiaGVsZW5zdCIsImEiOiJiZmZhYjYxMzc1ZGMzNmI3MjdlNmNkMTQ0MGJkZDdmNyJ9.6mfnxn0mORV5Gt73x_smtg'
+      // Create a map in the div #map
+      var map = L.mapbox.map('map', 'mapbox.dark').setView([30, 0], 2);
+      var geekIcon = L.icon({
+          iconUrl: '../assets/images/mapmarker.png',
+          iconSize:     [36, 36],
+          iconAnchor:   [18, 36],
+          popupAnchor:  [0, -36]
+      });
+      
+      
+          L.marker([52.374436, 4.89799560337], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+  
