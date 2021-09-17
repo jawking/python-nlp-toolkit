@@ -2012,4 +2012,31 @@
       
           L.marker([-24.7761086, 134.755], {
             icon: geekIcon,
-          }).addTo(map).bindPopu
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Australia"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([12.9791703, 77.5912429], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Bangalore, India"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([-19.912998, -43.940933], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+   
