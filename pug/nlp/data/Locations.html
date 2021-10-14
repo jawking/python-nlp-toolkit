@@ -2065,4 +2065,29 @@
           L.marker([42.3604823, -71.0595678], {
             icon: geekIcon,
           }).addTo(map).bindPopup(
-          
+            '<div class="social">' +
+            $('[data-chapter-name="Boston, MA"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([-15.7941454, -47.8825479], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Brasilia, Brazil"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([-10.3333333, -53.2], {
+            icon: geekIcon,
+          }).addTo(m
