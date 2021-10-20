@@ -2167,4 +2167,30 @@
       
       
           L.marker([-25.4167, -49.25], {
-            icon: g
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Curitiba, Brazil"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([32.7776162, -96.7970585], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Dallas, TX"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([53.3497645, -6.2602732], {
+         
