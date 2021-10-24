@@ -2271,4 +2271,32 @@
       
       
           L.marker([35.0117, 135.7683], {
-            icon: g
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Kyoto"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([51.507222, -0.1275], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="London, UK"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([34.053717, -118.2427266], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<di
