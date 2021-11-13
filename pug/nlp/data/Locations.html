@@ -2536,4 +2536,31 @@
             '<div class="social">' +
             $('[data-chapter-name="San Diego, CA"]').html() +
             '</div>', {
-              maxWidth: 3
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([37.7792768, -122.4192704], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="San Francisco, CA"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([-22.0087175, -47.8909142], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Sao Carlos, Brazil"]').html() +
+            '</div>', {
+              maxWidth: 375,
+  
