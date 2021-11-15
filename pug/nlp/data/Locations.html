@@ -2700,4 +2700,29 @@
       
       
           L.marker([-23.2237, -45.9009], {
-         
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Vale do Paraíba, Brazil"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([49.2608944, -123.1139383], {
+            icon: geekIcon,
+          }).addTo(map).bindPopup(
+            '<div class="social">' +
+            $('[data-chapter-name="Vancouver, Canada"]').html() +
+            '</div>', {
+              maxWidth: 375,
+              minWidth: 375
+            }
+          );
+        
+      
+      
+          L.marker([48.208
