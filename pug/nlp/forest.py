@@ -226,3 +226,200 @@ def get_width(tree):
 
 def get_depth(tree):
     '''Walk a tree to get it's maximum depth (a nonnegative integer)'''
+    if tree.tb == None and tree.fb == None:
+        return 0
+    if tree is None:
+        return None
+    return max(get_depth(tree.tb), get_depth(tree.fb)) + 1
+
+
+def variance(qs, field):
+    if len(qs) == 0:
+        return 0
+    column = qs.values(field)
+    # FIXME: use ORM `Sum()` and `count()` and look for a Variance function (or create one?)
+    data = [float(row[field]) for row in column]
+    mean = sum(data) / len(data)
+    variance = sum([(d - mean) ** 2 for d in data]) / len(data)
+    return variance
+
+
+def get(obj, key, default=None):
+    '''Get a numbered element from a sequence or dict, or the attribute of an object'''
+    if isinstance(obj, dict):
+        if isinstance(key, int):
+            try:
+                return obj.get(sorted(tuple(obj))[key], default)
+            except:
+                pass
+        try:
+            return obj.get(key, default)
+        except:
+            pass
+    try:
+        # integer key and sequence (list) object
+        return obj[key]
+    except:
+        return obj.getattr(key, default)
+
+
+def grow(qs, include_fields_list = [['wikiitem__modified', 'wikiitem__title'],['wikiitem__modified', 'wikiitem__title']]):
+
+    tree_list = []
+    fields = ['dispatch_status']
+    qs_kwargs_list = [
+            # quick test (small portion of database)
+            {'id__gt':0, 'id__lt': 1000},
+        ]
+    # each row is a different tree in the forest
+    
+
+    for i, field in enumerate(fields):
+        for j, qs_kwargs in enumerate(qs_kwargs_list):
+            for k, include_fields in enumerate(include_fields_list):
+                print
+                print '=' * 80
+                print "Attempt to predict: %s" % field
+                print "Limit database to: %s" % qs_kwargs
+                print "Indicator variables: %s" % include_fields
+                qs = qs.filter(**qs_kwargs)
+                print "Fitting to %s records." % qs.count()
+                print '-' * 80
+                tree = build_tree(qs, field=field, include_fields=include_fields + [field])
+                tree_list += [tree]
+                print_tree(tree)
+                print '-' * 80
+                draw_tree(tree, 'tree_%s_%s_%s.jpg' % (i, j, k))
+                with open('tree_%s_%s_%s.pickle' % (i, j, k), 'wb') as fpout:
+                    pickle.dump(tree, fpout)
+                with open('tree_%s_%s_%s.txt' % (i, j, k), 'wb') as fpout:
+                    fpout.write(represent_tree(tree))
+
+    return tree_list
+
+
+
+############################################################################
+## tree/network/graph plotting routines
+## for use with decision trees generated in forest.py
+
+
+# def draw_tree(tree, path='tree.jpg'):
+#     w = get_width(tree) * 100
+#     h = get_depth(tree) * 100 + 120
+
+#     img = Image.new('RGB',(w, h),(255,255,255))
+#     draw = ImageDraw.Draw(img)
+
+#     draw_node(draw, tree, w / 2,20)
+#     img.save(path,'JPEG')
+
+
+def draw_node(draw, tree, x, y):
+    if tree.results == None:
+        # Get the width of each branch
+        w1 = get_width(tree.fb) * 100
+        w2 = get_width(tree.tb) * 100
+
+        # Determine the total space required by this node
+        left = x - (w1 + w2) / 2
+        right = x + (w1 + w2) / 2
+
+        # Draw the condition string
+        draw.text((x - 20, y - 10), str(tree.col) + ':' + str(tree.value),(0,0,0))
+
+        # Draw links to the branches
+        draw.line((x, y, left + w1 / 2, y + 100), fill = (255,0,0))
+        draw.line((x, y, right - w2 / 2, y + 100), fill = (255,0,0))
+
+        # Draw the branch nodes
+        draw_node(draw, tree.fb, left + w1 / 2, y + 100)
+        draw_node(draw, tree.tb, right - w2 / 2, y + 100)
+    else:
+        txt = ' \n'.join(['%s:%d'%v for v in tree.results.items()])
+        draw.text((x - 20, y), txt,(0,0,0))
+
+
+def classify(observation, tree):
+    if tree.results != None:
+        return tree.results
+    else:
+        v = observation[tree.col]
+        branch = None
+        if isinstance(v, int) or isinstance(v, float):
+            if v >= tree.value: branch = tree.tb
+            else: branch = tree.fb
+        else:
+            if v == tree.value: branch = tree.tb
+            else: branch = tree.fb
+        return classify(observation, branch)
+
+def prune(tree, mingain):
+    # If the branches aren't leaves, then prune them
+    if tree.tb.results == None:
+        prune(tree.tb, mingain)
+    if tree.fb.results == None:
+        prune(tree.fb, mingain)
+        
+    # If both the subbranches are now leaves, see if they
+    # should merged
+    if tree.tb.results != None and tree.fb.results != None:
+        # Build a combined dataset
+        tb, fb = [],[]
+        for v, c in tree.tb.results.items():
+            tb += [[v]] * c
+        for v, c in tree.fb.results.items():
+            fb += [[v]] * c
+        
+        # Test the reduction in entropy
+        delta = entropy(tb + fb) - (entropy(tb) + entropy(fb) / 2)
+
+        if delta < mingain:
+            # Merge the branches
+            tree.tb, tree.fb = None, None
+            tree.results = count_unique(tb + fb)
+
+
+def mdclassify(observation, tree):
+    if tree.results != None:
+        return tree.results
+    else:
+        v = observation[tree.col]
+        if v == None:
+            tr, fr = mdclassify(observation, tree.tb), mdclassify(observation, tree.fb)
+            tcount = sum(tr.values())
+            fcount = sum(fr.values())
+            tw = float(tcount) / (tcount + fcount)
+            fw = float(fcount) / (tcount + fcount)
+            result = {}
+            for k, v in tr.items():
+                result[k] = v*tw
+            for k, v in fr.items():
+                result[k] = v*fw            
+            return result
+        else:
+            if isinstance(v, int) or isinstance(v, float):
+                if v >= tree.value:
+                    branch = tree.tb
+                else:
+                    branch = tree.fb
+            else:
+                if v == tree.value:
+                    branch = tree.tb
+                else:
+                    branch = tree.fb
+            return mdclassify(observation, branch)
+
+
+
+# def get(obj, key, default=None):
+#     try:
+#         # integer key and sequence (list) object
+#         return obj[key]
+#     except:
+#         if isinstance(obj, dict):
+#             try:
+#                 return obj.get(key, default)
+#             except:
+#                 return obj.get(tuple(obj)[key], default) 
+#     return obj.getattr(key, default)
