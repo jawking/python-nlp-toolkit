@@ -674,3 +674,70 @@ def clean_utf8(byte_seq, carefully=False,
         default: = ['shift-jis', 'ISO-8859-2', 'utf8', 'shift-jis-2004', 'CP-1252', 'iso-8859-1', 'utf16']
           'shift-jis': Japanese corporate data in MS SQL databases is often encoded in Shift JIS
           'CP1252' : Legacy microsoft windows SQLServer that seems to work for u'\xff\xfe' line terminations
+          'SQL_Latin1_General_CP1_CI_AS': no python codec for this case-insensitive mix of CP-1252 and UTF-8 common among Japanese corporations
+          'iso-8859-1' : MS SQL Server default encoding (before 2008)
+          'iso-8859-2' : MS SQL Server default encoding (before 2012)
+
+    '''
+    # Examples:
+    #   >>> clean_utf8('`A\xff\xffBC\x7fD\tE\r\nF~G`')
+    #   '`A\xc3\xbf\xc3\xbfBC\x7fD\tE\r\nF~G`'
+    #   >>> clean_utf8('`A\xff\xffBC\x7fD\tE\r\nF~G`').decode('UTF8')
+    #   u'`A\xff\xffBC\x7fD\tE\r\nF~G`'
+    #   >>> clean_utf8('`A\xff\xffBC\x7fD\tE\r\nF~G`', carefully=True)
+    #   '`ABC\x7fD\tE\r\nF~G`'
+    #   >>> clean_utf8('U\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2').decode('UTF8')
+    # '''
+    # print 'cleaning: ' + repr(byte_seq)
+    if not isinstance(byte_seq, basestring):
+        return byte_seq
+    for i, enc in enumerate(encodings_to_try):
+        try:
+            return unicode(byte_seq.decode(enc)).encode('utf8')
+        except UnicodeDecodeError:
+            if verbosity > 1:
+                print("Unable to short-circuit clean_utf8 function with `try: string.decode({0})` for the string:\n{1}".format(enc, byte_seq))
+    if carefully:
+        while True:
+            try:
+                byte_seq.decode('utf8')
+                # json.dumps(byte_seq)
+                break
+            except UnicodeDecodeError as e:
+                    if verbosity > 0:
+                        print('UnicodeDecodeError: {}'.format(format_exc()))
+                    m = re.match(r".*can't[ ]decode[ ]byte[ ]0x[0-9a-fA-F]{2}[ ]in[ ]position[ ](\d+)[ :.].*", str(e))
+                    if m and m.group(1):
+                        i = int(m.group(1))
+                        byte_seq = byte_seq[:i] + byte_seq[i + 1:]
+                    else:
+                        raise
+            except UnicodeEncodeError:
+                if verbosity > 0:
+                    'cleaned carefully and got UnicodeEncodeError, left with: %r' % unicode(byte_seq)
+                return unicode(byte_seq)
+        if verbosity > 0:
+            'cleaned carefully and came up with: %r' % unicode(byte_seq)
+        return byte_seq
+    else:
+        diagnosis = {'encoding': None, 'confidence': -1}
+        try:
+            diagnosis = chardet.detect(byte_seq)
+        except:
+            if verbosity > 0:
+                from traceback import print_exc
+                print_exc()
+        if verbosity > 0:
+            print(diagnosis)
+        if diagnosis['confidence'] > 0.25:
+            try:
+                # FIXME: should this be unicode instead of str?
+                return unicode(byte_seq.decode(diagnosis['encoding']).encode('utf8'))
+            except:
+                pass
+        for encoding in encodings_to_try[1:]:
+            try:
+                return unicode(byte_seq.decode(encoding).encode('utf8'))
+            except:
+                pass
+        return clean_utf8(byte_seq, carefully=True)
