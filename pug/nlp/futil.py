@@ -53,4 +53,22 @@ def walk_level(path, level=1):
     elif os.path.isfile(path):
         yield os.path.dirname(path), [], [os.path.basename(path)]
     else:
-        raise RuntimeError("Can't find a valid folder or file for path {0}".format(repr(
+        raise RuntimeError("Can't find a valid folder or file for path {0}".format(repr(path)))
+
+
+def path_status(path, filename='', status=None, verbosity=0):
+    """ Retrieve the access, modify, and create timetags for a path along with its size
+
+    Arguments:
+        path (str): full path to the file or directory to be statused
+        status (dict): optional existing status to be updated/overwritten with new status values
+
+    Returns:
+        dict: {'size': bytes (int), 'accessed': (datetime), 'modified': (datetime), 'created': (datetime)}
+    """
+    status = status or {}
+    if not filename:
+        dir_path, filename = os.path.split()  # this will split off a dir and as `filename` if path doesn't end in a /
+    else:
+        dir_path = path
+    full_path = os.path.join(dir_path, fi
