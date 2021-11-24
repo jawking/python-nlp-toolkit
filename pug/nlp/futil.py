@@ -71,4 +71,18 @@ def path_status(path, filename='', status=None, verbosity=0):
         dir_path, filename = os.path.split()  # this will split off a dir and as `filename` if path doesn't end in a /
     else:
         dir_path = path
-    full_path = os.path.join(dir_path, fi
+    full_path = os.path.join(dir_path, filename)
+    if verbosity > 1:
+        print(full_path)
+    status['name'] = filename
+    status['path'] = full_path
+    status['dir'] = dir_path
+    status['type'] = []
+    try:
+        status['size'] = os.path.getsize(full_path)
+        status['accessed'] = datetime.datetime.fromtimestamp(os.path.getatime(full_path))
+        status['modified'] = datetime.datetime.fromtimestamp(os.path.getmtime(full_path))
+        status['created'] = datetime.datetime.fromtimestamp(os.path.getctime(full_path))
+        status['mode'] = os.stat(full_path).st_mode   # first 3 digits are User, Group, Other permissions: 1=execute,2=write,4=read
+        if os.path.ismount(full_path):
+            status['type'] += ['mount-poi
