@@ -38,4 +38,19 @@ def walk_level(path, level=1):
 
     Examples:
       >>> root = os.path.dirname(__file__)
-      >>> all((os.path.join
+      >>> all((os.path.join(base,d).count('/')==(root.count('/')+1)) for (base, dirs, files) in walk_level(root, level=0) for d in dirs)
+      True
+    """
+    if level is None:
+        level = float('inf')
+    path = path.rstrip(os.path.sep)
+    if os.path.isdir(path):
+        root_level = path.count(os.path.sep)
+        for root, dirs, files in os.walk(path):
+            yield root, dirs, files
+            if root.count(os.path.sep) >= root_level + level:
+                del dirs[:]
+    elif os.path.isfile(path):
+        yield os.path.dirname(path), [], [os.path.basename(path)]
+    else:
+        raise RuntimeError("Can't find a valid folder or file for path {0}".format(repr(
