@@ -102,3 +102,22 @@ def path_status(path, filename='', status=None, verbosity=0):
             elif os.stat.S_ISFIFO(status['mode']):
                 status['type'] += ['pipe']
         if not status['type']:
+            status['type'] += ['unknown']
+        elif status['type'] and status['type'][-1] == 'symlink':
+            status['type'] += ['broken']
+    except OSError:
+        status['type'] = ['nonexistent'] + status['type']
+        if verbosity > -1:
+            warnings.warn("Unable to stat path '{}'".format(full_path))
+    status['type'] = '->'.join(status['type'])
+
+    return status
+
+
+def find_files(path='', ext='', level=None, typ=list, dirs=False, files=True, verbosity=0):
+    """ Recursively find all files in the indicated directory
+
+    Filter by the indicated file name extension (ext)
+
+    Args:
+      path (str):  Root/base path to sea
