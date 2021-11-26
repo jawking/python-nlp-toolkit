@@ -120,4 +120,13 @@ def find_files(path='', ext='', level=None, typ=list, dirs=False, files=True, ve
     Filter by the indicated file name extension (ext)
 
     Args:
-      path (str):  Root/base path to sea
+      path (str):  Root/base path to search.
+      ext (str):   File name extension. Only file paths that ".endswith()" this string will be returned
+      level (int, optional): Depth of file tree to halt recursion at.
+        None = full recursion to as deep as it goes
+        0 = nonrecursive, just provide a list of files at the root level of the tree
+        1 = one level of depth deeper in the tree
+      typ (type):  output type (default: list). if a mapping type is provided the keys will be the full paths (unique)
+      dirs (bool):  Whether to yield dir paths along with file paths (default: False)
+      files (bool): Whether to yield file paths (default: True)
+        `dirs=Tru
