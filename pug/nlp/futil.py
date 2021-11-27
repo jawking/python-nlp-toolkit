@@ -129,4 +129,15 @@ def find_files(path='', ext='', level=None, typ=list, dirs=False, files=True, ve
       typ (type):  output type (default: list). if a mapping type is provided the keys will be the full paths (unique)
       dirs (bool):  Whether to yield dir paths along with file paths (default: False)
       files (bool): Whether to yield file paths (default: True)
-        `dirs=Tru
+        `dirs=True`, `files=False` is equivalent to `ls -d`
+
+    Returns:
+      list of dicts: dict keys are { 'path', 'name', 'bytes', 'created', 'modified', 'accessed', 'permissions' }
+        path (str): Full, absolute paths to file beneath the indicated directory and ending with `ext`
+        name (str): File name only (everythin after the last slash in the path)
+        size (int): File size in bytes
+        created (datetime): File creation timestamp from file system
+        modified (datetime): File modification timestamp from file system
+        accessed (datetime): File access timestamp from file system
+        permissions (int): File permissions bytes as a chown-style integer with a maximum of 4 digits
+        t
