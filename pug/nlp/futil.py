@@ -140,4 +140,17 @@ def find_files(path='', ext='', level=None, typ=list, dirs=False, files=True, ve
         modified (datetime): File modification timestamp from file system
         accessed (datetime): File access timestamp from file system
         permissions (int): File permissions bytes as a chown-style integer with a maximum of 4 digits
-        t
+        type (str): One of 'file', 'dir', 'symlink->file', 'symlink->dir', 'symlink->broken'
+          e.g.: 777 or 1755
+
+    Examples:
+      >>> 'util.py' in [d['name'] for d in find_files(os.path.dirname(__file__), ext='.py', level=0)]
+      True
+      >>> (d for d in find_files(os.path.dirname(__file__), ext='.py') if d['name'] == 'util.py').next()['size'] > 1000
+      True
+
+      There should be an __init__ file in the same directory as this script.
+      And it should be at the top of the list.
+      >>> sorted(d['name'] for d in find_files(os.path.dirname(__file__), ext='.py', level=0))[0]
+      '__init__.py'
+      >>> all(d['type'] in ('file','dir','symlink->file','symlink->dir','mount-poi
