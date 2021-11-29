@@ -153,4 +153,20 @@ def find_files(path='', ext='', level=None, typ=list, dirs=False, files=True, ve
       And it should be at the top of the list.
       >>> sorted(d['name'] for d in find_files(os.path.dirname(__file__), ext='.py', level=0))[0]
       '__init__.py'
-      >>> all(d['type'] in ('file','dir','symlink->file','symlink->dir','mount-poi
+      >>> all(d['type'] in ('file','dir','symlink->file','symlink->dir','mount-point->file','mount-point->dir','block-device',
+                            'symlink->broken','pipe','special','socket','unknown') for d in find_files(level=1, files=True, dirs=True))
+      True
+      >>> os.path.join(os.path.dirname(__file__), '__init__.py') in find_files(
+      ... os.path.dirname(__file__), ext='.py', level=0, typ=dict)
+      True
+    """
+    gen = generate_files(path, ext=ext, level=level, dirs=dirs, files=files, verbosity=verbosity)
+    if isinstance(typ(), Mapping):
+        return typ((ff['path'], ff) for ff in gen)
+    elif typ is not None:
+        return typ(gen)
+    else:
+        return gen
+
+
+def generate_files(path='
