@@ -169,4 +169,16 @@ def find_files(path='', ext='', level=None, typ=list, dirs=False, files=True, ve
         return gen
 
 
-def generate_files(path='
+def generate_files(path='', ext='', level=None, dirs=False, files=True, verbosity=0):
+    """ Recursively generate files (and thier stats) in the indicated directory
+
+    Filter by the indicated file name extension (ext)
+
+    Args:
+      path (str):  Root/base path to search.
+      ext (str):   File name extension. Only file paths that ".endswith()" this string will be returned
+      level (int, optional): Depth of file tree to halt recursion at.
+        None = full recursion to as deep as it goes
+        0 = nonrecursive, just provide a list of files at the root level of the tree
+        1 = one level of depth deeper in the tree
+      typ (type):  output type (default: list). if a mapping type is provide
