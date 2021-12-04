@@ -181,4 +181,14 @@ def generate_files(path='', ext='', level=None, dirs=False, files=True, verbosit
         None = full recursion to as deep as it goes
         0 = nonrecursive, just provide a list of files at the root level of the tree
         1 = one level of depth deeper in the tree
-      typ (type):  output type (default: list). if a mapping type is provide
+      typ (type):  output type (default: list). if a mapping type is provided the keys will be the full paths (unique)
+      dirs (bool):  Whether to yield dir paths along with file paths (default: False)
+      files (bool): Whether to yield file paths (default: True)
+        `dirs=True`, `files=False` is equivalent to `ls -d`
+
+    Returns:
+      list of dicts: dict keys are { 'path', 'name', 'bytes', 'created', 'modified', 'accessed', 'permissions' }
+        path (str): Full, absolute paths to file beneath the indicated directory and ending with `ext`
+        name (str): File name only (everythin after the last slash in the path)
+        size (int): File size in bytes
+        created (datetime): File creation timestamp from 
