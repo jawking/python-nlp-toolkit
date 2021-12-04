@@ -191,4 +191,17 @@ def generate_files(path='', ext='', level=None, dirs=False, files=True, verbosit
         path (str): Full, absolute paths to file beneath the indicated directory and ending with `ext`
         name (str): File name only (everythin after the last slash in the path)
         size (int): File size in bytes
-        created (datetime): File creation timestamp from 
+        created (datetime): File creation timestamp from file system
+        modified (datetime): File modification timestamp from file system
+        accessed (datetime): File access timestamp from file system
+        permissions (int): File permissions bytes as a chown-style integer with a maximum of 4 digits
+        type (str): One of 'file', 'dir', 'symlink->file', 'symlink->dir', 'symlink->broken'
+          e.g.: 777 or 1755
+
+    Examples:
+      >>> 'util.py' in [d['name'] for d in generate_files(os.path.dirname(__file__), ext='.py', level=0)]
+      True
+      >>> (d for d in generate_files(os.path.dirname(__file__), ext='.py') if d['name'] == 'util.py').next()['size'] > 1000
+      True
+      >>> sorted(generate_files().next().keys())
+    
