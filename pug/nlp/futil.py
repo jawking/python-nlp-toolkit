@@ -204,4 +204,14 @@ def generate_files(path='', ext='', level=None, dirs=False, files=True, verbosit
       >>> (d for d in generate_files(os.path.dirname(__file__), ext='.py') if d['name'] == 'util.py').next()['size'] > 1000
       True
       >>> sorted(generate_files().next().keys())
-    
+      ['accessed', 'created', 'dir', 'mode', 'modified', 'name', 'path', 'size', 'type']
+
+      There should be an __init__ file in the same directory as this script.
+      And it should be at the top of the list.
+      >>> sorted(d['name'] for d in generate_files(os.path.dirname(__file__), ext='.py', level=0))[0]
+      '__init__.py'
+      >>> sorted(list(generate_files())[0].keys())
+      ['accessed', 'created', 'dir', 'mode', 'modified', 'name', 'path', 'size', 'type']
+      >>> all(d['type'] in ('file','dir','symlink->file','symlink->dir','mount-point->file','mount-point->dir','block-device','symlink->broken',
+      ...                   'pipe','special','socket','unknown')
+      ... for d in generate_files(level=1, 
