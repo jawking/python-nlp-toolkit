@@ -214,4 +214,23 @@ def generate_files(path='', ext='', level=None, dirs=False, files=True, verbosit
       ['accessed', 'created', 'dir', 'mode', 'modified', 'name', 'path', 'size', 'type']
       >>> all(d['type'] in ('file','dir','symlink->file','symlink->dir','mount-point->file','mount-point->dir','block-device','symlink->broken',
       ...                   'pipe','special','socket','unknown')
-      ... for d in generate_files(level=1, 
+      ... for d in generate_files(level=1, files=True, dirs=True))
+      True
+    """
+    path = path or './'
+    ext = str(ext).lower()
+
+    for dir_path, dir_names, filenames in walk_level(path, level=level):
+        if verbosity > 0:
+            print('Checking path "{}"'.format(dir_path))
+        if files:
+            for fn in filenames:  # itertools.chain(filenames, dir_names)
+                if ext and not fn.lower().endswith(ext):
+                    continue
+                yield path_status(dir_path, fn, verbosity=verbosity)
+        if dirs:
+            # TODO: warn user if ext and dirs both set
+            for fn in dir_names:
+                if ext and not fn.lower().endswith(ext):
+                    continue
+                yield p
