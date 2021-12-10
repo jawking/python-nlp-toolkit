@@ -233,4 +233,29 @@ def generate_files(path='', ext='', level=None, dirs=False, files=True, verbosit
             for fn in dir_names:
                 if ext and not fn.lower().endswith(ext):
                     continue
-                yield p
+                yield path_status(dir_path, fn, verbosity=verbosity)
+
+    # if verbosity > 1:
+    #     print files_found
+    # return files_found
+
+
+def find_dirs(*args, **kwargs):
+    kwargs['files'] = kwargs.get('files', False)
+    kwargs.update({'dirs': True})
+    return find_files(*args, **kwargs)
+
+
+def mkdir_p(path):
+    """`mkdir -p` functionality (don't raise exception if path exists)
+
+    Make containing directory and parent directories in `path`, if they don't exist.
+
+    Arguments:
+      path (str): Full or relative path to a directory to be created with mkdir -p
+
+    Returns:
+      str: 'pre-existing' or 'new'
+
+    References:
+      http://stackov
