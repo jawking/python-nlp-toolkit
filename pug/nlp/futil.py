@@ -258,4 +258,27 @@ def mkdir_p(path):
       str: 'pre-existing' or 'new'
 
     References:
-      http://stackov
+      http://stackoverflow.com/a/600612/623735
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno == errno.EEXIST and os.path.isdir(path):
+            return 'pre-existing'
+        else:
+            raise
+    return 'new'
+
+
+def sudo_yield_file_lines(file_path='/etc/NetworkManager/system-connections/*'):
+    r"""Cat a file iterating/yielding one line at a time,
+
+    shell will exeucte: `sudo cat $file_path` so if your shell doesn't have sudo or cat, no joy
+    Input:
+      file_path(str): glob stars are fine
+
+    >> for line in sudo_yield_file_lines('/etc/NetworkManager/system-connections/*')
+
+
+    """
+    # substitute your Windoze/DOS/PowerlessShell com
