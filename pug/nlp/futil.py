@@ -317,4 +317,13 @@ def ssid_password(source='/etc/NetworkConnections/system-connections', ext=''):
         psk = source.get('wifi-security', 'psk') if source.has_option('wifi-security', 'psk') else None
         return (ssid or os.path.basename(source), psk or '')
     elif os.path.isdir(source):
-        return dict([ssid_pass
+        return dict([ssid_password(meta['path']) for meta in find_files(source, ext=ext)])
+    elif os.path.isfile(source) or callable(getattr(source, 'read', None)):
+        config = ConfigParser()
+        if hasattr(source, 'read'):
+            config.read_file(source)
+        else:
+            config.read(source)
+        return ssid_password(config)
+    elif isinstance(source, basestring):
+        return ssid_password(StringIO(source))
