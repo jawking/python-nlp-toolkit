@@ -300,4 +300,21 @@ def sudo_iter_file_lines(file_path):
             self.process = subprocess.Popen(self.cat_cmd, stdout=subprocess.PIPE, shell=True)
 
         def __iter__(self):
-            # __iter__ returns an `iterator` instance. 
+            # __iter__ returns an `iterator` instance. having an __iter__ make this class `iterable`
+            return self
+
+        def next(self):
+            # substitute your Windoze/DOS/PowerlessShell command here:
+            return self.process.stdout.readline()
+            # raise StopIteration()
+
+    return FileLineIterable(file_path)
+
+
+def ssid_password(source='/etc/NetworkConnections/system-connections', ext=''):
+    if isinstance(source, ConfigParser):
+        ssid = source.get('wifi', 'ssid') if source.has_option('wifi', 'ssid') else None
+        psk = source.get('wifi-security', 'psk') if source.has_option('wifi-security', 'psk') else None
+        return (ssid or os.path.basename(source), psk or '')
+    elif os.path.isdir(source):
+        return dict([ssid_pass
