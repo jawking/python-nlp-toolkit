@@ -281,4 +281,23 @@ def sudo_yield_file_lines(file_path='/etc/NetworkManager/system-connections/*'):
 
 
     """
-    # substitute your Windoze/DOS/PowerlessShell com
+    # substitute your Windoze/DOS/PowerlessShell command here:
+    sudo_cat_cmd = 'sudo cat {}'.format(file_path)
+
+    process = subprocess.Popen(sudo_cat_cmd, stdout=subprocess.PIPE, shell=True)
+    # read one line at a time, as it becomes available
+    for line in iter(process.stdout.readline, ''):
+        yield line
+
+
+def sudo_iter_file_lines(file_path):
+
+    class FileLineIterable:
+
+        def __init__(self, file_path=file_path):
+            self.file_path = file_path
+            self.cat_cmd = 'sudo cat {}'.format(self.file_path)
+            self.process = subprocess.Popen(self.cat_cmd, stdout=subprocess.PIPE, shell=True)
+
+        def __iter__(self):
+            # __iter__ returns an `iterator` instance. 
