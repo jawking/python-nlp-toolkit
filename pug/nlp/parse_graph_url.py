@@ -50,4 +50,20 @@ def node_name_dictionaries(edges):
     node_names_only = []
     for edge in edges:
         node_names_only += [node_name(edge['source'])['name'], node_name(edge['target'])['name']]
-    node_names = list(
+    node_names = list(set(node_names_only))
+    new_nodes, old_nodes = {}, {}
+    for new, old in enumerate(node_names):
+        new_nodes[old] = new
+        old_nodes[new] = old
+    return old_nodes, new_nodes
+
+
+def node_name_lists(edge_list):
+    """
+    Return 2 lists that retain the order of nodes mentioned in the edges list: a list of full names and a list of cleaned names.
+
+    node_name_lists([{'source': 'Origin,2.7, 3 ', 'target': 'Destination,1,2', 'value': 9}, {'source': 'Origin,4', 'target': 'New', 'value': 1}])
+    (['Origin,2.7, 3 ', 'Destination,1,2', 'New'], ['Origin', 'Destination', 'New'])
+    """
+    node_names_only, node_full_names = [], []
+    for edge in edge_lis
