@@ -17,4 +17,24 @@ def node_name(name, use_defaults=False):
     # if the name is not a string, but a dict defining a node, then just set the defaults and return it
     if isinstance(name, Mapping):
         ans = dict(name)
-        for j, fi
+        for j, field in enumerate(node_name.schema):
+            if field['key'] not in ans:
+                ans[field['key']] = field['default']
+        return ans
+    seq = listify(name, delim=',')
+    ans = {}
+    for j, field in enumerate(node_name.schema):
+        if 'default' in field:
+            try:
+                ans[field['key']] = field['type'](seq[j])
+            except:
+                if use_defaults:
+                    ans[field['key']] = field['default']
+        else:
+            try:
+                ans[field['key']] = ans.get(field['key'], field['type'](seq[j]))
+            except:
+                pass
+    return ans
+node_name.schema = (
+                {'
