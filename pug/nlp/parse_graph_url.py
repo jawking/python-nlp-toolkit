@@ -66,4 +66,21 @@ def node_name_lists(edge_list):
     (['Origin,2.7, 3 ', 'Destination,1,2', 'New'], ['Origin', 'Destination', 'New'])
     """
     node_names_only, node_full_names = [], []
-    for edge in edge_lis
+    for edge in edge_list:
+        node_full_names += [edge['source'], edge['target']]
+        node_names_only += [node_name(node_full_names[-2])['name'], node_name(node_full_names[-1])['name']]
+    for_del = []
+    for i, name in enumerate(node_names_only):
+        if name in node_names_only[:i]:
+            for_del += [i]
+    for i in reversed(for_del):
+        del(node_full_names[i])
+        del(node_names_only[i])
+    return node_full_names, node_names_only
+
+
+def node_names(edges):
+    """Parse the node names found in a graph definition string
+
+    >>> node_names([{'source': 'Origin,2.7, 3 ', 'target': 'Destination,1,2', 'value': 9}, {'source': 'Origin,4', 'target': 'New', 'value': 1}])
+    [{'charge': 4.0, 
