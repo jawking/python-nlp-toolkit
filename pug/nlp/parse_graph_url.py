@@ -83,4 +83,18 @@ def node_names(edges):
     """Parse the node names found in a graph definition string
 
     >>> node_names([{'source': 'Origin,2.7, 3 ', 'target': 'Destination,1,2', 'value': 9}, {'source': 'Origin,4', 'target': 'New', 'value': 1}])
-    [{'charge': 4.0, 
+    [{'charge': 4.0, 'group': 3, 'name': 'Origin'}, {'charge': 1.0, 'group': 2, 'name': 'Destination'}, {'name': 'New'}]
+    """
+    full_name, short_name = node_name_dictionaries(edges)
+    redundant_nodes = []
+    for edge in edges:
+        redundant_nodes += [node_name(edge['source'])] 
+        redundant_nodes += [node_name(edge['target'])]
+    distinct_names, ans = [], []
+    #print redundant_nodes
+    for i, node in enumerate(redundant_nodes):
+        if node['name'] not in distinct_names:
+            distinct_names += [node['name']]
+            ans += [node]
+        else:
+            # `name` and other mandatory fields have already been taken care of (and possibly nonmandatory f
