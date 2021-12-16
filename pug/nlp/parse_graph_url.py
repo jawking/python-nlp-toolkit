@@ -37,4 +37,17 @@ def node_name(name, use_defaults=False):
                 pass
     return ans
 node_name.schema = (
-                {'
+                {'key': 'name', 'type': str},  # TODO: use the absence of a default value (rather than index > 0) to identify mandatory fields
+                {'key': 'charge', 'type': float, 'default': 1},
+                {'key': 'group', 'type': intify, 'default': 0},  # TODO: this should be a string like the names/indexes to nodes (groups are just hidden nodes)
+              )
+
+
+def node_name_dictionaries(edges):
+    """
+    Return 2 dictionaries that translate from the cleaned/striped name to fully qualified node names, and vice versa.
+    """
+    node_names_only = []
+    for edge in edges:
+        node_names_only += [node_name(edge['source'])['name'], node_name(edge['target'])['name']]
+    node_names = list(
