@@ -24,4 +24,6 @@ def simplify_get(get_dict, keys_to_del=None, datetime_to_date=True):
             get_dict[k] = datetime.date(v.year, v.month, v.day)
     for k in keys_to_del:
         if k in get_dict:
-           
+            del(get_dict[k])
+
+    return get_dict
