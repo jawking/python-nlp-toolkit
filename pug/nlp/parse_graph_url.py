@@ -97,4 +97,19 @@ def node_names(edges):
             distinct_names += [node['name']]
             ans += [node]
         else:
-            # `name` and other mandatory fields have already been taken care of (and possibly nonmandatory f
+            # `name` and other mandatory fields have already been taken care of (and possibly nonmandatory fields), 
+            # so skip mandatory fields (the ones without a default value) and update the nonmandatory ones if there's new data
+            for j, field in enumerate(node_name.schema):
+                if 'default' in field and field['name'] in node:
+                    ans[distinct_names.index(node['name'])][field['name']] = node.get[field['name']]
+    for i, node in enumerate(ans):
+        for j, field in enumerate(node_name.schema):
+            if 'default' in field and field['name'] not in ans[i]:
+                ans[i][field['name']] = field['default']        
+    return ans
+
+
+def graph_definition(edge_string):
+    """Parse a graph definition string
+
+    >>> gra
