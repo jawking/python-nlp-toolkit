@@ -134,4 +134,17 @@ def graph_definition(edge_string):
                     else:
                         # reprocess/recast the object (which is now node dict) to add default values to the node
                         obj = field['type'](obj)
- 
+                        node_list += [obj]  # obj[1] is a node dict
+                        node_names += [obj['name']]  # obj[1] is a node dict
+                        # since this is a new node, its node index is one less than the len of the node list (or node name list)
+                        obj = len(node_list) - 1
+                edge[field['key']] = obj
+            except:
+                edge[field['key']] = field['default']
+        edge_list += [edge]
+    return edge_list, node_list
+graph_definition.delim = '~'
+graph_definition.node_pair_delim = '_'
+graph_definition.schema = (
+                        {'key': 'source', 'type': node_name, 'default': 0},
+                        {'key': 'target', 'type': node_na
