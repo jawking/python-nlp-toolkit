@@ -124,4 +124,14 @@ def graph_definition(edge_string):
             try:
                 obj = field['type'](node_string_pair[j])
                 # if the field holds a node (source or target) then its name must be retrieved
-              
+                if isinstance(obj, Mapping) and 'name' in obj:
+                    # is this node name already in our list (and other node properties already defined)
+                    if obj['name'] in node_names:
+                        node_index = node_names.index(obj['name'])
+                        # update the existing node with any new properties of this node
+                        node_list[node_index].update(obj)  # obj[1] is a node dict
+                        obj = node_index
+                    else:
+                        # reprocess/recast the object (which is now node dict) to add default values to the node
+                        obj = field['type'](obj)
+ 
