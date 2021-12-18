@@ -112,4 +112,16 @@ def node_names(edges):
 def graph_definition(edge_string):
     """Parse a graph definition string
 
-    >>> gra
+    >>> graph_definition('Origin,3,9_I_5.6~Origin_II~I_III')
+    [{'source': 0, 'target': 1, 'value': 5.6}, {'source': 0, 'target': 2, 'value': 4}, {'source': 1, 'target': 3, 'value': 4}]
+    """
+    edge_definitions = listify(edge_string, delim=graph_definition.delim)
+    edge_list, node_list, node_names = [], [], []
+    for i, edge_definition in enumerate(edge_definitions):
+        edge = {}
+        node_string_pair = listify(edge_definition, delim=graph_definition.node_pair_delim)
+        for j, field in enumerate(graph_definition.schema):
+            try:
+                obj = field['type'](node_string_pair[j])
+                # if the field holds a node (source or target) then its name must be retrieved
+              
