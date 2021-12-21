@@ -147,4 +147,6 @@ graph_definition.delim = '~'
 graph_definition.node_pair_delim = '_'
 graph_definition.schema = (
                         {'key': 'source', 'type': node_name, 'default': 0},
-                        {'key': 'target', 'type': node_na
+                        {'key': 'target', 'type': node_name, 'default': 0},
+                        {'key': 'value', 'type': float, 'default': 4},
+                     )
