@@ -7,4 +7,30 @@ from __future__ import print_function, division
 import json
 import logging
 from copy import deepcopy
-from itertools
+from itertools import product
+from collections import Mapping
+
+from scipy.optimize import minimize
+import pandas as pd
+from matplotlib import pyplot as plt
+
+from pug.nlp.constant import NUMERIC_TYPES
+# watch out for circular import
+from pug.nlp.segmentation import stringify
+from pug.nlp.util import make_dataframe, listify
+from pug.nlp.util import PrettyDict
+from pug.nlp.constant import INF
+
+# from scipy import stats as scipy_stats
+# import pymc
+
+np = pd.np
+logger = logging.getLogger(__name__)
+
+
+def mcc_chi(mcc, num_samples):
+    return np.sqrt(mcc ** 2 * num_samples) if mcc is not None and num_samples else 0
+phi2chi = mcc_chi
+
+
+def random_split(df, first_portion=.1)
