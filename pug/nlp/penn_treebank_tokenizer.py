@@ -44,4 +44,24 @@ RULES1 = [  # starting quotes
     # punctuation
     (r'([:,])([^\d])', r' \1 \2'),
     (r'\.\.\.', r' ... '),
-  
+    (r'[;@#$%&]', r' \g<0> '),
+    (r'([^\.])(\.)([\]\)}>"\']*)\s*$', r'\1 \2\3 '),
+    (r'[?!]', r' \g<0> '),
+    (r"([^'])' ", r"\1 ' "),
+    # parens, brackets, etc.
+    (r'[\]\[\(\)\{\}\<\>]', r' \g<0> '),
+    (r'--', r' -- ')]
+
+# ending quotes
+RULES2 = [(r'"', " '' "),
+          (r'(\S)(\'\')', r'\1 \2 ')]
+
+# all replaced with r"\1 \2 "
+CONTRACTIONS = [r"(?i)([^' ])('S|'M|'D|') ",
+                r"(?i)([^' ])('LL|'RE|'VE|N'T) ",
+                r"(?i)\b(CAN)(NOT)\b",
+                r"(?i)\b(D)('YE)\b",
+                r"(?i)\b(GIM)(ME)\b",
+                r"(?i)\b(GON)(NA)\b",
+                r"(?i)\b(GOT)(TA)\b",
+                r"(?i)\b(LEM)(ME)
