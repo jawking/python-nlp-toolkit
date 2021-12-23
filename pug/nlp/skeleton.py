@@ -60,4 +60,22 @@ def parse_args(args):
         version='pug-nlp {ver}'.format(ver=__version__))
     parser.add_argument(
         dest="n",
-        help="n-th Fibonacci
+        help="n-th Fibonacci number",
+        type=int,
+        metavar="INT")
+    return parser.parse_args(args)
+
+
+def main(args):
+    args = parse_args(args)
+    print("The {}-th Fibonacci number is {}".format(args.n, fib(args.n)))
+    _logger.info("Script ends here")
+
+
+def run():
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    main(sys.argv[1:])
+
+
+if __name__ == "__main__":
+    run()
