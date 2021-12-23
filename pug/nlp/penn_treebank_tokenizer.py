@@ -64,4 +64,24 @@ CONTRACTIONS = [r"(?i)([^' ])('S|'M|'D|') ",
                 r"(?i)\b(GIM)(ME)\b",
                 r"(?i)\b(GON)(NA)\b",
                 r"(?i)\b(GOT)(TA)\b",
-                r"(?i)\b(LEM)(ME)
+                r"(?i)\b(LEM)(ME)\b",
+                r"(?i)\b(MOR)('N)\b",
+                r"(?i)\b(WAN)(NA) ",
+                r"(?i) ('T)(IS)\b",
+                r"(?i) ('T)(WAS)\b"]
+
+
+def word_tokenize(text):
+    """
+    Split string `text` into word tokens using the Penn Treebank rules
+    """
+    for (regexp, replacement) in RULES1:
+        text = sub(regexp, replacement, text)
+    # add extra space to make things easier
+    text = " " + text + " "
+    for (regexp, replacement) in RULES2:
+        text = sub(regexp, replacement, text)
+    for regexp in CONTRACTIONS:
+        text = sub(regexp, r"\1 \2 ", text)
+    # split and return
+    return text.split()
