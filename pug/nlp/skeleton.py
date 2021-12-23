@@ -32,4 +32,32 @@ _logger = logging.getLogger(__name__)
 
 def fib(n):
     """
-    Fibonacci example 
+    Fibonacci example function
+
+    :param n: integer
+    :return: n-th Fibonacci number
+    """
+    assert n > 0
+    a, b = 1, 1
+    for i in range(n-1):
+        a, b = b, a+b
+    return a
+
+
+def parse_args(args):
+    """
+    Parse command line parameters
+
+    :param args: command line parameters as list of strings
+    :return: command line parameters as :obj:`airgparse.Namespace`
+    """
+    parser = argparse.ArgumentParser(
+        description="Just a Fibonnaci demonstration")
+    parser.add_argument(
+        '-v',
+        '--version',
+        action='version',
+        version='pug-nlp {ver}'.format(ver=__version__))
+    parser.add_argument(
+        dest="n",
+        help="n-th Fibonacci
