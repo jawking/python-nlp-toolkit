@@ -21,4 +21,27 @@
 
 
 """Penn Treebank tokenizer, adapted from `nltk.tokenize.treebank.py`, which
-in turn is adapted from an infamous sed script by Robert McIntyre.
+in turn is adapted from an infamous sed script by Robert McIntyre. Even
+ignoring the reduced import overhead, this is about half again faster than
+the NLTK version; don't ask me why.
+
+Examples:
+    >>> s = '''Good muffins cost $3.88\\nin New York.  Please buy me\\ntwo of them.\\nThanks.'''
+    >>> word_tokenize(s)
+    ['Good', 'muffins', 'cost', '$', '3.88', 'in', 'New', 'York.', 'Please', 'buy', 'me', 'two', 'of', 'them.', 'Thanks', '.']
+    >>> s = "They'll save and invest more."
+    >>> word_tokenize(s)
+    ['They', "'ll", 'save', 'and', 'invest', 'more', '.']
+"""
+
+from re import sub
+
+
+RULES1 = [  # starting quotes
+    (r'^\"', r'``'),
+    (r'(``)', r' \1 '),
+    (r'([ (\[{<])"', r'\1 `` '),
+    # punctuation
+    (r'([:,])([^\d])', r' \1 \2'),
+    (r'\.\.\.', r' ... '),
+  
