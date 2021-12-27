@@ -52,4 +52,31 @@ def safe_div(a, b, inf=INF):
       none (float or object): value to return in place of TypeErrors (division by None)
     Returns:
       dividend:
-   
+        b if b is None or NaN
+        a if a is None or NaN
+        inf (specified by caller, default is np.inf) if b is 0
+        pd.NaT if b or a is pd.NaT
+    >>> safe_div(84, 2)
+    42.0
+    >>> safe_div(-85, 2)
+    -42.5
+    >>> safe_div(42, 0)
+    inf
+    >>> safe_div(-42, 0)
+    inf
+    >>> safe_div(1, 0.)
+    inf
+    >>> safe_div(1, 0., inf="custom OutOfBounds str")
+    'custom OutOfBounds str'
+    >>> safe_div(np.inf, np.inf)
+    nan
+    >>> safe_div(1e200, np.inf)
+    0.0
+    >>> safe_div(np.inf, np.nan)
+    nan
+    >>> safe_div(np.nan, 0)
+    inf
+    >>> repr(safe_div(99.99, None))
+    'None'
+    >>> safe_div(42, object())
+    <object object at 0x.
