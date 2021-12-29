@@ -79,4 +79,30 @@ def safe_div(a, b, inf=INF):
     >>> repr(safe_div(99.99, None))
     'None'
     >>> safe_div(42, object())
-    <object object at 0x.
+    <object object at 0x...>
+    """
+    try:
+        return 1. * a / b
+    except ZeroDivisionError:
+        return inf
+    except TypeError:
+        try:
+            1. / b
+        except TypeError:
+            return b
+        return a
+    return 1. * a / b
+
+
+def mcc_chi(mcc, num_samples):
+    """Return the equivalent Chi value for a given MCC (correlation) value
+    >>> round(mcc_chi(0.5, 100), 3)
+    5.0
+    """
+    return np.sqrt(mcc ** 2. * num_samples) if mcc is not None and num_samples else 0.
+phi2chi = mcc_chi
+
+
+def mcc_chi_squared(mcc, num_samples):
+    """Return the equivalent Chi-Squared value for a given MCC (correlation) value
+    Chi is a cumulative value on the horizontal axes (z-score) and represents confidence in c
