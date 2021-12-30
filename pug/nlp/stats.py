@@ -105,4 +105,19 @@ phi2chi = mcc_chi
 
 def mcc_chi_squared(mcc, num_samples):
     """Return the equivalent Chi-Squared value for a given MCC (correlation) value
-    Chi is a cumulative value on the horizontal axes (z-score) and represents confidence in c
+    Chi is a cumulative value on the horizontal axes (z-score) and represents confidence in correlation
+    (like the inverse of P-value) or statistical significance.
+    Assumes that the random variable being measured is continuous rather than discrete.
+    Otherwise num_samples should be the number of degrees of freedom: (num_possible_states - 1) ** 2
+    >>> round(mcc_chi_squared(0.5, 100), 3)
+    25.0
+    """
+    return mcc_chi(mcc, num_samples) ** 2.
+
+
+def tptnfpfn_chi(*args, **kwargs):
+    """Calculate Chi from True Positive (tp), True Negative (tn), False Positive/Negative counts.
+    Assumes that the random variable being measured is continuous rather than discrete.
+    Reference:
+      https://en.wikipedia.org/wiki/Matthews_correlation_coefficient
+    >>> round(
