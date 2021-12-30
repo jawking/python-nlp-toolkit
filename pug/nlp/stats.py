@@ -120,4 +120,26 @@ def tptnfpfn_chi(*args, **kwargs):
     Assumes that the random variable being measured is continuous rather than discrete.
     Reference:
       https://en.wikipedia.org/wiki/Matthews_correlation_coefficient
-    >>> round(
+    >>> round(tptnfpfn_chi(1000, 2000, 30, 40))
+    2765.0
+    """
+    tp, tn, fp, fn = args_tptnfpfn(*args, **kwargs)
+    return tptnfpfn_mcc(tp=tp, tn=tn, fp=fp, fn=fn) ** 2. * (tp + tn + fp + fn)
+
+
+def args_tptnfpfn(*args, **kwargs):
+    """Convert kwargs for tp, tn, fp, fn to ordered tuple of args
+    If a single tuple/list is passed as the first arg, it is assumed to be the desired tuple of args
+    >>> args_tptnfpfn(1, 2, 3, 4)
+    (1, 2, 3, 4)
+    >>> args_tptnfpfn((1, 2, 3, 4))
+    (1, 2, 3, 4)
+    >>> args_tptnfpfn([1, 2, 3, 4])
+    (1, 2, 3, 4)
+    >>> args_tptnfpfn(3, 4, tp=1, tn=2)
+    (1, 2, 3, 4)
+    >>> args_tptnfpfn(tp=1, tn=2)
+    (1, 2, 0, 0)
+    >>> args_tptnfpfn(tp=1, tn=2, fp=3, fn=4)
+    (1, 2, 3, 4)
+    >>> 
