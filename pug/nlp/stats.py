@@ -142,4 +142,23 @@ def args_tptnfpfn(*args, **kwargs):
     (1, 2, 0, 0)
     >>> args_tptnfpfn(tp=1, tn=2, fp=3, fn=4)
     (1, 2, 3, 4)
-    >>> 
+    >>> args_tptnfpfn(1)
+    (1, 0, 0, 0)
+    """
+    if len(args) == 4:
+        tp, tn, fp, fn = args
+    elif len(kwargs) == 0:
+        if len(args) == 1:
+            args = listify(args[0])
+        tp, tn, fp, fn = list(list(args) + [0] * (4 - len(args)))
+    else:
+        args = list(args)
+        tp = kwargs['tp'] if 'tp' in kwargs else args.pop(0) if len(args) else 0
+        tn = kwargs['tn'] if 'tn' in kwargs else args.pop(0) if len(args) else 0
+        fp = kwargs['fp'] if 'fp' in kwargs else args.pop(0) if len(args) else 0
+        fn = kwargs['fn'] if 'fn' in kwargs else args.pop(0) if len(args) else 0
+    return tp, tn, fp, fn
+
+
+def tptnfpfn_mcc(*args, **kwargs):
+    tp, tn, fp, fn = args_t
