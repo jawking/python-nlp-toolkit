@@ -161,4 +161,19 @@ def args_tptnfpfn(*args, **kwargs):
 
 
 def tptnfpfn_mcc(*args, **kwargs):
-    tp, tn, fp, fn = args_t
+    tp, tn, fp, fn = args_tptnfpfn(*args, **kwargs)
+    return (tp * tn - fp * fn) / np.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))
+
+
+def dataframe_tptnfpfn(df, pos_label=True, labels=None):
+    """Count the True Pos, True Neg, False Pos, False Neg samples within a confusions matrx (potentiall larger than 2x2)
+    >>> matrix = [[5, 3, 0], [2, 3, 1], [0, 2, 11]]
+    >>> columns=['Cat', 'Dog', 'Rabbit']
+    >>> x = np.array([[tc, pc] for (tc, row) in enumerate(matrix) for (pc, n) in enumerate(row) for i in range(n)])
+    >>> c = Confusion([(columns[i], columns[j]) for (i, j) in x], columns=['Actual', 'Predicted'])
+    >>> c
+    Predicted  Cat  Dog  Rabbit
+    Actual
+    Cat          5    3       0
+    Dog          2    3       1
+    Rabbit       0    2      11
