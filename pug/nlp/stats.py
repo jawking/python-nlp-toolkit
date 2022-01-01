@@ -177,3 +177,22 @@ def dataframe_tptnfpfn(df, pos_label=True, labels=None):
     Cat          5    3       0
     Dog          2    3       1
     Rabbit       0    2      11
+    >>> dataframe_tptnfpfn(c, 'Rabbit')
+    (11, 13, 1, 2)
+    >>> dataframe_tptnfpfn(c.T, 'Rabbit')
+    (11, 13, 2, 1)
+    >>> c.mcc[2]
+    0.77901...
+    """
+    labels = df.columns if labels is None else labels
+    neg_labels = [label for label in labels if label != pos_label]
+    tp = df[pos_label][pos_label]
+    tn = sum(df[pred_label][true_label] for true_label in neg_labels for pred_label in neg_labels)
+    fp = df[pos_label][neg_labels].sum()
+    fn = sum(df[label][pos_label] for label in neg_labels)
+    return tp, tn, fp, fn
+
+
+class Confusion(pd.DataFrame):
+    """Compute a confusion matrix from a dataframe of true and predicted classes (2 cols)
+    Stats are computed as i
