@@ -195,4 +195,15 @@ def dataframe_tptnfpfn(df, pos_label=True, labels=None):
 
 class Confusion(pd.DataFrame):
     """Compute a confusion matrix from a dataframe of true and predicted classes (2 cols)
-    Stats are computed as i
+    Stats are computed as if each of the classes were considered "positive" and
+    all the others were considered "negative"
+    Attributes:
+      stats (dict): {
+        tpr: true positive rate  = num correct positive predicitons   / num positive samples
+        tnr: true negative rate  = num correct negative predictions   / num negative samples
+        fpr: false positive rate = num incorrect positive predictions / num negative samples
+        fnr: true positive       = num incorrect positive predictions / num positive samples
+        sensitivity = tp / (tp + fn)
+        specificity = tn / (tn + fp)
+        ppv = Positive Predictive Value = tpr / (tpr + fpr)
+        npv = Negative Predictive Value= tnr /
