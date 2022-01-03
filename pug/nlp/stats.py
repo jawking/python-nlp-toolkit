@@ -206,4 +206,20 @@ class Confusion(pd.DataFrame):
         sensitivity = tp / (tp + fn)
         specificity = tn / (tn + fp)
         ppv = Positive Predictive Value = tpr / (tpr + fpr)
-        npv = Negative Predictive Value= tnr /
+        npv = Negative Predictive Value= tnr / (tnr + fnr)
+        plr = Pos. Likelihood Ratio = Sens. / (1 - Spec.)
+        nlr = Neg. Likelihood Ratio = (1 - Sens.) / Spec. }
+    Reference:
+      https://en.wikipedia.org/wiki/Confusion_matrix#Example
+                Predicted
+             Cat Dog Rabbit
+      Actual
+         Cat  5   3    0
+         Dog  2   3    1
+      Rabbit  0   2    11
+    >>> matrix = [[5, 3, 0], [2, 3, 1], [0, 2, 11]]
+    >>> columns=['Cat', 'Dog', 'Rabbit']
+    >>> x = np.array([[tc, pc] for (tc, row) in enumerate(matrix) for (pc, n) in enumerate(row) for i in range(n)])
+    >>> c = Confusion([(columns[i], columns[j]) for (i, j) in x], columns=['Actual', 'Predicted'])
+    >>> c
+    Predicte
