@@ -222,4 +222,29 @@ class Confusion(pd.DataFrame):
     >>> x = np.array([[tc, pc] for (tc, row) in enumerate(matrix) for (pc, n) in enumerate(row) for i in range(n)])
     >>> c = Confusion([(columns[i], columns[j]) for (i, j) in x], columns=['Actual', 'Predicted'])
     >>> c
-    Predicte
+    Predicted  Cat  Dog  Rabbit
+    Actual
+    Cat          5    3       0
+    Dog          2    3       1
+    Rabbit       0    2      11
+    >>> (Confusion(c) == c).all().all()
+    True
+    >>> (Confusion(x, columns=['Actual', 'Predicted']).values == matrix).all()
+    True
+    >>> (Confusion(x).as_data() == x).all()
+    True
+    >>> c.stats_dict
+    {
+      "tpr": 0.625,
+      "fpr": 0.105263157894737,
+      "tnr": 0.736842105263158,
+      "fnr": 0.75,
+      "plr": 5.9375,
+      "nlr": 1.01785714285714,
+      "accuracy": {
+        "Cat": 0.18518518518518517,
+        "Dog": 0.1111111111111111,
+        "Rabbit": 0.40740740740740738
+      },
+      "sensitivity": {
+    
