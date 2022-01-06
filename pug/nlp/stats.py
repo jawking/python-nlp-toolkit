@@ -247,4 +247,26 @@ class Confusion(pd.DataFrame):
         "Rabbit": 0.40740740740740738
       },
       "sensitivity": {
-    
+        "Cat": 0.625,
+        "Dog": 0.5,
+        "Rabbit": 0.84615384615384615
+      },
+      "specificity": {
+        "Cat": 0.875,
+        "Dog": 0.76190476190476186,
+        "Rabbit": 0.88888888888888884
+      },
+      "mcc": {
+        "Cat": 0.54155339089324317,
+        "Dog": 0.23845524161913301,
+        "Rabbit": 0.77901741435486016
+      },
+      "chi_squared": {
+        "Cat": 7.9185620300751856,
+        "Dog": 1.5352443609022557,
+        "Rabbit": 16.385439560439561
+      }
+    }
+
+    TODO: to_data() should output 2-column DataFrame with ["Pred", "True"] columns
+          constructor should allow colu
