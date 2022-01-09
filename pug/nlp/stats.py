@@ -269,4 +269,26 @@ class Confusion(pd.DataFrame):
     }
 
     TODO: to_data() should output 2-column DataFrame with ["Pred", "True"] columns
-          constructor should allow colu
+          constructor should allow columns and index kwargs to override category labels when values are ints
+    >>> df = pd.DataFrame(zip(list('PN'*3 + 'NNNN'), list('PNNPPNNPNPPNNN')), columns=['True', 'Pred'])
+    >>> c = Confusion(df, sort=False)
+    >>> c.get_false_positive(scalar=False)
+    P    0.333333
+    N    0.428571
+    dtype: float64
+    >>> c.false_positive
+    0.33...
+    >>> c.specificity
+    0.57...
+    >>> c.sensitivity
+    0.66...
+    >>> df = pd.DataFrame(np.matrix([[1]*10,[1]*10]).T, columns=['True', 'Pred'])
+    >>> c = Confusion(df)
+    >>> c
+    Pred   1
+    True
+    1     10
+    >>> c.sensitivity, c.specificity
+    (inf, 1.0)
+
+    `infer=True` assumes that the first label encoun
