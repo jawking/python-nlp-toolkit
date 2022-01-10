@@ -291,4 +291,26 @@ class Confusion(pd.DataFrame):
     >>> c.sensitivity, c.specificity
     (inf, 1.0)
 
-    `infer=True` assumes that the first label encoun
+    `infer=True` assumes that the first label encounted is for the **positive** class
+    `infer=False` (default) assumes the only class found is the **positive** class
+    So confusion matrix (and stats like senstivity) are transposed.
+    >>> c = Confusion(df, infer=True)
+    >>> c
+    Pred  0   1
+    True
+    0     0   0
+    1     0  10
+    >>> c.sensitivity, c.specificity
+    (1.0, inf)
+    >>> df = pd.DataFrame(np.matrix([[0,1,2,0,1,2,1,2,2,1],[0,1,2,1,2,0,0,1,2,0]]).T, columns=['True', 'Pred'])
+    >>> Confusion(df)
+    Pred  0  1  2
+    True
+    0     1  1  0
+    1     2  1  1
+    2     1  1  2
+    >>> str(Confusion(df.astype(str))) == str(Confusion(df))
+    True
+    >>> Confusion(df).sensitivity
+    0    0.50
+    1   
