@@ -313,4 +313,40 @@ class Confusion(pd.DataFrame):
     True
     >>> Confusion(df).sensitivity
     0    0.50
-    1   
+    1    0.25
+    2    0.50
+    dtype: float64
+    >>> df = pd.DataFrame(zip(list('ABC'*5 + 'CCC'), list('ABCBCACABCACCBCCCC')), columns=['True', 'Pred'])
+    >>> c = Confusion(df)
+    >>> c
+    Pred  A  B  C
+    True
+    A     1  1  3
+    B     2  2  1
+    C     1  1  6
+    >>> c.sensitivity
+    A    0.20
+    B    0.40
+    C    0.75
+    dtype: float64
+    >>> c.get_false_positive()
+    A    0.80
+    B    0.60
+    C    0.25
+    dtype: float64
+    >>> c.phi == c.mcc
+    A    True
+    B    True
+    C    True
+    dtype: bool
+    >>> c.mcc
+    A   -0.033150
+    B    0.265197
+    C    0.350000
+    dtype: float64
+    """
+
+    _verbose = False
+    _infer = None
+    _scalar_stats = None
+ 
