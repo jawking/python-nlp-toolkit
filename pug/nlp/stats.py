@@ -349,4 +349,17 @@ class Confusion(pd.DataFrame):
     _verbose = False
     _infer = None
     _scalar_stats = None
- 
+    _sort_classes = None
+    _num_classes = None
+    _num_samples = None
+    _colnums = None
+
+    def __init__(self, df, *args, **kwargs):
+        # 2 x 2 matrix of ints interpretted as data rather than counts/Confusion unless its a DataFrame or Confusion type
+        # if ((isinstance(df, pd.DataFrame) and
+        #         (getattr(df, 'columns', range(len(df))) == getattr(df, 'index', range(len(df)))).all() and
+        #         len(df) == len(iter(df).next()) and
+        #         all(isinstance(value), int) for row in df for value in row) and
+        #         ((len(iter(df).next()) > 2) or isinstance(df, pd.DataFrame))):
+        try:
+            assert(is
