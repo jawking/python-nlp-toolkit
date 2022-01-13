@@ -362,4 +362,19 @@ class Confusion(pd.DataFrame):
         #         all(isinstance(value), int) for row in df for value in row) and
         #         ((len(iter(df).next()) > 2) or isinstance(df, pd.DataFrame))):
         try:
-            assert(is
+            assert(isinstance(df, pd.DataFrame))
+            assert((df.columns == df.index).all())
+            assert(df.values.dtype == int)
+            self.construct_copy(df, *args, **kwargs)
+            return
+        except (AssertionError, AttributeError, ValueError):
+            pass
+        _infer = kwargs.pop('infer', kwargs.pop('infer_classes', None))
+        _sort_classes = kwargs.pop('sort', kwargs.pop('sort_classes', 1))
+        verbose = kwargs.pop('verbose', False)
+
+        df = make_dataframe(df, *args, **kwargs)
+        # only 2 columns allowed: true class and predicted class
+        columns = df.columns[:2]
+        # to maintain the order of classes:
+        # pd.Index(
