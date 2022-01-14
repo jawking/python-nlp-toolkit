@@ -377,4 +377,17 @@ class Confusion(pd.DataFrame):
         # only 2 columns allowed: true class and predicted class
         columns = df.columns[:2]
         # to maintain the order of classes:
-        # pd.Index(
+        # pd.Index(df[df.columns[0]]).intersection(pd.Index(df[df.columns[1]])).unique
+        # or pip install orderedset by Raymond Hettinger and Rob Speer
+        index = pd.Index(np.concatenate([df[columns[0]], df[columns[1]]])).unique()
+
+        if _infer and len(index) == 1:
+            index = np.concatenate([index, [infer_pos_label(index[0])]])
+            # if verbose:
+            #     print('WARN: Only a single class label was found} so inferring (guessing) a positive label.')
+        index = pd.Index(pd.Index(index).unique())
+        if _sort_classes:
+            index = index.sort_values(ascending=(_sort_classes > 0))
+
+        # construct an empty parent DataFrame instance
+        super(Confusion, self).__init_
