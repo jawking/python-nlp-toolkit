@@ -404,4 +404,16 @@ class Confusion(pd.DataFrame):
         #    "Negative", "-1", "0", "Healthy", "N/A", etc
 
         try:
-            self._neg_lab
+            self._neg_label = (label for label in self.columns if unicode(label).strip().lower()[0] in ('-nh0')).next()
+        except StopIteration:
+            self._neg_label = self.columns[-1]
+        try:
+            self._pos_label = (label for label in self.columns if label != self._neg_label).next()
+        except StopIteration:
+            self._pos_label = infer_pos_label(self._neg_label)
+
+        logger.debug('true class samples: {}'.format(df[columns[0]].values[:5]))
+        for p_class in index:
+            self[p_class] = pd.Series([len(df[(df[columns[0]] == t_class) & (df[columns[1]] == p_class)]) for t_class in index],
+                                      index=index, dtype=int)
+   
