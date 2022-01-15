@@ -390,4 +390,18 @@ class Confusion(pd.DataFrame):
             index = index.sort_values(ascending=(_sort_classes > 0))
 
         # construct an empty parent DataFrame instance
-        super(Confusion, self).__init_
+        super(Confusion, self).__init__(index=pd.Index(index, name=columns[0]), columns=pd.Index(index, name=columns[1]))
+
+        # metadata to speed other operations
+        self._verbose = verbose
+        self._infer = _infer
+        self._scalar_stats = kwargs.pop('scalar', kwargs.pop('scalar_stats', None))
+        self._sort_classes = _sort_classes
+        self._num_classes = len(index)
+        self._num_samples = len(df)
+        self._colnums = np.arange(0, self._num_classes)
+        # look for Positive and Negative column labels by first finding columns labeled
+        #    "Negative", "-1", "0", "Healthy", "N/A", etc
+
+        try:
+            self._neg_lab
