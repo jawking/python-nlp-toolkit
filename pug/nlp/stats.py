@@ -416,4 +416,22 @@ class Confusion(pd.DataFrame):
         for p_class in index:
             self[p_class] = pd.Series([len(df[(df[columns[0]] == t_class) & (df[columns[1]] == p_class)]) for t_class in index],
                                       index=index, dtype=int)
-   
+        self.refresh_meta()
+
+    def construct_copy(self, other, *args, **kwargs):
+        # construct a parent DataFrame instance
+        parent_type = super(Confusion, self)
+        parent_type.__init__(other)
+        try:
+            for k, v in other.__dict__.iteritems():
+                if hasattr(parent_type, k) and hasattr(self, k) and getattr(parent_type, k) == getattr(self, k):
+                    continue
+                setattr(self, k, deepcopy(v))
+        except AttributeError:
+            pass
+        self.refresh_meta()
+
+    def as_data(self):
+        return np.array([[tc, pc] for (tc, row) in enumerate(self.values) for (pc, n) in enumerate(row) for i in range(n)])
+
+    def refresh_meta(self):
