@@ -447,4 +447,16 @@ class Confusion(pd.DataFrame):
         try:
             self._pos_label = (label for label in self.columns if label != self._neg_label).next()
         except StopIteration:
-            self._pos_label = infer_pos_label(self._neg_la
+            self._pos_label = infer_pos_label(self._neg_label)
+
+        # TODO: reorder columns with newly guessed pos and neg class labels first
+
+        # TODO: gather up additional meta calculations here so
+        #       a Confusion matrix can be build from an existing DataFrame that contains confusion counts
+        #       rather than just two columns of labels.
+        self._hist_labels = self.sum().astype(int)
+        self._num_total = self._hist_labels.sum()
+        assert(self._num_total == self.sum().sum())
+        self._num_pos_labels = self._hist_labels.get(self._pos_label, 0)
+        self._num_neg_labels = self._num_total - self._num_pos_labels  # everything that isn't positive is negative
+        self._hist_classes = self.T.sum()
