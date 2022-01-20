@@ -435,3 +435,16 @@ class Confusion(pd.DataFrame):
         return np.array([[tc, pc] for (tc, row) in enumerate(self.values) for (pc, n) in enumerate(row) for i in range(n)])
 
     def refresh_meta(self):
+        """Calculations that only depend on aggregate counts in Confusion Matrix go here"""
+
+        # these calcs are duplicated in __init__()
+        self._num_classes = len(self.index)
+        self._colnums = np.arange(0, self._num_classes)
+        try:
+            self._neg_label = (label for label in self.columns if unicode(label).strip().lower()[0] in ('-nh0')).next()
+        except StopIteration:
+            self._neg_label = self.columns[-1]
+        try:
+            self._pos_label = (label for label in self.columns if label != self._neg_label).next()
+        except StopIteration:
+            self._pos_label = infer_pos_label(self._neg_la
