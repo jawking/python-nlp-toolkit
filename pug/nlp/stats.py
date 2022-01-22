@@ -460,3 +460,14 @@ class Confusion(pd.DataFrame):
         self._num_pos_labels = self._hist_labels.get(self._pos_label, 0)
         self._num_neg_labels = self._num_total - self._num_pos_labels  # everything that isn't positive is negative
         self._hist_classes = self.T.sum()
+        self._num_pos = self._hist_classes.get(self._pos_label, 0)
+        self._num_neg = self._hist_classes.sum() - self._num_pos  # everything that isn't positive is negative
+        self._tp = self.get(self._pos_label, pd.Series()).get(self._pos_label, 0)
+        self._tpr = safe_div(float(self._tp), self._num_pos)
+        self._tn = np.diag(self).sum() - self._tp
+        self._tnr = safe_div(float(self._tn), self._num_neg)
+        self._fp = self.get(self._pos_label, pd.Series()).sum() - self._tp
+        self._fpr = safe_div(float(self._fp), self._num_neg)
+        self._fn = self._num_neg_labels - self._tn
+        self._fnr = safe_div(float(self._fn), self._num_pos)
+    
