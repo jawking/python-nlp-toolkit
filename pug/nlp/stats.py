@@ -482,4 +482,22 @@ class Confusion(pd.DataFrame):
 
     @classmethod
     def from_existing(cls, confusion, *args, **kwargs):
-        """Creates a 
+        """Creates a confusion matrix from a DataFrame that already contains confusion counts (but not meta stats)
+        >>> df = pd.DataFrame(np.matrix([[0,1,2,0,1,2,1,2,2,1],[0,1,2,1,2,0,0,1,2,0]]).T, columns=['True', 'Pred'])
+        >>> c = Confusion(df)
+        >>> c2 = pd.DataFrame(c)
+        >>> hasattr(c2, '_binary_sensitivity')
+        False
+        >>> c3 = Confusion.from_existing(c2)
+        >>> hasattr(c3, '_binary_sensitivity')
+        True
+        >>> (c3 == c).all().all()
+        True
+        >>> c3
+        Pred  0  1  2
+        True
+        0     1  1  0
+        1     2  1  1
+        2     1  1  2
+        """
+        # Extremely brute-force to recreate data fr
