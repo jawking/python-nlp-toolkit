@@ -470,4 +470,16 @@ class Confusion(pd.DataFrame):
         self._fpr = safe_div(float(self._fp), self._num_neg)
         self._fn = self._num_neg_labels - self._tn
         self._fnr = safe_div(float(self._fn), self._num_pos)
-    
+        self._plr = safe_div(float(self._tpr), self._fpr)
+        self._nlr = safe_div(float(self._fnr), self._tnr)
+        self._binary_accuracy = safe_div(self._tp + self._tn, self._num_samples)
+        self._binary_sensitivity = safe_div(self._tp, self._tp + self._fn)
+        self._binary_specificity = safe_div(self._tn, self._tn + self._fp)
+        # # These asserts intentionally commented out. They are just developer FYI.
+        # # May fail due to platform-dependent floating point rounding implementations
+        # assert self._binary_sensitivity == self._tpr
+        # assert self._binary_specificity == self._tnr
+
+    @classmethod
+    def from_existing(cls, confusion, *args, **kwargs):
+        """Creates a 
