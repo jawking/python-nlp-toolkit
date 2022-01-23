@@ -500,4 +500,18 @@ class Confusion(pd.DataFrame):
         1     2  1  1
         2     1  1  2
         """
-        # Extremely brute-force to recreate data fr
+        # Extremely brute-force to recreate data from a confusion matrix!
+
+        df = []
+        for t, p in product(confusion.index.values, confusion.columns.values):
+            df += [[t, p]] * confusion[p][t]
+        if confusion.index.name is not None and confusion.columns.name is not None:
+            return Confusion(pd.DataFrame(df, columns=[confusion.index.name, confusion.columns.name]))
+        return Confusion(pd.DataFrame(df))
+
+    def get_accuracy(self, scalar=None):
+        """Num_True_Positive / Num_Samples"""
+        # to get a Series instead of a dict:
+        # (np.diag(c).astype(float) / c.T.sum())
+        #     == pd.Series(self.sensitivity)
+        if ((not self._scalar_stats and not scalar and self._num_classe
