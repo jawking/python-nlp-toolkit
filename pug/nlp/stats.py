@@ -514,4 +514,16 @@ class Confusion(pd.DataFrame):
         # to get a Series instead of a dict:
         # (np.diag(c).astype(float) / c.T.sum())
         #     == pd.Series(self.sensitivity)
-        if ((not self._scalar_stats and not scalar and self._num_classe
+        if ((not self._scalar_stats and not scalar and self._num_classes > 2) or
+                ((scalar is False or self._scalar_stats is False) and self._num_classes > 1)):
+            return pd.Series(PrettyDict([(k, safe_div(self[k][k], self._num_total)) for k in self.columns]))
+        return self._binary_accuracy
+    accuracy = property(get_accuracy)
+
+    def get_sensitivity(self, scalar=None):
+        """True Positive Rate = TP / P = Num_True_Positive / (Num_True_Postive + Num_False_Negative)"""
+        # to get a Series instead of a dict:
+        # (np.diag(c).astype(float) / c.T.sum())
+        #     == pd.Series(self.sensitivity)
+        if ((not self._scalar_stats and not scalar and self._num_classes > 2) or
+                ((scalar i
