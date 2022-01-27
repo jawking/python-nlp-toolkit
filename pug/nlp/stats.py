@@ -526,4 +526,15 @@ class Confusion(pd.DataFrame):
         # (np.diag(c).astype(float) / c.T.sum())
         #     == pd.Series(self.sensitivity)
         if ((not self._scalar_stats and not scalar and self._num_classes > 2) or
-                ((scalar i
+                ((scalar is False or self._scalar_stats is False) and self._num_classes > 1)):
+            return pd.Series(PrettyDict([(k, safe_div(self[k][k], self.loc[k].sum())) for k in self.columns]))
+        return self._binary_sensitivity
+    sensitivity = property(get_sensitivity)
+
+    def get_specificity(self, scalar=None):
+        """True_Negative / (True_Negative + False_Positive)"""
+        if ((not self._scalar_stats and not scalar and self._num_classes > 2) or
+                ((scalar is False or self._scalar_stats is False) and self._num_classes > 1)):
+            spec = PrettyDict()
+            for pos_label in self.columns:
+                neg_labels = [label for label in self.columns if label != p
