@@ -537,4 +537,18 @@ class Confusion(pd.DataFrame):
                 ((scalar is False or self._scalar_stats is False) and self._num_classes > 1)):
             spec = PrettyDict()
             for pos_label in self.columns:
-                neg_labels = [label for label in self.columns if label != p
+                neg_labels = [label for label in self.columns if label != pos_label]
+                tn = sum(self[label][label] for label in neg_labels)
+                # fp = self[pos_label][neg_labels].sum()
+                fp = self.loc[neg_labels].sum()[pos_label]
+                assert(self[pos_label][neg_labels].sum() == fp)
+                spec[pos_label] = float(tn) / (tn + fp)
+            return pd.Series(spec)
+        return self._binary_specificity
+    specificity = property(get_specificity)
+
+    def get_phi(self, scalar=None):
+        """Phi (φ) Coefficient -- lack of confusion
+        Arguments:
+          scalar (bool or None): Whether to return a scalar Phi coefficient (assume binary classification) rather than a multiclass vector
+        Measure of the
