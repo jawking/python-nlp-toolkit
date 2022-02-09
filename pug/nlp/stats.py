@@ -551,4 +551,13 @@ class Confusion(pd.DataFrame):
         """Phi (φ) Coefficient -- lack of confusion
         Arguments:
           scalar (bool or None): Whether to return a scalar Phi coefficient (assume binary classification) rather than a multiclass vector
-        Measure of the
+        Measure of the lack of confusion in a single value
+        References:
+          [MCC on wikipedia](https://en.wikipedia.org/wiki/Matthews_correlation_coefficient)
+          [docs on R implementation](http://www.personality-project.org/r/html/phi.html)
+        φ =   (TP*TN - FP*FN) / sqrt((TP+FP) * (TP+FN) * (TN+FP) * (TN+FN))
+        mcc = (tp*tn - fp*fn) / sqrt((tp+fp) * (tp+fn) * (tn+fp) * (tn+fn))
+        """
+        # If requested, compute the phi coeffients for all possible 'positive' and 'negative' class labels (multiclass problem)
+        if ((not self._scalar_stats and not scalar and self._num_classes > 2) or
+         
