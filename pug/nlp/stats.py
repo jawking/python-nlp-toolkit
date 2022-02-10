@@ -598,4 +598,18 @@ class Confusion(pd.DataFrame):
                                    for k in self.columns]))
         if (not self._scalar_stats and not scalar) or self._num_classes != 2:
             return ans
-   
+        return ans[self._pos_label]
+    false_positive = property(get_false_positive)
+    fpr = false_positive
+
+    def get_false_negative(self, scalar=True):
+        """Normalized false positive rate (0 <= fp <= 1)"""
+        ans = pd.Series(PrettyDict([(k, safe_div(np.sum(self.loc[k]) - self[k][k], np.sum(self.sum() - self.loc[k]))) for k in self.columns]))
+        if (not self._scalar_stats and not scalar) or self._num_classes != 2:
+            return ans
+        return ans[self._pos_label]
+    false_negative = property(get_false_negative)
+    fnr = false_negative
+
+    def get_stats_dict(self, scalar=False):
+        # TPR and TNR, etc should be vectors so each set of stats can be a c
