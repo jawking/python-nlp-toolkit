@@ -569,4 +569,21 @@ class Confusion(pd.DataFrame):
                 phi[pos_label] = tptnfpfn_mcc(tp=tp, tn=tn, fp=fp, fn=fn)
             return pd.Series(phi)
         # A scalar phi value was requested, so compute it for the "inferred" positive classification class
-        return tptnfpfn_mcc(sel
+        return tptnfpfn_mcc(self._tp, self._tn, self._fp, self._fn)
+    phi = property(get_phi)
+    # mcc = Matthews Correlation Coefficient = phi coefficient
+    get_mcc = get_phi
+    mcc = property(get_mcc)
+
+    def get_chi(self, scalar=None):
+        """sqrt(Chi_Squared) statistic (see `mcc`, `phi`, or google 'Matthews Correlation Coefficient'"""
+        phi = self.get_phi(scalar=scalar)
+        return mcc_chi(phi, self._num_samples)
+    chi = property(get_chi)
+
+    def get_chi_squared(self, scalar=None):
+        return self.get_chi(scalar=scalar) ** 2
+    chi_squared = property(get_chi_squared)
+
+    def get_binary_confusion(self, pos_label=None):
+        pos_label = pos_label if pos_la
