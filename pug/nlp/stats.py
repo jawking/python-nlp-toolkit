@@ -619,4 +619,11 @@ class Confusion(pd.DataFrame):
                        ('fpr',         self._fpr if isinstance(self._fpr, NUMERIC_TYPES) else PrettyDict(self._fpr)),
                        ('tnr',         self._tnr if isinstance(self._tnr, NUMERIC_TYPES) else PrettyDict(self._tnr)),
                        ('fnr',         self._fnr if isinstance(self._fnr, NUMERIC_TYPES) else PrettyDict(self._fnr)),
-                       ('plr',         self._plr if isinstance(self._plr, NUMERIC_TY
+                       ('plr',         self._plr if isinstance(self._plr, NUMERIC_TYPES) else PrettyDict(self._plr)),
+                       ('nlr',         self._nlr if isinstance(self._nlr, NUMERIC_TYPES) else PrettyDict(self._nlr)),
+                       ('accuracy',    self.accuracy if isinstance(self.accuracy, NUMERIC_TYPES) else
+                        PrettyDict([(label, self.accuracy[label]) for label in self.columns])),
+                       ('sensitivity', self.sensitivity if isinstance(self.sensitivity, NUMERIC_TYPES) else
+                        PrettyDict([(label, self.sensitivity[label]) for label in self.columns])),
+                       ('specificity', self.specificity if isinstance(self.specificity, NUMERIC_TYPES) else
+                        PrettyDict([
