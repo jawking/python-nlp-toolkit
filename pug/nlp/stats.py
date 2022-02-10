@@ -612,4 +612,11 @@ class Confusion(pd.DataFrame):
     fnr = false_negative
 
     def get_stats_dict(self, scalar=False):
-        # TPR and TNR, etc should be vectors so each set of stats can be a c
+        # TPR and TNR, etc should be vectors so each set of stats can be a column in a DataFrame
+        # TPDO: make this a PrettyDict around a list comprehension over the attribute names
+        d = PrettyDict([
+                       ('tpr',         self._tpr if isinstance(self._tpr, NUMERIC_TYPES) else PrettyDict(self._tpr)),
+                       ('fpr',         self._fpr if isinstance(self._fpr, NUMERIC_TYPES) else PrettyDict(self._fpr)),
+                       ('tnr',         self._tnr if isinstance(self._tnr, NUMERIC_TYPES) else PrettyDict(self._tnr)),
+                       ('fnr',         self._fnr if isinstance(self._fnr, NUMERIC_TYPES) else PrettyDict(self._fnr)),
+                       ('plr',         self._plr if isinstance(self._plr, NUMERIC_TY
