@@ -586,4 +586,16 @@ class Confusion(pd.DataFrame):
     chi_squared = property(get_chi_squared)
 
     def get_binary_confusion(self, pos_label=None):
-        pos_label = pos_label if pos_la
+        pos_label = pos_label if pos_label in self.columns else self._pos_label
+        neg_labels = [label for label in self.columns if label != pos_label]
+        columns = [pos_label, '+'.join(str(lbl) for lbl in neg_labels)]
+        conf = pd.DataFrame(index=columns, columns=columns)
+        return conf
+
+    def get_false_positive(self, scalar=True):
+        """Normalized false positive rate (0 <= fp <= 1)"""
+        ans = pd.Series(PrettyDict([(k, safe_div(np.sum(self.loc[k][[j for j in self.columns if j != k]]), np.sum(self.loc[k])))
+                                   for k in self.columns]))
+        if (not self._scalar_stats and not scalar) or self._num_classes != 2:
+            return ans
+   
