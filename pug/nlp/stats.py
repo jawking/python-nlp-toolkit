@@ -560,4 +560,13 @@ class Confusion(pd.DataFrame):
         """
         # If requested, compute the phi coeffients for all possible 'positive' and 'negative' class labels (multiclass problem)
         if ((not self._scalar_stats and not scalar and self._num_classes > 2) or
-         
+                ((scalar is False or self._scalar_stats is False) and self._num_classes > 1)):
+            phi = PrettyDict()
+            # count of predictions labeled with pred_label for a slice of data that was actually labeled true_label:
+            # `count = self[pred_label][true_label]`
+            for pos_label in self.columns:
+                tp, tn, fp, fn = dataframe_tptnfpfn(self, pos_label=pos_label, labels=self.columns)
+                phi[pos_label] = tptnfpfn_mcc(tp=tp, tn=tn, fp=fp, fn=fn)
+            return pd.Series(phi)
+        # A scalar phi value was requested, so compute it for the "inferred" positive classification class
+        return tptnfpfn_mcc(sel
