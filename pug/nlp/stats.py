@@ -626,4 +626,16 @@ class Confusion(pd.DataFrame):
                        ('sensitivity', self.sensitivity if isinstance(self.sensitivity, NUMERIC_TYPES) else
                         PrettyDict([(label, self.sensitivity[label]) for label in self.columns])),
                        ('specificity', self.specificity if isinstance(self.specificity, NUMERIC_TYPES) else
-                        PrettyDict([
+                        PrettyDict([(label, self.specificity[label]) for label in self.columns])),
+                       ('mcc',         self.mcc if isinstance(self.mcc, NUMERIC_TYPES) else
+                        PrettyDict([(label, self.mcc[label]) for label in self.columns])),
+                       ('chi_squared', self.chi_squared if isinstance(self.chi_squared, NUMERIC_TYPES) else
+                        PrettyDict([(label, self.chi_squared[label]) for label in self.columns])),
+                       ])
+        if not scalar:
+            return d
+        return PrettyDict([(k, v[self._pos_label]) for k, v in d.iteritems()])
+    stats_dict = property(get_stats_dict)
+
+    def get_stats(self):
+        df = pd.Data
