@@ -657,4 +657,12 @@ class Confusion(pd.DataFrame):
         return(s)
 
 
-# TODO: reuse inverse dict function and fuzzy_get from pug.
+# TODO: reuse inverse dict function and fuzzy_get from pug.nlp
+POS_LABELS = {'0': '1', 'False': 'True', 'F': 'T', 'No': 'Yes', 'N': 'P',
+              'None': 'Positive', 'Neg': 'Pos', 'Negative': 'Positive', "A": "B"}
+POS_LABELS_INVERSE = dict((v, k) for k, v in POS_LABELS.iteritems())
+POS_LABELS_LOWER = dict((k.lower(), v.lower()) for k, v in POS_LABELS.iteritems())
+POS_LABELS_LOWER_INVERSE = dict((v.lower(), k.lower()) for k, v in POS_LABELS.iteritems())
+POS_LABELS_LOWER_INVERSE = dict((k.lower(), v.lower()) for k, v in POS_LABELS.iteritems())
+POS_LABELS_LOWER_FIRST = dict((k.lower()[0], v.lower()[0]) for k, v in POS_LABELS.iteritems())
+POS_LABELS_LOWER_INVERSE_FIRST = dict((v.lower()[0], k.lower()[0]) for k, v
