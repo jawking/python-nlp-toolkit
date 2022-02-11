@@ -638,4 +638,23 @@ class Confusion(pd.DataFrame):
     stats_dict = property(get_stats_dict)
 
     def get_stats(self):
-        df = pd.Data
+        df = pd.DataFrame()
+        for k, v in self.get_stats_dict(scalar=False).iteritems():
+            if isinstance(v, Mapping):
+                df[k] = pd.Series(v)
+        return df
+
+    def to_markdown(self):
+        markdown = ''
+        markdown += '## Confusion Matrices with "{}" as Truth\n\n'.format(self.columns.name)
+        markdown += '### {}-vs-{}\n\n'.format(self.index.name, self.columns.name)
+        markdown += self.to_html() + '\n'
+        markdown += self.get_stats(scalar=False).to_html() + '\n\n'
+        return markdown
+
+    def __repr__(self):
+        s = super(Confusion, self).__repr__()
+        return(s)
+
+
+# TODO: reuse inverse dict function and fuzzy_get from pug.
