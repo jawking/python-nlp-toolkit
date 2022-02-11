@@ -665,4 +665,20 @@ POS_LABELS_LOWER = dict((k.lower(), v.lower()) for k, v in POS_LABELS.iteritems(
 POS_LABELS_LOWER_INVERSE = dict((v.lower(), k.lower()) for k, v in POS_LABELS.iteritems())
 POS_LABELS_LOWER_INVERSE = dict((k.lower(), v.lower()) for k, v in POS_LABELS.iteritems())
 POS_LABELS_LOWER_FIRST = dict((k.lower()[0], v.lower()[0]) for k, v in POS_LABELS.iteritems())
-POS_LABELS_LOWER_INVERSE_FIRST = dict((v.lower()[0], k.lower()[0]) for k, v
+POS_LABELS_LOWER_INVERSE_FIRST = dict((v.lower()[0], k.lower()[0]) for k, v in POS_LABELS.iteritems())
+# POS_LABELS_ALL = OrderedDict(list(POS_LABELS.iteritems()) + list(POS_LABELS_LOWER.iteritems())
+
+
+def infer_pos_label(neg_label=None):
+    """Try to guess a positive classification label from a negative label
+    Basis for an NLP function to find the "opposite" of a string
+    yes->no, true->false, etc)
+    >>> [infer_pos_label(x) for x in ('1', '-1', '0', '2', 1, 0, 'F', 'False', False, True)]
+    ['0', '1', '1', '3', 0, 1, 'T', 'True', True, False]
+    """
+    # A class label should be a None, bool, int, or str
+    if neg_label is None:
+        return True
+    typ = type(neg_label)
+    # If class label isn't a bool or None then make it an int or str
+    
