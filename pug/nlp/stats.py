@@ -681,4 +681,20 @@ def infer_pos_label(neg_label=None):
         return True
     typ = type(neg_label)
     # If class label isn't a bool or None then make it an int or str
-    
+    try:
+        neg_label = int(float(neg_label))
+        if neg_label in (0, 1):
+            return typ(int(not neg_label))
+        if neg_label < 0:
+            return typ(-neg_label)
+        return typ(neg_label + 1)
+    except:
+        neg_label = stringify(neg_label).strip()
+    for xform, label_dict in zip((lambda x: x, lambda x: x,       str.lower,        str.lower,),
+                                 (POS_LABELS, POS_LABELS_INVERSE, POS_LABELS_LOWER, POS_LABELS_LOWER_INVERSE)):
+        try:
+            return typ(label_dict[xform(neg_label)])
+        except KeyError:
+            pass
+    # neg_label = neg.lower()
+    # for labels in (POS_LABELS_LOWER, POS_LABE
