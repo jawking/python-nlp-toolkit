@@ -733,4 +733,19 @@ def json_from_cov_df(df, threshold=.5, gain=2., n=None, indent=1):
     """Produce a json string describing the graph (list of edges) from a square auto-correlation/covariance matrix
        { "nodes": [{"group": 1, "name": "the"},
                 {"group": 1, "name": "and"},
-                {"group"
+                {"group": 1, "name": "our"},
+                {"group": 2, "name": "that"},...
+         "links": [{"source": 0, "target": 0, "value": 2.637520131294177},
+                   {"source": 0, "target": 1, "value": 1.343999676850537}, ...
+    """
+    nodes, edges = graph_from_cov_df(df=df, threshold=threshold, gain=gain, n=n)
+    return json.dumps({'nodes': nodes, 'links': edges}, indent=indent)
+
+
+# # TODO: only do this when STRICT or DEBUG or VERBOSE global variables are set (in django.settings?)
+# # raise exceptions for numpy and pandas warnings:
+# warnings.filterwarnings('error')
+
+
+def spec_from_thresh(thresh, labels, scores, *args, **kwargs):
+    r"""Compute the specifity that a part
