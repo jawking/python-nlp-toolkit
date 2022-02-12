@@ -697,4 +697,27 @@ def infer_pos_label(neg_label=None):
         except KeyError:
             pass
     # neg_label = neg.lower()
-    # for labels in (POS_LABELS_LOWER, POS_LABE
+    # for labels in (POS_LABELS_LOWER, POS_LABELS_LOWER_INVERSE):
+    #     try:
+    #         return typ(labels[neg_label])
+    #     except KeyError:
+    #         pass
+    # if not neg_label:
+    #     return True
+    # neg = neg[0]
+    # try:
+    #     return POS_LABELS_LOWER_FIRST[neg]
+    # except KeyError:
+    #     pass
+    return 'P'
+
+
+CLASSES = [str(i) for i in range(11)]
+CLASSES = dict(zip(CLASSES, range(len(CLASSES))))
+
+
+# TODO: Create a dict or Pandas Index of node names and their d3 group index (0-N)
+def graph_from_cov_df(df, threshold=.5, gain=2., n=None, class_dict=CLASSES):
+    """Compose pair of lists of dicts (nodes, edges) for the graph described by a DataFrame"""
+    n = n or len(df)
+    nodes = 
