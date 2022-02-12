@@ -720,4 +720,17 @@ CLASSES = dict(zip(CLASSES, range(len(CLASSES))))
 def graph_from_cov_df(df, threshold=.5, gain=2., n=None, class_dict=CLASSES):
     """Compose pair of lists of dicts (nodes, edges) for the graph described by a DataFrame"""
     n = n or len(df)
-    nodes = 
+    nodes = [{'group': class_dict.get(name, 0), "name": name} for name in df.index.values][:n]
+    edges = []
+    for i, (row_name, row) in enumerate(df.iterrows()):
+        for j, value in enumerate(row.values):
+            if i > j and value * gain > threshold and i < n and j < n:
+                edges += [{'source': i, 'target': j, 'value': gain * value}]
+    return nodes, edges
+
+
+def json_from_cov_df(df, threshold=.5, gain=2., n=None, indent=1):
+    """Produce a json string describing the graph (list of edges) from a square auto-correlation/covariance matrix
+       { "nodes": [{"group": 1, "name": "the"},
+                {"group": 1, "name": "and"},
+                {"group"
