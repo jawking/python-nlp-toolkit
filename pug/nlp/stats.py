@@ -764,4 +764,19 @@ def spec_from_thresh(thresh, labels, scores, *args, **kwargs):
 
 
 def sens_from_thresh(thresh, labels, scores, *args, **kwargs):
-    r"""Compute the specifity th
+    r"""Compute the specifity that a particular threshold on the scores can acheive
+    sensitivity = Num_True_Positive / (Num_True_Postive + Num_False_Negative)
+    >>> scores = np.arange(0, 1, 0.1)
+    >>> sens_from_thresh(0.5, labels=(scores > .5).astype(int), scores=scores)
+    1.0
+    >>> sens_from_thresh(0.5, labels=(scores > .4).astype(int), scores=scores)
+    0.8
+    """
+    df = pd.DataFrame(zip(labels, np.array(scores > thresh).astype(int)))
+    c = Confusion(df, *args, **kwargs)
+    return c._binary_sensitivity
+
+
+def sens_from_spec(spec, labels, scores, *args, **kwargs):
+    r"""Find the sensitivity that corresponds to the indicated specificity (ROC function)
+    sensitivity = Num_True_Positive / (Num_True_Postive
