@@ -779,4 +779,19 @@ def sens_from_thresh(thresh, labels, scores, *args, **kwargs):
 
 def sens_from_spec(spec, labels, scores, *args, **kwargs):
     r"""Find the sensitivity that corresponds to the indicated specificity (ROC function)
-    sensitivity = Num_True_Positive / (Num_True_Postive
+    sensitivity = Num_True_Positive / (Num_True_Postive + Num_False_Negative)
+    specificity = Num_True_Negative / (Num_True_Negative + Num_False_Positive)
+    """
+    thresh = thresh_from_spec(spec, labels, scores)
+    df = pd.DataFrame(zip(labels, scores[scores > thresh.astype(int)]))
+    c = Confusion(df, *args, **kwargs)
+    return c._binary_sensitivity
+
+
+def cost_fun(x, *args, **kwargs):
+    """Enables minimization (root-finding) for non-zero targets
+    Returns regularized absolute error between target and output of `fun`.
+    Configurable state with function attributes.
+    >>> cost_fun.fun = spec_from_thresh  # "forward" function we want to evaluate in cost_fun to compute error
+    >>> cost_fun.target = 1.0  # desired specificity
+    >>> thresh,
