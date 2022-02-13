@@ -748,4 +748,20 @@ def json_from_cov_df(df, threshold=.5, gain=2., n=None, indent=1):
 
 
 def spec_from_thresh(thresh, labels, scores, *args, **kwargs):
-    r"""Compute the specifity that a part
+    r"""Compute the specifity that a particular threshold on the scores can acheive
+    specificity = Num_True_Negative / (Num_True_Negative + Num_False_Positive)
+    >>> scores = np.arange(0, 1, 0.1)
+    >>> spec_from_thresh(0.5, labels=(scores > .5).astype(int), scores=scores)
+    1.0
+    >>> spec_from_thresh(0.5, labels=(scores > .4).astype(int), scores=scores)
+    1.0
+    >>> spec_from_thresh(0.5, labels=(scores > .9).astype(int), scores=scores)
+    0.6
+    """
+    df = pd.DataFrame(zip(labels, np.array(scores > thresh).astype(int)))
+    c = Confusion(df, *args, **kwargs)
+    return c._binary_specificity
+
+
+def sens_from_thresh(thresh, labels, scores, *args, **kwargs):
+    r"""Compute the specifity th
