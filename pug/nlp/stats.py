@@ -794,4 +794,15 @@ def cost_fun(x, *args, **kwargs):
     Configurable state with function attributes.
     >>> cost_fun.fun = spec_from_thresh  # "forward" function we want to evaluate in cost_fun to compute error
     >>> cost_fun.target = 1.0  # desired specificity
-    >>> thresh,
+    >>> thresh, labels, scores = 0.9, [0]*10, np.arange(0, 1, 0.1)
+    >>> spec = spec_from_thresh(thresh, labels, scores)
+    >>> spec  # should get perfect specificity because no samples were wrongly labeled
+    1.0
+    >>> cost_fun(thresh, labels, scores)  # should be zero cost, since target = function output
+    0.0
+    >>> spec = spec_from_thresh(.5, labels, scores)
+    >>> spec  # should get less than perfect specificity now that there are some incorrect neg predictions
+    0.6
+    >>> 1.0 - spec  # so the "cost" of this incorrect threshold should be the error in the specificity
+    0.4
+    >>> round(cost_fun(spec, labels, scores), 6)  # should be
