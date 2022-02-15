@@ -805,4 +805,15 @@ def cost_fun(x, *args, **kwargs):
     0.6
     >>> 1.0 - spec  # so the "cost" of this incorrect threshold should be the error in the specificity
     0.4
-    >>> round(cost_fun(spec, labels, scores), 6)  # should be
+    >>> round(cost_fun(spec, labels, scores), 6)  # should be approximately same as error in spec above
+    0.4
+    """
+    cost_fun.regularization_weight = kwargs.pop('regularization_weight', cost_fun.regularization_weight)
+    cost_fun.verbose = verbose = kwargs.pop('verbose', cost_fun.verbose)
+    fun = cost_fun.fun = kwargs.get('fun', None) or cost_fun.fun
+    target = cost_fun.target = cost_fun.target if kwargs.get('target', None) is None else kwargs.pop('target')
+    delta = target - fun(x, *args)
+    cost = np.abs(delta) + getattr(cost_fun, 'regularization_weight', 0) * np.abs(x)
+    if verbose:
+        print("x, target = {}, {} => delta = {} - {} => cost = abs({}) + abs({}) = {}".format(
+      
