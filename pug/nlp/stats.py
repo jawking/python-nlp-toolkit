@@ -816,4 +816,23 @@ def cost_fun(x, *args, **kwargs):
     cost = np.abs(delta) + getattr(cost_fun, 'regularization_weight', 0) * np.abs(x)
     if verbose:
         print("x, target = {}, {} => delta = {} - {} => cost = abs({}) + abs({}) = {}".format(
-      
+            x, target, target, fun(x, *args), delta, x, cost))
+    return cost
+cost_fun.fun = spec_from_thresh
+cost_fun.target = 0
+cost_fun.verbose = False
+cost_fun.regularization_weight = 0
+
+
+def plot_cost(scores=np.random.rand(100), thresh=0.5, noise=0):
+    """Plot the cost function topology (contours for each of several targets)"""
+    c = pd.DataFrame(index=np.arange(0, 1, 0.01))
+    if isinstance(thresh, (int, float)):
+        thresh = [thresh]
+    elif not isinstance(thresh, (pd.Series, np.ndarray, list, tuple)):
+        thresh = np.arange(0, 1, .2)
+    cost_fun.fun = spec_from_thresh
+    for t in thresh:
+        labels = (scores / t / scores.max() / 1.00001).astype(int)
+        cost_fun.target = t
+  
