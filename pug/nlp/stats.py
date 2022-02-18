@@ -835,4 +835,16 @@ def plot_cost(scores=np.random.rand(100), thresh=0.5, noise=0):
     for t in thresh:
         labels = (scores / t / scores.max() / 1.00001).astype(int)
         cost_fun.target = t
-  
+        c['target=0.{}'.format(int(t * 10))] = np.array([cost_fun(x, labels, scores, verbose=True) for x in c.index])
+    c.plot()
+    plt.show(block=False)
+
+
+def fun_inverse(fun=None, y=0, x0=None, args=(), disp=False, method='Nelder-Mead', **kwargs):
+    r"""Find the threshold level that accomplishes the desired specificity
+    Call indicated function repeatedly to find answer to the inverse function evaluation
+    Arguments:
+      fun (function): function to be calculate an inverse for
+      y (float): desired output of fun
+      x0 (float): initial guess at input to fun, the fun arg that will be adjusted
+      args (list or tuple): consta
