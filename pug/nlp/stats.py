@@ -847,4 +847,15 @@ def fun_inverse(fun=None, y=0, x0=None, args=(), disp=False, method='Nelder-Mead
       fun (function): function to be calculate an inverse for
       y (float): desired output of fun
       x0 (float): initial guess at input to fun, the fun arg that will be adjusted
-      args (list or tuple): consta
+      args (list or tuple): constant arguments to fun which will not be adjusted
+      constraints (tuple): dictionary of optimizer constraints (see scipy.optimize.minimize)
+      disp (bool): whether to display incremental results during optimization
+      method (str): one of the scipy.optimize.minimize methods
+      additional kwargs are passed along to the minimize function
+    fun_inverse can be used to calculate a trivial square root:
+    >>> round(fun_inverse(fun=lambda x: x**2, y=9, x0=0), 6)
+    3.0
+    """
+    fun_inverse.fun = cost_fun.fun = fun if fun is not None else getattr(fun_inverse, 'fun', lambda x: x)
+    fun_inverse.target = cost_fun.target = y or 0
+    fun_inverse.verbose = verbose
