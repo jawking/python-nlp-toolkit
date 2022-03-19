@@ -858,4 +858,24 @@ def fun_inverse(fun=None, y=0, x0=None, args=(), disp=False, method='Nelder-Mead
     """
     fun_inverse.fun = cost_fun.fun = fun if fun is not None else getattr(fun_inverse, 'fun', lambda x: x)
     fun_inverse.target = cost_fun.target = y or 0
-    fun_inverse.verbose = verbose
+    fun_inverse.verbose = verbose = cost_fun.verbose = kwargs.pop(
+        'verbose', getattr(cost_fun, 'verbose', getattr(fun_inverse, 'verbose', False)))
+    fun_inverse.x0 = x0 = x0 if x0 is not None else getattr(fun_inverse, 'x0', 0) or 0
+
+    if verbose:
+        print('    x0: {}\ntarget: {}\n'.format(fun_inverse.x0, fun_inverse.target))
+
+    res = minimize(cost_fun,
+                   x0=x0,
+                   args=args,
+                   options=kwargs.pop('options', {}),
+                   method=method,
+                   **kwargs
+                   )
+    if isinstance(x0, NUMERIC_TYPES):
+        return res.x[0]
+    return res.x
+
+
+def thresh_from_spec(spec, labels, scores, **kwargs):
+    r"""Find the 
