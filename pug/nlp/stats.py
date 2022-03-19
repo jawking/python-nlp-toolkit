@@ -894,4 +894,22 @@ def thresh_from_spec(spec, labels, scores, **kwargs):
 
 
 def write_graph_json(filename='similarity_graph.json', verbosity=1):
-    js = json_from_cov_df(df=make_dat
+    js = json_from_cov_df(df=make_dataframe())
+    if verbosity:
+        print(js[:1000] + '\n...\n' + js[-1000:])
+    with open(filename, 'w') as f:
+        f.write(js)
+
+
+def dyno_hist(x, window=None, probability=True, edge_weight=1.):
+    """ Probability Distribution function from values
+    Arguments:
+      probability (bool): whether the values should be min/max scaled to lie on the range [0, 1]
+    Like `hist` but smoother, more accurate/useful
+    Double-Normalization:
+      The x values are min/max normalized to lie in the range 0-1 inclusive
+      The pdf is normalized to integrate/sum to 1.0
+    >>> h = dyno_hist(np.arange(100), window=5)
+    >>> abs(sum(np.diff(h.index.values) * h.values[1:]) - 1.) < 0.00001
+    True
+    >>
