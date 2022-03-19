@@ -878,4 +878,20 @@ def fun_inverse(fun=None, y=0, x0=None, args=(), disp=False, method='Nelder-Mead
 
 
 def thresh_from_spec(spec, labels, scores, **kwargs):
-    r"""Find the 
+    r"""Find the threshold level that accomplishes the desired specificity"""
+    cost_fun.verbose = kwargs.pop('verbose', cost_fun.verbose)
+    cost_fun.target = spec
+    return minimize(cost_fun,
+                    x0=[.5],
+                    args=(labels, scores),
+                    method='SLSQP',
+                    constraints=({'type': 'ineq',
+                                  'fun': lambda x: np.array([x[0]]),
+                                  'jac': lambda x: np.array([1.])},
+                                 ),
+                    **kwargs
+                    )
+
+
+def write_graph_json(filename='similarity_graph.json', verbosity=1):
+    js = json_from_cov_df(df=make_dat
