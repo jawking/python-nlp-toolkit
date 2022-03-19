@@ -912,4 +912,21 @@ def dyno_hist(x, window=None, probability=True, edge_weight=1.):
     >>> h = dyno_hist(np.arange(100), window=5)
     >>> abs(sum(np.diff(h.index.values) * h.values[1:]) - 1.) < 0.00001
     True
-    >>
+    >>> h = dyno_hist(np.arange(50), window=12)
+    >>> abs(sum(np.diff(h.index.values) * h.values[1:]) - 1.) < 0.00001
+    True
+    >>> h = dyno_hist(np.random.randn(1000), window=42)
+    >>> abs(sum(np.diff(h.index.values) * h.values[1:]) - 1.0) < 0.04
+    True
+    """
+    x = np.sort(x)
+    if probability:
+        # normalize x first
+        x = x - x[0]
+        x = x / float(x[-1] or 1)
+    window = window or 1
+    window = min(max(window, 1), int(len(x) / 1.5))
+    window += 1
+    # Empirical Densitites (PDF) based on diff of sorted values
+    delta = x[(window - 1):] - x[:(1 - window)]
+    densities = float(window - 1) / (len(delta) 
