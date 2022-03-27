@@ -929,4 +929,11 @@ def dyno_hist(x, window=None, probability=True, edge_weight=1.):
     window += 1
     # Empirical Densitites (PDF) based on diff of sorted values
     delta = x[(window - 1):] - x[:(1 - window)]
-    densities = float(window - 1) / (len(delta) 
+    densities = float(window - 1) / (len(delta) + window - 2) / delta
+    h = pd.Series(densities, index=x[window // 2:][:len(delta)])
+    if probability:
+        if h.index[0] > 0:
+            h = pd.Series(edge_weight * densities[0], index=[0]).append(h)
+        if h.index[-1] < 1:
+            h = h.append(pd.Series(edge_weight * densities[-1], index=[1.]))
+    return h
