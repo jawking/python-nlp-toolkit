@@ -47,4 +47,19 @@ def dataframe_from_excel(path, sheetname=0, header=0, skiprows=None):  # , parse
     #     sheet = wb.sheet_by_name(sheetname)
     # assert(not parse_dates, "`parse_dates` argument and function not yet implemented!")
     # table = [sheet.row_values(i) for i in range(sheet.nrows)]
-    return pd.io.excel.read_excel(
+    return pd.io.excel.read_excel(wb, sheetname=sheetname, header=header, skiprows=skiprows, engine='xlrd')
+
+
+def flatten_excel(path='.', ext='xlsx', sheetname=0, skiprows=None, header=0, date_parser=parse_date, verbosity=0, output_ext=None):
+    """Load all Excel files in the given path, write .flat.csv files, return `DataFrame` dict
+
+    Arguments:
+      path (str): file or folder to retrieve CSV files and `pandas.DataFrame`s from
+      ext (str): file name extension (to filter files by)
+      date_parser (function): if the MultiIndex can be interpretted as a datetime, this parser will be used
+
+    Returns:
+      dict of DataFrame: { file_path: flattened_data_frame }
+    """
+
+    date_parser = date_parser or (la
