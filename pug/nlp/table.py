@@ -62,4 +62,16 @@ def flatten_excel(path='.', ext='xlsx', sheetname=0, skiprows=None, header=0, da
       dict of DataFrame: { file_path: flattened_data_frame }
     """
 
-    date_parser = date_parser or (la
+    date_parser = date_parser or (lambda x: x)
+    dotted_ext, dotted_output_ext = None, None
+    if ext is not None and output_ext is not None:
+        dotted_ext = ('' if ext.startswith('.') else '.') + ext
+        dotted_output_ext = ('' if output_ext.startswith('.') else '.') + output_ext
+    table = {}
+    for file_properties in find_files(path, ext=ext or '', verbosity=verbosity):
+        file_path = file_properties['path']
+        if output_ext and (dotted_output_ext + '.') in file_path:
+            continue
+        df = dataframe_from_excel(file_path, sheetname=sheetname, header=header, skiprows=skiprows)
+        df = flatten_dataframe(df, verbosity=verbosity)
+        if dotted_ext is not None and dotted_out
