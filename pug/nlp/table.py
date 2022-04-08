@@ -74,4 +74,20 @@ def flatten_excel(path='.', ext='xlsx', sheetname=0, skiprows=None, header=0, da
             continue
         df = dataframe_from_excel(file_path, sheetname=sheetname, header=header, skiprows=skiprows)
         df = flatten_dataframe(df, verbosity=verbosity)
-        if dotted_ext is not None and dotted_out
+        if dotted_ext is not None and dotted_output_ext is not None:
+            df.to_csv(file_path[:-len(dotted_ext)] + dotted_output_ext + dotted_ext)
+    return table
+
+
+def flatten_dataframe(df, date_parser=parse_date, verbosity=0):
+    """Creates 1-D timeseries (pandas.Series) coercing column labels into datetime.time objects
+
+    Assumes that the columns are strings representing times of day (or datetime.time objects)
+    Assumes that the index should be a datetime object. If it isn't already, the first column
+    with "date" (case insenstive) in its label will be used as the FataFrame index.
+    """
+
+    # extract rows with nonull, nonnan index values
+    df = df[pd.notnull(df.index)]
+
+    # Make sure columns and row labels are all times 
