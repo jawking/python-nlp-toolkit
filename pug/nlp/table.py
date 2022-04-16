@@ -90,4 +90,22 @@ def flatten_dataframe(df, date_parser=parse_date, verbosity=0):
     # extract rows with nonull, nonnan index values
     df = df[pd.notnull(df.index)]
 
-    # Make sure columns and row labels are all times 
+    # Make sure columns and row labels are all times and dates respectively
+    # Ignores/clears any timezone information
+    if all(isinstance(i, int) for i in df.index):
+        for label in df.columns:
+            if 'date' in str(label).lower():
+                df.index = [make_date(d) for d in df[label]]
+                del df[label]
+                break
+    if not all(isinstance(i, pd.Timestamp) for i in df.index):
+        date_index = []
+        for i in df.index:
+            try:
+                date_index += [make_date(str(i))]
+            except:
+                date_index += [i]
+        df.index = date_index
+    df.columns = [make_time(str(c)) if (c and str(c) and str(c)[0] in '0123456789') else str(c) for c in df.columns]
+    if verbosity > 2:
+ 
