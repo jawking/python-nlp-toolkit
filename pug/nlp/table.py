@@ -108,4 +108,22 @@ def flatten_dataframe(df, date_parser=parse_date, verbosity=0):
         df.index = date_index
     df.columns = [make_time(str(c)) if (c and str(c) and str(c)[0] in '0123456789') else str(c) for c in df.columns]
     if verbosity > 2:
- 
+        print('Columns: {0}'.format(df.columns))
+
+    # flatten it
+    df = df.transpose().unstack()
+
+    df = df.drop(df.index[[(isinstance(d[1], (basestring, NoneType))) for d in df.index]])
+
+    # df.index is now a compound key (tuple) of the column labels (df.columns) and the row labels (df.index)
+    # so lets combine them to be datetime values (pandas.Timestamp)
+    dt = None
+    t0 = df.index[0][1]
+    t1 = df.index[1][1]
+    try:
+        dt_stepsize = datetime.timedelta(hours=t1.hour - t0.hour, minutes=t1.minute - t0.minute, seconds=t1.second - t0.second)
+    except:
+        dt_stepsize = datetime.timedelta(hours=0, minutes=15)
+    parse_date_exception = False
+    index = []
+    for i, d in enumerate(df.index.value
