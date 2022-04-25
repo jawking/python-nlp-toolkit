@@ -180,4 +180,16 @@ def flatten_csv(path='.', ext='csv', date_parser=parse_date, verbosity=0, output
     """
     date_parser = date_parser or (lambda x: x)
     dotted_ext, dotted_output_ext = None, None
-    i
+    if ext is not None and output_ext is not None:
+        dotted_ext = ('' if ext.startswith('.') else '.') + ext
+        dotted_output_ext = ('' if output_ext.startswith('.') else '.') + output_ext
+    table = {}
+    for file_properties in find_files(path, ext=ext or '', verbosity=verbosity):
+        file_path = file_properties['path']
+        if output_ext and (dotted_output_ext + '.') in file_path:
+            continue
+        df = pd.DataFrame.from_csv(file_path, parse_dates=False)
+        df = flatten_dataframe(df)
+        if dotted_ext is not None and dotted_output_ext is not None:
+            df.to_csv(file_path[:-len(dotted_ext)] + dotted_output_ext + dotted_ext)
+        table[file
