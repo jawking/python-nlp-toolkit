@@ -126,4 +126,20 @@ def flatten_dataframe(df, date_parser=parse_date, verbosity=0):
         dt_stepsize = datetime.timedelta(hours=0, minutes=15)
     parse_date_exception = False
     index = []
-    for i, d in enumerate(df.index.value
+    for i, d in enumerate(df.index.values):
+        dt = i
+        if verbosity > 2:
+            print(d)
+        # # TODO: assert(not parser_date_exception)
+        # if isinstance(d[0], basestring):
+        #     d[0] = d[0]
+        try:
+            datetimeargs = list(d[0].timetuple()[:3]) + [d[1].hour, d[1].minute, d[1].second, d[1].microsecond]
+            dt = datetime.datetime(*datetimeargs)
+            if verbosity > 2:
+                print('{0} -> {1}'.format(d, dt))
+        except TypeError:
+            if verbosity > 1:
+                print_exc()
+                # print 'file with error: {0}\ndate-time tuple that caused the problem: {1}'.format(file_properties, d)
+            if isi
