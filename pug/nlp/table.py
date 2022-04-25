@@ -163,4 +163,21 @@ def flatten_dataframe(df, date_parser=parse_date, verbosity=0):
     if index and not parse_date_exception:
         df.index = index
     else:
-        df.index 
+        df.index = list(pd.Timestamp(d) for d in index)
+    return df
+
+
+def flatten_csv(path='.', ext='csv', date_parser=parse_date, verbosity=0, output_ext=None):
+    """Load all CSV files in the given path, write .flat.csv files, return `DataFrame`s
+
+    Arguments:
+      path (str): file or folder to retrieve CSV files and `pandas.DataFrame`s from
+      ext (str): file name extension (to filter files by)
+      date_parser (function): if the MultiIndex can be interpretted as a datetime, this parser will be used
+
+    Returns:
+      dict of DataFrame: { file_path: flattened_data_frame }
+    """
+    date_parser = date_parser or (lambda x: x)
+    dotted_ext, dotted_output_ext = None, None
+    i
