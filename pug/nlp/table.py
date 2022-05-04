@@ -192,4 +192,5 @@ def flatten_csv(path='.', ext='csv', date_parser=parse_date, verbosity=0, output
         df = flatten_dataframe(df)
         if dotted_ext is not None and dotted_output_ext is not None:
             df.to_csv(file_path[:-len(dotted_ext)] + dotted_output_ext + dotted_ext)
-        table[file
+        table[file_path] = df
+    return table
