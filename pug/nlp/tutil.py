@@ -406,3 +406,89 @@ def make_tz_aware(dt, tz='UTC', is_dst=None):
 def normalize_datetime(t, time=datetime.timedelta(hours=16)):
     if isinstance(t, datetime.datetime):
         if not t.hours + t.seconds:
+            if time:
+                t += time
+        return t
+    if isinstance(t, datetime.date):
+        return normalize_datetime(datetime.datetime(t), time=time)
+    if isinstance(t, basestring):
+        return normalize_datetime(parse_date(t))
+    return normalize_datetime(datetime.datetime(*[int(i) for i in t]))
+
+
+def normalize_date(d):
+    if isinstance(d, datetime.date):
+        return d
+    if isinstance(d, datetime.datetime):
+        return datetime.date(d.year, d.month, d.day)
+    if isinstance(d, basestring):
+        return normalize_date(parse_date(d))
+    return normalize_date(datetime.datetime(*[int(i) for i in d]))
+
+
+def clean_wiki_datetime(dt, squelch=True):
+    if isinstance(dt, datetime.datetime):
+        return dt
+    elif not isinstance(dt, basestring):
+        dt = ' '.join(dt)
+    try:
+        return make_tz_aware(parse_date(dt))
+    except:
+        if not squelch:
+            print("Failed to parse %r as a date" % dt)
+    dt = [s.strip() for s in dt.split(' ')]
+    # get rid of any " at " or empty strings
+    dt = [s for s in dt if s and s.lower() != 'at']
+
+    # deal with the absence of :'s in wikipedia datetime strings
+
+    if rex.month_name.match(dt[0]) or rex.month_name.match(dt[1]):
+        if len(dt) >= 5:
+            dt = dt[:-2] + [dt[-2].strip(':') + ':' + dt[-1].strip(':')]
+            return clean_wiki_datetime(' '.join(dt))
+        elif len(dt) == 4 and (len(dt[3]) == 4 or len(dt[0]) == 4):
+            dt[:-1] + ['00']
+            return clean_wiki_datetime(' '.join(dt))
+    elif rex.month_name.match(dt[-2]) or rex.month_name.match(dt[-3]):
+        if len(dt) >= 5:
+            dt = [dt[0].strip(':') + ':' + dt[1].strip(':')] + dt[2:]
+            return clean_wiki_datetime(' '.join(dt))
+        elif len(dt) == 4 and (len(dt[-1]) == 4 or len(dt[-3]) == 4):
+            dt = [dt[0], '00'] + dt[1:]
+            return clean_wiki_datetime(' '.join(dt))
+
+    try:
+        return make_tz_aware(parse_date(' '.join(dt)))
+    except Exception as e:
+        if squelch:
+            from traceback import format_exc
+            print(format_exc(e) + '\n^^^ Exception caught ^^^\nWARN: Failed to parse datetime string %r\n      from list of strings %r' %
+                  (' '.join(dt), dt))
+            return dt
+        raise(e)
+
+
+def clip_datetime(dt, tz=DEFAULT_TZ, is_dst=None):
+    """Limit a datetime to a valid range for datetime, datetime64, and Timestamp objects
+    >>> from datetime import timedelta
+    >>> from clayton.constant import MAX_DATETIME64, MAX_DATETIME, MAX_TIMESTAMP
+    >>> clip_datetime(MAX_DATETIME + timedelta(100)) == pd.Timestamp(MAX_DATETIME64, tz='utc') == MAX_TIMESTAMP
+    True
+    >>> MAX_TIMESTAMP
+    Timestamp('2262-04-11 23:47:16.854775807+0000', tz='UTC')
+    """
+    if isinstance(dt, datetime.datetime):
+        # TODO: this gives up a day of datetime range due to assumptions about timezone
+        #       make MIN/MAX naive and replace dt.replace(tz=None) before comparison
+        #       set it back when done
+        dt = make_tz_aware(dt, tz=tz, is_dst=is_dst)
+        try:
+            return pd.tslib.Timestamp(dt)
+        except:
+            pass
+        if dt > MAX_DATETIME:
+            return MAX_TIMESTAMP
+        elif dt < MIN_DATETIME:
+            return MIN_TIMESTAMP
+        return NAT
+    return dt
