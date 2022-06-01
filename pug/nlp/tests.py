@@ -31,4 +31,11 @@ class NLPDocTest(TestCase):
         self.test_module(regex, optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
 
     def test_penn_treebank_tokenizer(self):
-        self.test_module(penn_treebank_tokenizer, optionflags=
+        self.test_module(penn_treebank_tokenizer, optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+
+    def test_detector_morse(self):
+        self.test_module(detector_morse, optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+
+
+if __name__ == '__main__':
+    main()
