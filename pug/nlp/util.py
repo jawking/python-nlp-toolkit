@@ -88,4 +88,20 @@ def qs_to_table(qs, excluded_fields=['id']):
     for row in qs:
         for f in fields:
             if f in excluded_fields:
-         
+                continue
+            rowl += [getattr(row, f)]
+        rows, rowl = rows + [rowl], []
+    return rows
+
+
+def force_hashable(obj, recursive=True):
+    """Force frozenset() command to freeze the order and contents of mutables and iterables like lists, dicts, generators
+
+    Useful for memoization and constructing dicts or hashtables where keys must be immutable.
+
+    FIXME: Rename function because "hashable" is misleading.
+           A better name might be `force_immutable`.
+           because some hashable objects (generators) are tuplized  by this function
+           `tuplized` is probably a better name, but strings are left alone, so not quite right
+
+   
