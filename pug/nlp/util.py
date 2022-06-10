@@ -61,4 +61,31 @@ from time import mktime
 from traceback import format_exc
 
 import pandas as pd
-from .tutil import cli
+from .tutil import clip_datetime
+import progressbar
+from fuzzywuzzy import process as fuzzy
+from slugify import slugify
+
+from pug.nlp import charlist
+
+from .constant import PUNC
+from .constant import FLOAT_TYPES, MAX_CHR
+from .constant import ROUNDABLE_NUMERIC_TYPES, COUNT_NAMES, SCALAR_TYPES, NUMBERS_AND_DATETIMES
+from .constant import DATETIME_TYPES, DEFAULT_TZ
+
+from pug.nlp import regex as rex
+from .tutil import make_tz_aware
+
+
+np = pd.np
+logger = logging.getLogger(__name__)
+
+
+def qs_to_table(qs, excluded_fields=['id']):
+    rows, rowl = [], []
+    qs = qs.all()
+    fields = sorted(qs[0]._meta.get_all_field_names())
+    for row in qs:
+        for f in fields:
+            if f in excluded_fields:
+         
