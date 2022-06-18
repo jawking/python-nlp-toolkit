@@ -104,4 +104,20 @@ def force_hashable(obj, recursive=True):
            because some hashable objects (generators) are tuplized  by this function
            `tuplized` is probably a better name, but strings are left alone, so not quite right
 
-   
+    >>> force_hashable([1,2.,['3','four'],'five', {'s': 'ix'}])
+    (1, 2.0, ('3', 'four'), 'five', (('s', 'ix'),))
+    >>> force_hashable(i for i in range(4))
+    (0, 1, 2, 3)
+    >>> force_hashable(Counter('abbccc')) ==  (('a', 1), ('c', 3), ('b', 2))
+    True
+    """
+    # if it's already hashable, and isn't a generator (which are also hashable, but not mutable)
+    if hasattr(obj, '__hash__') and not hasattr(obj, 'next'):
+        try:
+            hash(obj)
+            return obj
+        except:
+            pass
+    if hasattr(obj, '__iter__'):
+        # looks like a Mapping if it has .get() and .items(), so should treat it like one
+        if hasattr(obj, 'get') and hasattr(obj, 'items'):
