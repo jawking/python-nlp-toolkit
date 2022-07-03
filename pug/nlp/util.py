@@ -121,3 +121,18 @@ def force_hashable(obj, recursive=True):
     if hasattr(obj, '__iter__'):
         # looks like a Mapping if it has .get() and .items(), so should treat it like one
         if hasattr(obj, 'get') and hasattr(obj, 'items'):
+            # FIXME: prevent infinite recursion:
+            #        tuples don't have 'items' method so this will recurse forever
+            #        if elements within new tuple aren't hashable and recurse has not been set!
+            return force_hashable(tuple(obj.items()))
+        if recursive:
+            return tuple(force_hashable(item) for item in obj)
+        return tuple(obj)
+    # strings are hashable so this ends the recursion for any object without an __iter__ method (strings do not)
+    return str(obj)
+
+
+def inverted_dict(d):
+    """Return a dict with swapped keys and values
+
+    >>> inverted_dict({0: ('a', 'b'), 1: 'cd'}) == {'cd': 
