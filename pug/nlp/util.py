@@ -135,4 +135,24 @@ def force_hashable(obj, recursive=True):
 def inverted_dict(d):
     """Return a dict with swapped keys and values
 
-    >>> inverted_dict({0: ('a', 'b'), 1: 'cd'}) == {'cd': 
+    >>> inverted_dict({0: ('a', 'b'), 1: 'cd'}) == {'cd': 1, ('a', 'b'): 0}
+    True
+    """
+    return dict((force_hashable(v), k) for (k, v) in viewitems(dict(d)))
+
+
+def inverted_dict_of_lists(d):
+    """Return a dict where the keys are all the values listed in the values of the original dict
+
+    >>> inverted_dict_of_lists({0: ['a', 'b'], 1: 'cd'}) == {'a': 0, 'b': 0, 'cd': 1}
+    True
+    """
+    new_dict = {}
+    for (old_key, old_value_list) in viewitems(dict(d)):
+        for new_key in listify(old_value_list):
+            new_dict[new_key] = old_key
+    return new_dict
+
+
+def sort_strings(strings, sort_order=None, reverse=False, case_sensitive=False, sort_order_first=True):
+    """Sort a l
