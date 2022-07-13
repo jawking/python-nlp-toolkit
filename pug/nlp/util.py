@@ -155,4 +155,14 @@ def inverted_dict_of_lists(d):
 
 
 def sort_strings(strings, sort_order=None, reverse=False, case_sensitive=False, sort_order_first=True):
-    """Sort a l
+    """Sort a list of strings according to the provided sorted list of string prefixes
+
+    TODO:
+        - Provide an option to use `.startswith()` rather than a fixed prefix length (will be much slower)
+
+    Arguments:
+        sort_order_first (bool): Whether strings in sort_order should always preceed "unknown" strings
+        sort_order (sequence of str): Desired ordering as a list of prefixes to the strings
+            If sort_order strings have varying length, the max length will determine the prefix length compared
+        reverse (bool): whether to reverse the sort orded. Passed through to `sorted(strings, reverse=reverse)`
+        case_senstive (bool): Whether
