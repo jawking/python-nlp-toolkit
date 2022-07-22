@@ -165,4 +165,15 @@ def sort_strings(strings, sort_order=None, reverse=False, case_sensitive=False, 
         sort_order (sequence of str): Desired ordering as a list of prefixes to the strings
             If sort_order strings have varying length, the max length will determine the prefix length compared
         reverse (bool): whether to reverse the sort orded. Passed through to `sorted(strings, reverse=reverse)`
-        case_senstive (bool): Whether
+        case_senstive (bool): Whether to sort in lexographic rather than alphabetic order
+         and whether the prefixes  in sort_order are checked in a case-sensitive way
+
+    Examples:
+        >>> sort_strings(['morn32', 'morning', 'unknown', 'date', 'dow', 'doy', 'moy'],
+        ...              ('dat', 'dow', 'moy', 'dom', 'doy', 'mor'))
+        ['date', 'dow', 'moy', 'doy', 'morn32', 'morning', 'unknown']
+        >>> sort_strings(['morn32', 'morning', 'unknown', 'less unknown', 'lucy', 'date', 'dow', 'doy', 'moy'],
+        ...              ('dat', 'dow', 'moy', 'dom', 'doy', 'mor'), reverse=True)
+        ['unknown', 'lucy', 'less unknown', 'morning', 'morn32', 'doy', 'moy', 'dow', 'date']
+
+        Strings whose prefixes don't 
