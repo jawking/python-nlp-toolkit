@@ -176,4 +176,14 @@ def sort_strings(strings, sort_order=None, reverse=False, case_sensitive=False, 
         ...              ('dat', 'dow', 'moy', 'dom', 'doy', 'mor'), reverse=True)
         ['unknown', 'lucy', 'less unknown', 'morning', 'morn32', 'doy', 'moy', 'dow', 'date']
 
-        Strings whose prefixes don't 
+        Strings whose prefixes don't exist in `sort_order` sequence can be interleaved into the
+        sorted list in lexical order by setting `sort_order_first=False`
+        >>> sort_strings(['morn32', 'morning', 'unknown', 'lucy', 'less unknown', 'date', 'dow', 'doy', 'moy'],
+        ...              ('dat', 'dow', 'moy', 'dom', 'moy', 'mor'),
+        ...              sort_order_first=False)  # doctest: +NORMALIZE_WHITESPACE
+        ['date', 'dow', 'doy', 'less unknown', 'lucy', 'moy', 'morn32', 'morning', 'unknown']
+    """
+    if not case_sensitive:
+        sort_order = tuple(s.lower() for s in sort_order)
+        strings = tuple(s.lower() for s in strings)
+    prefix_len = max(l
