@@ -186,4 +186,17 @@ def sort_strings(strings, sort_order=None, reverse=False, case_sensitive=False, 
     if not case_sensitive:
         sort_order = tuple(s.lower() for s in sort_order)
         strings = tuple(s.lower() for s in strings)
-    prefix_len = max(l
+    prefix_len = max(len(s) for s in sort_order)
+
+    def compare(a, b, prefix_len=prefix_len):
+        if prefix_len:
+            if a[:prefix_len] in sort_order:
+                if b[:prefix_len] in sort_order:
+                    comparison = sort_order.index(a[:prefix_len]) - sort_order.index(b[:prefix_len])
+                    comparison = int(comparison / abs(comparison or 1))
+                    if comparison:
+                        return comparison * (-2 * reverse + 1)
+                elif sort_order_first:
+                    return -1 * (-2 * reverse + 1)
+            # b may be in sort_order list, so it should be first
+            elif sort_order_first and b[:prefix_l
