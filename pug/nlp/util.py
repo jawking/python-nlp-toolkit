@@ -199,4 +199,24 @@ def sort_strings(strings, sort_order=None, reverse=False, case_sensitive=False, 
                 elif sort_order_first:
                     return -1 * (-2 * reverse + 1)
             # b may be in sort_order list, so it should be first
-            elif sort_order_first and b[:prefix_l
+            elif sort_order_first and b[:prefix_len] in sort_order:
+                return -2 * reverse + 1
+        return (-1 * (a < b) + 1 * (a > b)) * (-2 * reverse + 1)
+
+    return sorted(strings, cmp=compare)
+
+
+def clean_field_dict(field_dict, cleaner=str.strip, time_zone=None):
+    r"""Normalize field values by stripping whitespace from strings, localizing datetimes to a timezone, etc
+
+    >>> sorted(clean_field_dict({'_state': object(), 'x': 1, 'y': u"\t  Wash Me! \n" }).items())
+    [('x', 1), ('y', u'Wash Me!')]
+    """
+    d = {}
+    if time_zone is None:
+        tz = DEFAULT_TZ
+    for k, v in viewitems(field_dict):
+        if k == '_state':
+            continue
+        if isinstance(v, basestring):
+            d[k] = cleaner(str(v
