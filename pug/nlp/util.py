@@ -219,4 +219,27 @@ def clean_field_dict(field_dict, cleaner=str.strip, time_zone=None):
         if k == '_state':
             continue
         if isinstance(v, basestring):
-            d[k] = cleaner(str(v
+            d[k] = cleaner(str(v))
+        elif isinstance(v, (datetime.datetime, datetime.date)):
+            d[k] = tz.localize(v)
+        else:
+            d[k] = v
+    return d
+
+
+# def reduce_vocab(tokens, similarity=.85, limit=20):
+#     """Find spelling variations of similar words within a list of tokens to reduce token set size
+
+#     Arguments:
+#       tokens (list or set or tuple of str): token strings from which to eliminate similar spellings
+
+#     Examples:
+#       >>> reduce_vocab(('on', 'hon', 'honey', 'ones', 'one', 'two', 'three'))  # doctest: +NORMALIZE_WHITESPACE
+
+
+#     """
+#     tokens = set(tokens)
+#     thesaurus = {}
+#     while tokens:
+#         tok = tokens.pop()
+#         
