@@ -242,4 +242,19 @@ def clean_field_dict(field_dict, cleaner=str.strip, time_zone=None):
 #     thesaurus = {}
 #     while tokens:
 #         tok = tokens.pop()
-#         
+#         matches = fuzzy.extractBests(tok, tokens, score_cutoff=int(similarity * 100), limit=20)
+#         if matches:
+#             thesaurus[tok] = zip(*matches)[0]
+#         else:
+#             thesaurus[tok] = (tok,)
+#         for syn in thesaurus[tok][1:]:
+#             tokens.discard(syn)
+#     return thesaurus
+
+
+def reduce_vocab(tokens, similarity=.85, limit=20, sort_order=-1):
+    """Find spelling variations of similar words within a list of tokens to reduce token set size
+
+    Lexically sorted in reverse order (unless `reverse=False`), before running through fuzzy-wuzzy
+    which results in the longer of identical spellings to be prefered (e.g. "ones" prefered to "one")
+  
