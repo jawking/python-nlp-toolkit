@@ -257,4 +257,19 @@ def reduce_vocab(tokens, similarity=.85, limit=20, sort_order=-1):
 
     Lexically sorted in reverse order (unless `reverse=False`), before running through fuzzy-wuzzy
     which results in the longer of identical spellings to be prefered (e.g. "ones" prefered to "one")
+    as the key token. Usually you wantThis is usually what you want.
+
+    Arguments:
+      tokens (list or set or tuple of str): token strings from which to eliminate similar spellings
+      similarity (float): portion of characters that should be unchanged in order to be considered a synonym
+        as a fraction of the key token length.
+        e.g. `0.85` (which means 85%) allows "hon" to match "on" and "honey", but not "one"
+
+    Returns:
+      dict: { 'token': ('similar_token', 'similar_token2', ...), ...}
+
+    Examples:
+      >>> tokens = ('on', 'hon', 'honey', 'ones', 'one', 'two', 'three')
+      >>> answer = {'hon': ('on', 'honey'),
+      ...           'one': ('ones',),
   
