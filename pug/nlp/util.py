@@ -272,4 +272,22 @@ def reduce_vocab(tokens, similarity=.85, limit=20, sort_order=-1):
       >>> tokens = ('on', 'hon', 'honey', 'ones', 'one', 'two', 'three')
       >>> answer = {'hon': ('on', 'honey'),
       ...           'one': ('ones',),
-  
+      ...           'three': (),
+      ...           'two': ()}
+      >>> reduce_vocab(tokens, sort_order=1) == answer
+      True
+      >>> answer = {'honey': ('hon',),
+      ...           'ones': ('on', 'one'),
+      ...           'three': (),
+      ...           'two': ()}
+      >>> reduce_vocab(tokens, sort_order=-1) == answer
+      True
+      >>> (reduce_vocab(tokens, similarity=0.3, limit=2, sort_order=-1) ==
+      ...  {'ones': (), 'two': ('on', 'hon'), 'three': ('honey', 'one')})
+      True
+      >>> (reduce_vocab(tokens, similarity=0.3, limit=3, sort_order=-1) ==
+      ...  {'ones': (), 'two': ('on', 'hon', 'one'), 'three': ('honey',)})
+      True
+    """
+    if 0 <= similarity <= 1:
+        
