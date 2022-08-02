@@ -309,4 +309,23 @@ def reduce_vocab(tokens, similarity=.85, limit=20, sort_order=-1):
         if matches:
             thesaurus[tok] = list(zip(*matches))[0]
         else:
-            thesaurus
+            thesaurus[tok] = ()
+        for syn in thesaurus[tok]:
+            tokens.discard(syn)
+    return thesaurus
+
+
+def reduce_vocab_by_len(tokens, similarity=.87, limit=20, reverse=True):
+    """Find spelling variations of similar words within a list of tokens to reduce token set size
+
+    Sorted by length (longest first unless reverse=False) before running through fuzzy-wuzzy
+    which results in longer key tokens.
+
+    Arguments:
+      tokens (list or set or tuple of str): token strings from which to eliminate similar spellings
+
+    Returns:
+      dict: { 'token': ('similar_token', 'similar_token2', ...), ...}
+
+    Examples:
+      >>> tokens = ('on', 'hon', 'honey', 'ones', 'one', 'two'
