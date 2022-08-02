@@ -290,4 +290,23 @@ def reduce_vocab(tokens, similarity=.85, limit=20, sort_order=-1):
       True
     """
     if 0 <= similarity <= 1:
-        
+        similarity *= 100
+    if sort_order:
+        tokens = set(tokens)
+        tokens_sorted = sorted(list(tokens), reverse=bool(sort_order < 0))
+    else:
+        tokens_sorted = list(tokens)
+        tokens = set(tokens)
+    # print(tokens)
+    thesaurus = {}
+    for tok in tokens_sorted:
+        try:
+            tokens.remove(tok)
+        except (KeyError, ValueError):
+            continue
+        # FIXME: this is slow because the tokens list must be regenerated and reinstantiated with each iteration
+        matches = fuzzy.extractBests(tok, list(tokens), score_cutoff=int(similarity), limit=limit)
+        if matches:
+            thesaurus[tok] = list(zip(*matches))[0]
+        else:
+            thesaurus
