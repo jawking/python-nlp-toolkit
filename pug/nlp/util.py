@@ -381,4 +381,25 @@ def quantify_field_dict(field_dict, precision=None, date_precision=None, cleaner
 
 
 def generate_batches(sequence, batch_len=1, allow_partial=True, ignore_errors=True, verbosity=1):
-    """Iterate through a sequence (or generator) in batches of length `batch_le
+    """Iterate through a sequence (or generator) in batches of length `batch_len`
+
+    http://stackoverflow.com/a/761125/623735
+    >>> [batch for batch in generate_batches(range(7), 3)]
+    [[0, 1, 2], [3, 4, 5], [6]]
+    """
+    it = iter(sequence)
+    last_value = False
+    # An exception will be thrown by `.next()` here and caught in the loop that called this iterator/generator
+    while not last_value:
+        batch = []
+        for n in range(batch_len):
+            try:
+                batch += (next(it),)
+            except StopIteration:
+                last_value = True
+                if batch:
+                    break
+                else:
+                    raise StopIteration
+            except Exception:
+                # 'Error: new-line character seen 
