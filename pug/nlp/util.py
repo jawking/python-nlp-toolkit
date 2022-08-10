@@ -328,4 +328,17 @@ def reduce_vocab_by_len(tokens, similarity=.87, limit=20, reverse=True):
       dict: { 'token': ('similar_token', 'similar_token2', ...), ...}
 
     Examples:
-      >>> tokens = ('on', 'hon', 'honey', 'ones', 'one', 'two'
+      >>> tokens = ('on', 'hon', 'honey', 'ones', 'one', 'two', 'three')
+      >>> reduce_vocab_by_len(tokens) ==  {'honey': ('on', 'hon', 'one'), 'ones': (), 'three': (), 'two': ()}
+      True
+    """
+    tokens = set(tokens)
+    tokens_sorted = list(zip(*sorted([(len(tok), tok) for tok in tokens], reverse=reverse)))[1]
+    return reduce_vocab(tokens=tokens_sorted, similarity=similarity, limit=limit, sort_order=0)
+
+
+def quantify_field_dict(field_dict, precision=None, date_precision=None, cleaner=str.strip):
+    r"""Convert strings and datetime objects in the values of a dict into float/int/long, if possible
+
+    Arguments:
+      field_dict (dict): The dict to have any values (not keys) that are strings "qua
