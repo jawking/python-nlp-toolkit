@@ -341,4 +341,18 @@ def quantify_field_dict(field_dict, precision=None, date_precision=None, cleaner
     r"""Convert strings and datetime objects in the values of a dict into float/int/long, if possible
 
     Arguments:
-      field_dict (dict): The dict to have any values (not keys) that are strings "qua
+      field_dict (dict): The dict to have any values (not keys) that are strings "quantified"
+      precision (int): Number of digits of precision to enforce
+      cleaner: A string cleaner to apply to all string before
+
+
+    FIXME: define a time zone for the datetime object and get it to be consistent for travis and local
+
+    >>> sorted(viewitems(quantify_field_dict({'_state': object(), 'x': 12345678911131517L, 'y': "\t  Wash Me! \n",
+    ...     'z': datetime.datetime(1970, 10, 23, 23, 59, 59, 123456)})))  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    [('x', 12345678911131517), ('y', u'Wash Me!'), ('z', 25...99.123456)]
+    """
+    if cleaner:
+        d = clean_field_dict(field_dict, cleaner=cleaner)
+    for k, v in viewitems(d):
+        if isinst
