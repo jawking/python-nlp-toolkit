@@ -366,4 +366,19 @@ def quantify_field_dict(field_dict, precision=None, date_precision=None, cleaner
                     continue
             except:
                 pass
-        if not isinstance(d[k], (int, float))
+        if not isinstance(d[k], (int, float)):
+            try:
+                d[k] = float(d[k])
+            except:
+                pass
+        if precision is not None and isinstance(d[k], ROUNDABLE_NUMERIC_TYPES):
+            d[k] = round(d[k], precision)
+        if isinstance(d[k], float) and d[k].is_integer():
+            # `int()` will convert to a long, if value overflows an integer type
+            # use the original value, `v`, in case it was a long and d[k] is has been truncated by the conversion to float!
+            d[k] = int(v)
+    return d
+
+
+def generate_batches(sequence, batch_len=1, allow_partial=True, ignore_errors=True, verbosity=1):
+    """Iterate through a sequence (or generator) in batches of length `batch_le
