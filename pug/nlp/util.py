@@ -355,4 +355,15 @@ def quantify_field_dict(field_dict, precision=None, date_precision=None, cleaner
     if cleaner:
         d = clean_field_dict(field_dict, cleaner=cleaner)
     for k, v in viewitems(d):
-        if isinst
+        if isinstance(d[k], datetime.datetime):
+            # seconds since epoch = datetime.datetime(1969,12,31,18,0,0)
+            try:
+                # around the year 2250, a float conversion of this string will lose 1 microsecond of precision,
+                # and around 22500 the loss of precision will be 10 microseconds
+                d[k] = float(d[k].strftime('%s.%f'))  # seconds since Jan 1, 1970
+                if date_precision is not None and isinstance(d[k], ROUNDABLE_NUMERIC_TYPES):
+                    d[k] = round(d[k], date_precision)
+                    continue
+            except:
+                pass
+        if not isinstance(d[k], (int, float))
