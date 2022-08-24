@@ -402,4 +402,27 @@ def generate_batches(sequence, batch_len=1, allow_partial=True, ignore_errors=Tr
                 else:
                     raise StopIteration
             except Exception:
-                # 'Error: new-line character seen 
+                # 'Error: new-line character seen in unquoted field - do you need to open the file in universal-newline mode?'
+                if verbosity > 0:
+                    print_exc()
+                if not ignore_errors:
+                    raise
+        yield batch
+
+
+def generate_tuple_batches(qs, batch_len=1):
+    """Iterate through a queryset in batches of length `batch_len`
+
+    >>> [batch for batch in generate_tuple_batches(range(7), 3)]
+    [(0, 1, 2), (3, 4, 5), (6,)]
+    """
+    num_items, batch = 0, []
+    for item in qs:
+        if num_items >= batch_len:
+            yield tuple(batch)
+            num_items = 0
+            batch = []
+        num_items += 1
+        batch += [item]
+    if num_items:
+        yield tuple(batc
