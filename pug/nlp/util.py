@@ -425,4 +425,33 @@ def generate_tuple_batches(qs, batch_len=1):
         num_items += 1
         batch += [item]
     if num_items:
-        yield tuple(batc
+        yield tuple(batch)
+
+
+def sliding_window(seq, n=2):
+    """Generate overlapping sliding/rolling windows (of width n) over an iterable
+
+    s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...
+
+    References:
+      http://stackoverflow.com/a/6822773/623735
+
+    Examples:
+
+    >>> list(sliding_window(range(6), 3))  # doctest: +NORMALIZE_WHITESPACE
+    [(0, 1, 2),
+     (1, 2, 3),
+     (2, 3, 4),
+     (3, 4, 5)]
+    """
+    it = iter(seq)
+    result = tuple(itertools.islice(it, n))
+    if len(result) == n:
+        yield result
+    for elem in it:
+        result = result[1:] + (elem,)
+        yield result
+
+
+def generate_slices(sliceable_set, batch_len=1, length=None, start_batch=0):
+    """Iterate through a sequen
