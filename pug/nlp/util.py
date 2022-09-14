@@ -454,4 +454,23 @@ def sliding_window(seq, n=2):
 
 
 def generate_slices(sliceable_set, batch_len=1, length=None, start_batch=0):
-    """Iterate through a sequen
+    """Iterate through a sequence (or generator) in batches of length `batch_len`
+
+    See Also:
+      pug.dj.db.generate_queryset_batches
+
+    References:
+      http://stackoverflow.com/a/761125/623735
+
+    Examples:
+      >>  [batch for batch in generate_slices(range(7), 3)]
+      [(0, 1, 2), (3, 4, 5), (6,)]
+      >>  from django.contrib.auth.models import User, Permission
+      >>  len(list(generate_slices(User.objects.all(), 2)))       == max(math.ceil(User.objects.count() / 2.), 1)
+      True
+      >>  len(list(generate_slices(Permission.objects.all(), 2))) == max(math.ceil(Permission.objects.count() / 2.), 1)
+      True
+    """
+    if length is None:
+        try:
+            length = sliceab
