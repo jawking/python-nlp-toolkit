@@ -473,4 +473,31 @@ def generate_slices(sliceable_set, batch_len=1, length=None, start_batch=0):
     """
     if length is None:
         try:
-            length = sliceab
+            length = sliceable_set.count()
+        except:
+            length = len(sliceable_set)
+    length = int(length)
+
+    for i in range(int(length / batch_len + 1)):
+        if i < start_batch:
+            continue
+        start = i * batch_len
+        end = min((i + 1) * batch_len, length)
+        if start != end:
+            yield tuple(sliceable_set[start:end])
+    raise StopIteration
+
+
+def find_count_label(d):
+    """Find the member of a set that means "count" or "frequency" or "probability" or "number of occurrences".
+
+    """
+    for name in COUNT_NAMES:
+        if name in d:
+            return name
+    for name in COUNT_NAMES:
+        if str(name).lower() in d:
+            return name
+
+
+def first_in
