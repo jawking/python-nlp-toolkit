@@ -500,4 +500,20 @@ def find_count_label(d):
             return name
 
 
-def first_in
+def first_in_seq(seq):
+    # lists/sequences
+    return next(iter(seq))
+
+
+def get_key_for_value(dict_obj, value, default=None):
+    """
+    >>> get_key_for_value({0: 'what', 'k': 'ever', 'you': 'want', 'to find': None}, 'you')
+    >>> get_key_for_value({0: 'what', 'k': 'ever', 'you': 'want', 'to find': None}, 'you', default='Not Found')
+    'Not Found'
+    >>> get_key_for_value({0: 'what', 'k': 'ever', 'you': 'want', 'to find': None}, 'other', default='Not Found')
+    'Not Found'
+    >>> get_key_for_value({0: 'what', 'k': 'ever', 'you': 'want', 'to find': None}, 'want')
+    'you'
+    >>> get_key_for_value({0: 'what', '': 'ever', 'you': 'want', 'to find': None, 'you': 'too'}, 'what')
+    0
+    >>> get_key_for_value({0: 'wha
