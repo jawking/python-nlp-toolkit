@@ -516,4 +516,23 @@ def get_key_for_value(dict_obj, value, default=None):
     'you'
     >>> get_key_for_value({0: 'what', '': 'ever', 'you': 'want', 'to find': None, 'you': 'too'}, 'what')
     0
-    >>> get_key_for_value({0: 'wha
+    >>> get_key_for_value({0: 'what', '': 'ever', 'you': 'want', 'to find': None, 'you': 'too', ' ': 'want'}, 'want')
+    ' '
+    """
+    for k, v in viewitems(dict_obj):
+        if v == value:
+            return k
+    return default
+
+
+def list_set(seq):
+    """Similar to `list(set(seq))`, but maintains the order of `seq` while eliminating duplicates
+
+    In general list(set(L)) will not have the same order as the original list.
+    This is a list(set(L)) function that will preserve the order of L.
+
+    Arguments:
+      seq (iterable): list, tuple, or other iterable to be used to produce an ordered `set()`
+
+    Returns:
+      iterable: A copy of `seq` but with duplicates removed, and distinct elements in the same 
