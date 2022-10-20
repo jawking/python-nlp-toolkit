@@ -535,4 +535,22 @@ def list_set(seq):
       seq (iterable): list, tuple, or other iterable to be used to produce an ordered `set()`
 
     Returns:
-      iterable: A copy of `seq` but with duplicates removed, and distinct elements in the same 
+      iterable: A copy of `seq` but with duplicates removed, and distinct elements in the same order as in `seq`
+
+    Examples:
+      >>> list_set([2.7,3,2,2,2,1,1,2,3,4,3,2,42,1])
+      [2.7, 3, 2, 1, 4, 42]
+      >>> list_set(['Zzz','abc', ('what.', 'ever.'), 0, 0.0, 'Zzz', 0.00, 'ABC'])
+      ['Zzz', 'abc', ('what.', 'ever.'), 0, 'ABC']
+    """
+    new_list = []
+    for i in seq:
+        if i not in new_list:
+            new_list += [i]
+    return type(seq)(new_list)
+
+
+def fuzzy_get(possible_keys, approximate_key, default=None, similarity=0.6, tuple_joiner='|', key_and_value=False, dict_keys=None):
+    r"""Find the closest matching key in a dictionary (or element in a list)
+
+    For a dict, optionally retrieve the associated value associated wi
