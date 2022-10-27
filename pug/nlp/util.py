@@ -577,4 +577,14 @@ def fuzzy_get(possible_keys, approximate_key, default=None, similarity=0.6, tupl
     Examples:
       >>> fuzzy_get({'seller': 2.7, 'sailor': set('e')}, 'sail')
       set(['e'])
-   
+      >>> fuzzy_get({'seller': 2.7, 'sailor': set('e'), 'camera': object()}, 'SLR')
+      2.7
+      >>> fuzzy_get({'seller': 2.7, 'sailor': set('e'), 'camera': object()}, 'I')
+      set(['e'])
+      >>> fuzzy_get({'word': tuple('word'), 'noun': tuple('noun')}, 'woh!', similarity=.3, key_and_value=True)
+      ('word', ('w', 'o', 'r', 'd'))
+      >>> fuzzy_get({'word': tuple('word'), 'noun': tuple('noun')}, 'woh!', similarity=.9, key_and_value=True)
+      (None, None)
+      >>> fuzzy_get({'word': tuple('word'), 'noun': tuple('noun')}, 'woh!', similarity=.9, default='darn :-()', key_and_value=True)
+      (None, 'darn :-()')
+      >>> possible_keys = ('alerts astronomy conditions currenthurricane forecast f
