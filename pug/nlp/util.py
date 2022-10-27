@@ -564,4 +564,17 @@ def fuzzy_get(possible_keys, approximate_key, default=None, similarity=0.6, tupl
       possible_keys (dict): object to run the get method on using the key that is most similar to one within the dict
       approximate_key (str): key to look for a fuzzy match within the dict keys
       default (obj): the value to return if a similar key cannote be found in the `possible_keys`
-      similarity (float): fractional similiarity between the approximate_key and the dict key (0.9 means 90% of characters must b
+      similarity (float): fractional similiarity between the approximate_key and the dict key (0.9 means 90% of characters must be identical)
+      tuple_joiner (str): Character to use as delimitter/joiner between tuple elements.
+        Used to create keys of any tuples to be able to use fuzzywuzzy string matching on it.
+      key_and_value (bool): Whether to return both the key and its value (True) or just the value (False).
+        Default is the same behavior as dict.get (i.e. key_and_value=False)
+      dict_keys (list of str): if you already have a set of keys to search, this will save this funciton a little time and RAM
+
+    See Also:
+      get_similar: Allows nonstring keys and searches object attributes in addition to keys
+
+    Examples:
+      >>> fuzzy_get({'seller': 2.7, 'sailor': set('e')}, 'sail')
+      set(['e'])
+   
