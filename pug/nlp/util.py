@@ -604,4 +604,16 @@ def fuzzy_get(possible_keys, approximate_key, default=None, similarity=0.6, tupl
       >>> fuzzy_get(df, 'get')
     """
     dict_obj = copy.copy(possible_keys)
-    if not isinstance(dict_obj, (Mapping, pd.DataFrame, p
+    if not isinstance(dict_obj, (Mapping, pd.DataFrame, pd.Series)):
+        dict_obj = dict((x, x) for x in dict_obj)
+
+    fuzzy_key, value = None, default
+    if approximate_key in dict_obj:
+        fuzzy_key, value = approximate_key, dict_obj[approximate_key]
+    else:
+        strkey = str(approximate_key)
+        if approximate_key and strkey and strkey.strip():
+            # print 'no exact match was found for {0} in {1} so preprocessing keys'.format(approximate_key, dict_obj.keys())
+            if any(isinstance(k, (tuple, list)) for k in dict_obj):
+                dict_obj = dict((tuple_joiner.join(str(k2) for k2 in k), v) for (k, v) in viewitems(dict_obj))
+                if isinstance(approximate_key, (tup
