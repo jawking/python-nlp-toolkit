@@ -616,4 +616,16 @@ def fuzzy_get(possible_keys, approximate_key, default=None, similarity=0.6, tupl
             # print 'no exact match was found for {0} in {1} so preprocessing keys'.format(approximate_key, dict_obj.keys())
             if any(isinstance(k, (tuple, list)) for k in dict_obj):
                 dict_obj = dict((tuple_joiner.join(str(k2) for k2 in k), v) for (k, v) in viewitems(dict_obj))
-                if isinstance(approximate_key, (tup
+                if isinstance(approximate_key, (tuple, list)):
+                    strkey = tuple_joiner.join(approximate_key)
+            # fuzzywuzzy requires that dict_keys be a list (sets and tuples fail!)
+            dict_keys = list(set(dict_keys if dict_keys else dict_obj))
+            if strkey in dict_keys:
+                fuzzy_key, value = strkey, dict_obj[strkey]
+            else:
+                strkey = strkey.strip()
+                if strkey in dict_keys:
+                    fuzzy_key, value = strkey, dict_obj[strkey]
+                else:
+                    fuzzy_key_scores = fuzzy.extractBests(strkey, dict_keys, score_cutoff=min(max(similarity * 100.0 - 1, 0), 100), limit=6)
+                  
