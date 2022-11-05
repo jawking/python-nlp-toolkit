@@ -628,4 +628,19 @@ def fuzzy_get(possible_keys, approximate_key, default=None, similarity=0.6, tupl
                     fuzzy_key, value = strkey, dict_obj[strkey]
                 else:
                     fuzzy_key_scores = fuzzy.extractBests(strkey, dict_keys, score_cutoff=min(max(similarity * 100.0 - 1, 0), 100), limit=6)
-                  
+                    if fuzzy_key_scores:
+                        fuzzy_score_keys = []
+                        # add length similarity as part of score
+                        for (i, (k, score)) in enumerate(fuzzy_key_scores):
+                            fuzzy_score_keys += [(score * math.sqrt(len(strkey)**2 / float((len(k)**2 + len(strkey)**2) or 1)), k)]
+                        fuzzy_score, fuzzy_key = sorted(fuzzy_score_keys)[-1]
+                        value = dict_obj[fuzzy_key]
+    if key_and_value:
+        if key_and_value in ('v', 'V', 'value', 'VALUE', 'Value'):
+            return value
+        return fuzzy_key, value
+    else:
+        return value
+
+
+def fuzzy_get_value(obj, approximate_key, default=None, **kwargs)
