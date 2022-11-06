@@ -643,4 +643,15 @@ def fuzzy_get(possible_keys, approximate_key, default=None, similarity=0.6, tupl
         return value
 
 
-def fuzzy_get_value(obj, approximate_key, default=None, **kwargs)
+def fuzzy_get_value(obj, approximate_key, default=None, **kwargs):
+    """ Like fuzzy_get, but assume the obj is dict-like and return the value without the key
+
+    Notes:
+      Argument order is in reverse order relative to `fuzzywuzzy.process.extractOne()`
+        but in the same order as get(self, key) method on dicts
+
+    Arguments:
+      obj (dict-like): object to run the get method on using the key that is most similar to one within the dict
+      approximate_key (str): key to look for a fuzzy match within the dict keys
+      default (obj): the value to return if a similar key cannote be found in the `possible_keys`
+      similarity (str): fractional similiarity between the approximate_key and the dict key (0.9 means 90% of characters must be i
