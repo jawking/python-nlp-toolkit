@@ -682,4 +682,14 @@ def fuzzy_get_value(obj, approximate_key, default=None, **kwargs):
     return fuzzy_get(dict_obj, approximate_key, key_and_value=False, **kwargs)
 
 
-def fuzzy_get_tuple(dict_obj, approximate_key,
+def fuzzy_get_tuple(dict_obj, approximate_key, dict_keys=None, key_and_value=False, similarity=0.6, default=None):
+    """Find the closest matching key and/or value in a dictionary (must have all string keys!)"""
+    return fuzzy_get(dict(('|'.join(str(k2) for k2 in k), v) for (k, v) in viewitems(dict_obj)),
+                     '|'.join(str(k) for k in approximate_key), dict_keys=dict_keys,
+                     key_and_value=key_and_value, similarity=similarity, default=default)
+
+
+def sod_transposed(seq_of_dicts, align=True, pad=True, filler=None):
+    """Return sequence (list) of dictionaries, transposed into a dictionary of sequences (lists)
+
+    >>> sorted(sod_transposed([{'c': 1, 'cm': u'P'}, {'c': 1, 'ct': 2, 'cm': 6, 'cn': u'MU
