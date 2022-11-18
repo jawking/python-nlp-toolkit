@@ -727,4 +727,17 @@ def joined_seq(seq, sep=None):
     (1, 2, 3)
     """
     joined_seq = tuple(seq)
-    if isinstance(sep, bas
+    if isinstance(sep, basestring):
+        joined_seq = sep.join(str(item) for item in joined_seq)
+    return joined_seq
+
+
+def consolidate_stats(dict_of_seqs, stats_key=None, sep=','):
+    """Join (stringify and concatenate) keys (table fields) in a dict (table) of sequences (columns)
+
+    >>> consolidate_stats(dict([('c', [1, 1, 1]), ('cm', [u'P', 6, u'Q']), ('cn', [0, u'MUS', u'ROM']), ('ct', [0, 2, 0])]), stats_key='c')
+    [{u'P,0,0': 1}, {u'6,MUS,2': 1}, {u'Q,ROM,0': 1}]
+    >>> consolidate_stats([{'c': 1, 'cm': 'P', 'cn': 0, 'ct': 0}, {'c': 1, 'cm': 6, 'cn': 'MUS', 'ct': 2},
+    ...                    {'c': 1, 'cm': 'Q', 'cn': 'ROM', 'ct': 0}], stats_key='c')
+    [{u'P,0,0': 1}, {u'6,MUS,2': 1}, {u'Q,ROM,0': 1}]
+    "
