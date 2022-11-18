@@ -703,4 +703,28 @@ def sod_transposed(seq_of_dicts, align=True, pad=True, filler=None):
         seq_of_dicts = [seq_of_dicts]
     it = iter(seq_of_dicts)
     # if you don't need to align and/or fill, then just loop through and return
-    if n
+    if not (align and pad):
+        for d in it:
+            for k in d:
+                result[k] = result.get(k, []) + [d[k]]
+        return result
+    # need to align and/or fill, so pad as necessary
+    for i, d in enumerate(it):
+        for k in d:
+            result[k] = result.get(k, [filler] * (i * int(align))) + [d[k]]
+        for k in result:
+            if k not in d:
+                result[k] += [filler]
+    return result
+
+
+def joined_seq(seq, sep=None):
+    r"""Join a sequence into a tuple or a concatenated string
+
+    >>> joined_seq(range(3), ', ')
+    u'0, 1, 2'
+    >>> joined_seq([1, 2, 3])
+    (1, 2, 3)
+    """
+    joined_seq = tuple(seq)
+    if isinstance(sep, bas
