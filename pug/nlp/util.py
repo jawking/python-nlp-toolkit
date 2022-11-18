@@ -692,4 +692,15 @@ def fuzzy_get_tuple(dict_obj, approximate_key, dict_keys=None, key_and_value=Fal
 def sod_transposed(seq_of_dicts, align=True, pad=True, filler=None):
     """Return sequence (list) of dictionaries, transposed into a dictionary of sequences (lists)
 
-    >>> sorted(sod_transposed([{'c': 1, 'cm': u'P'}, {'c': 1, 'ct': 2, 'cm': 6, 'cn': u'MU
+    >>> sorted(sod_transposed([{'c': 1, 'cm': u'P'}, {'c': 1, 'ct': 2, 'cm': 6, 'cn': u'MUS'}, {'c': 1, 'cm': u'Q', 'cn': u'ROM'}], filler=0).items())
+    [('c', [1, 1, 1]), ('cm', [u'P', 6, u'Q']), ('cn', [0, u'MUS', u'ROM']), ('ct', [0, 2, 0])]
+    >>> sorted(sod_transposed(({'c': 1, 'cm': u'P'}, {'c': 1, 'ct': 2, 'cm': 6, 'cn': u'MUS'}, {'c': 1, 'cm': u'Q', 'cn': u'ROM'}),
+    ...                       filler=0, align=0).items())
+    [('c', [1, 1, 1]), ('cm', [u'P', 6, u'Q']), ('cn', [u'MUS', u'ROM']), ('ct', [2])]
+    """
+    result = {}
+    if isinstance(seq_of_dicts, Mapping):
+        seq_of_dicts = [seq_of_dicts]
+    it = iter(seq_of_dicts)
+    # if you don't need to align and/or fill, then just loop through and return
+    if n
