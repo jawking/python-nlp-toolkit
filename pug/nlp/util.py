@@ -753,4 +753,24 @@ def consolidate_stats(dict_of_seqs, stats_key=None, sep=','):
     return [{joined_seq((d[k] for k in sorted(d) if k is not stats_key), sep): d[stats_key]} for d in dict_of_seqs]
 
 
-def dos_from_table(table, head
+def dos_from_table(table, header=None):
+    """Produce dictionary of sequences from sequence of sequences, optionally with a header "row".
+
+    >>> dos_from_table([['hello', 'world'], [1, 2], [3,4]]) == {'hello': [1, 3], 'world': [2, 4]}
+    True
+    """
+    start_row = 0
+    if not table:
+        return table
+    if not header:
+        header = table[0]
+        start_row = 1
+    header_list = header
+    if header and isinstance(header, basestring):
+        header_list = header.split('\t')
+        if len(header_list) != len(table[0]):
+            header_list = header.split(',')
+        if len(header_list) != len(table[0]):
+            header_list = header.split(' ')
+    ans = {}
+    for i, k 
