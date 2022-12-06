@@ -740,4 +740,17 @@ def consolidate_stats(dict_of_seqs, stats_key=None, sep=','):
     >>> consolidate_stats([{'c': 1, 'cm': 'P', 'cn': 0, 'ct': 0}, {'c': 1, 'cm': 6, 'cn': 'MUS', 'ct': 2},
     ...                    {'c': 1, 'cm': 'Q', 'cn': 'ROM', 'ct': 0}], stats_key='c')
     [{u'P,0,0': 1}, {u'6,MUS,2': 1}, {u'Q,ROM,0': 1}]
-    "
+    """
+    if isinstance(dict_of_seqs, dict):
+        stats = dict_of_seqs[stats_key]
+        keys = joined_seq(sorted([k for k in dict_of_seqs if k is not stats_key]), sep=None)
+        joined_key = joined_seq(keys, sep=sep)
+        result = {stats_key: [], joined_key: []}
+        for i, statistic in enumerate(stats):
+            result[stats_key] += [statistic]
+            result[joined_key] += [joined_seq((dict_of_seqs[k][i] for k in keys if k is not stats_key), sep)]
+        return list({k: result[stats_key][i]} for i, k in enumerate(result[joined_key]))
+    return [{joined_seq((d[k] for k in sorted(d) if k is not stats_key), sep): d[stats_key]} for d in dict_of_seqs]
+
+
+def dos_from_table(table, head
