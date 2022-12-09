@@ -794,4 +794,28 @@ def transposed_lists(list_of_lists, default=None):
     [[0, 1, 2, 3], [4, 5]]
     """
     if default is None or default is [] or default is tuple():
-        default =
+        default = []
+    elif default is 'None':
+        default = [None]
+    else:
+        default = [default]
+
+    N = len(list_of_lists)
+    Ms = [len(row) for row in list_of_lists]
+    M = max(Ms)
+    ans = []
+    for j in range(M):
+        ans += [[]]
+        for i in range(N):
+            if j < Ms[i]:
+                ans[-1] += [list_of_lists[i][j]]
+            else:
+                ans[-1] += list(default)
+    return ans
+
+
+def transposed_matrix(matrix, filler=None, row_type=list, matrix_type=list, value_type=None):
+    """Like numpy.transposed, evens up row (list) lengths that aren't uniform, filling with None.
+
+    Also, makes all elements a uniform type (default=type(matrix[0][0])),
+    excep
