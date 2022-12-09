@@ -773,4 +773,25 @@ def dos_from_table(table, header=None):
         if len(header_list) != len(table[0]):
             header_list = header.split(' ')
     ans = {}
-    for i, k 
+    for i, k in enumerate(header):
+        ans[k] = [row[i] for row in table[start_row:]]
+    return ans
+
+
+def transposed_lists(list_of_lists, default=None):
+    """Like `numpy.transposed`, but allows uneven row lengths
+
+    Uneven lengths will affect the order of the elements in the rows of the transposed lists
+
+    >>> transposed_lists([[1, 2], [3, 4, 5], [6]])
+    [[1, 3, 6], [2, 4], [5]]
+    >>> transposed_lists(transposed_lists([[], [1, 2, 3], [4]]))
+    [[1, 2, 3], [4]]
+    >>> l = transposed_lists([range(4),[4,5]])
+    >>> l
+    [[0, 4], [1, 5], [2], [3]]
+    >>> transposed_lists(l)
+    [[0, 1, 2, 3], [4, 5]]
+    """
+    if default is None or default is [] or default is tuple():
+        default =
