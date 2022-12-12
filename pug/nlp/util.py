@@ -818,4 +818,16 @@ def transposed_matrix(matrix, filler=None, row_type=list, matrix_type=list, valu
     """Like numpy.transposed, evens up row (list) lengths that aren't uniform, filling with None.
 
     Also, makes all elements a uniform type (default=type(matrix[0][0])),
-    excep
+    except for filler elements.
+
+    TODO: add feature to delete None's at the end of rows so that transpose(transpose(LOL)) = LOL
+
+    >>> transposed_matrix([[1, 2], [3, 4, 5], [6]])
+    [[1, 3, 6], [2, 4, None], [None, 5, None]]
+    >>> transposed_matrix(transposed_matrix([[1, 2], [3, 4, 5], [6]]))
+    [[1, 2, None], [3, 4, 5], [6, None, None]]
+    >>> transposed_matrix([[], [1, 2, 3], [4]])  # empty first row forces default value type (float)
+    [[None, 1.0, 4.0], [None, 2.0, None], [None, 3.0, None]]
+    >>> transposed_matrix(transposed_matrix([[], [1, 2, 3], [4]]))
+    [[None, None, None], [1.0, 2.0, 3.0], [4.0, None, None]]
+    >>> l = transposed_matrix([ran
