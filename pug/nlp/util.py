@@ -830,4 +830,29 @@ def transposed_matrix(matrix, filler=None, row_type=list, matrix_type=list, valu
     [[None, 1.0, 4.0], [None, 2.0, None], [None, 3.0, None]]
     >>> transposed_matrix(transposed_matrix([[], [1, 2, 3], [4]]))
     [[None, None, None], [1.0, 2.0, 3.0], [4.0, None, None]]
-    >>> l = transposed_matrix([ran
+    >>> l = transposed_matrix([range(4),[4,5]])
+    >>> l
+    [[0, 4], [1, 5], [2, None], [3, None]]
+    >>> transposed_matrix(l)
+    [[0, 1, 2, 3], [4, 5, None, None]]
+    >>> transposed_matrix([[1,2],[1],[1,2,3]])
+    [[1, 1, 1], [2, None, 2], [None, None, 3]]
+    """
+    matrix_type = matrix_type or type(matrix)
+
+    try:
+        row_type = row_type or type(matrix[0])
+    except:
+        pass
+    if not row_type or row_type is None:
+        row_type = list
+
+    try:
+        if matrix[0][0] is None:
+            value_type = value_type or float
+        else:
+            value_type = value_type or type(matrix[0][0]) or float
+    except:
+        pass
+    if not value_type or value_type is None:
+        v
