@@ -855,4 +855,24 @@ def transposed_matrix(matrix, filler=None, row_type=list, matrix_type=list, valu
     except:
         pass
     if not value_type or value_type is None:
-        v
+        value_type = float
+
+    # original matrix is NxM, new matrix will be MxN
+    N = len(matrix)
+    Ms = [len(row) for row in matrix]
+    M = 0 if not Ms else max(Ms)
+
+    ans = []
+    # for each row in the new matrix (column in old matrix)
+    for j in range(M):
+        # add a row full of copies the `fill` value up to the maximum width required
+        ans += [row_type([filler] * N)]
+        for i in range(N):
+            try:
+                ans[j][i] = value_type(matrix[i][j])
+            except IndexError:
+                ans[j][i] = filler
+            except TypeError:
+                ans[j][i] = filler
+
+    return matrix_type(ans) if isinstance(ans[0], row_t
