@@ -875,4 +875,18 @@ def transposed_matrix(matrix, filler=None, row_type=list, matrix_type=list, valu
             except TypeError:
                 ans[j][i] = filler
 
-    return matrix_type(ans) if isinstance(ans[0], row_t
+    return matrix_type(ans) if isinstance(ans[0], row_type) else matrix_type([row_type(row) for row in ans])
+
+
+def hist_from_counts(counts, normalize=False, cumulative=False, to_str=False, sep=',', min_bin=None, max_bin=None):
+    """Compute an emprical histogram, PMF or CDF in a list of lists
+
+    TESTME: compare results to hist_from_values_list and hist_from_float_values_list
+    """
+    counters = [dict((i, c)for i, c in enumerate(counts))]
+
+    intkeys_list = [[c for c in counts_dict if (isinstance(c, int) or (isinstance(c, float) and int(c) == c))] for counts_dict in counters]
+    min_bin, max_bin = min_bin or 0, max_bin or len(counts) - 1
+
+    histograms = []
+    for intkeys, counts in zip(
