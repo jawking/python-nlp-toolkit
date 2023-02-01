@@ -889,4 +889,22 @@ def hist_from_counts(counts, normalize=False, cumulative=False, to_str=False, se
     min_bin, max_bin = min_bin or 0, max_bin or len(counts) - 1
 
     histograms = []
-    for intkeys, counts in zip(
+    for intkeys, counts in zip(intkeys_list, counters):
+        histograms += [OrderedDict()]
+        if not intkeys:
+            continue
+        if normalize:
+            N = sum(counts[c] for c in intkeys)
+            for c in intkeys:
+                counts[c] = float(counts[c]) / N
+        if cumulative:
+            for i in range(min_bin, max_bin + 1):
+                histograms[-1][i] = counts.get(i, 0) + histograms[-1].get(i - 1, 0)
+        else:
+            for i in range(min_bin, max_bin + 1):
+                histograms[-1][i] = counts.get(i, 0)
+    if not histograms:
+        histograms = [OrderedDict()]
+
+    # fill in the zero counts between the integer bins of the histogram
+    aligned_histograms 
