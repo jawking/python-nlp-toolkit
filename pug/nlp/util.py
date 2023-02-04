@@ -932,4 +932,12 @@ def hist_from_values_list(values_list, fillers=(None,), normalize=False, cumulat
     >>> hist_from_values_list(transposed_matrix([(8,),(1,3,5),(2,),(3,4,5,8)]))  # doctest: +NORMALIZE_WHITESPACE
     [[(8, 1)], [(1, 1), (2, 0), (3, 1), (4, 0), (5, 1)], [(2, 1)], [(3, 1), (4, 1), (5, 1), (6, 0), (7, 0), (8, 1)]]
     """
-    value_ty
+    value_types = tuple([int, float] + [type(filler) for filler in fillers])
+
+    if all(isinstance(value, value_types) for value in values_list):
+        # ignore all fillers and convert all floats to ints when doing counting
+        counters = [Counter(int(value) for value in values_list if isinstance(value, (int, float)))]
+    elif all(len(row) == 1 for row in values_list) and all(isinstance(row[0], value_types) for row in values_list):
+        return hist_from_values_list([values[0] for values in values_list], fillers=fillers, normalize=normalize, cumulative=cumulative,
+                                     to_str=to_str, sep=sep, min_bin=min_bin, max_bin=max_bin)
+    else:  # assume it's a row-wise table (list of row
