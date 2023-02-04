@@ -940,4 +940,24 @@ def hist_from_values_list(values_list, fillers=(None,), normalize=False, cumulat
     elif all(len(row) == 1 for row in values_list) and all(isinstance(row[0], value_types) for row in values_list):
         return hist_from_values_list([values[0] for values in values_list], fillers=fillers, normalize=normalize, cumulative=cumulative,
                                      to_str=to_str, sep=sep, min_bin=min_bin, max_bin=max_bin)
-    else:  # assume it's a row-wise table (list of row
+    else:  # assume it's a row-wise table (list of rows)
+        return [
+            hist_from_values_list(col, fillers=fillers, normalize=normalize, cumulative=cumulative, to_str=to_str, sep=sep,
+                                  min_bin=min_bin, max_bin=max_bin)
+            for col in transposed_matrix(values_list)
+        ]
+
+    if not values_list:
+        return []
+
+    intkeys_list = [[c for c in counts if (isinstance(c, int) or (isinstance(c, float) and int(c) == c))] for counts in counters]
+    try:
+        min_bin = int(min_bin)
+    except:
+        min_bin = min(min(intkeys) for intkeys in intkeys_list)
+    try:
+        max_bin = int(max_bin)
+    except:
+        max_bin = max(max(intkeys) for intkeys in intkeys_list)
+
+    # FIXME: this loo
