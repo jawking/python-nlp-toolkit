@@ -907,4 +907,22 @@ def hist_from_counts(counts, normalize=False, cumulative=False, to_str=False, se
         histograms = [OrderedDict()]
 
     # fill in the zero counts between the integer bins of the histogram
-    aligned_histograms 
+    aligned_histograms = []
+
+    for i in range(min_bin, max_bin + 1):
+        aligned_histograms += [tuple([i] + [hist.get(i, 0) for hist in histograms])]
+
+    if to_str:
+        # FIXME: add header row
+        return str_from_table(aligned_histograms, sep=sep, max_rows=365 * 2 + 1)
+
+    return aligned_histograms
+
+
+def hist_from_values_list(values_list, fillers=(None,), normalize=False, cumulative=False, to_str=False, sep=',', min_bin=None, max_bin=None):
+    """Compute an emprical histogram, PMF or CDF in a list of lists or a csv string
+
+    Only works for discrete (integer) values (doesn't bin real values).
+    `fillers`: list or tuple of values to ignore in computing the histogram
+
+    >>> hist_fro
