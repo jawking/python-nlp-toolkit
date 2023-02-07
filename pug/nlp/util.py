@@ -960,4 +960,19 @@ def hist_from_values_list(values_list, fillers=(None,), normalize=False, cumulat
     except:
         max_bin = max(max(intkeys) for intkeys in intkeys_list)
 
-    # FIXME: this loo
+    # FIXME: this looks slow and hazardous (like it's ignore min/max bin):
+    min_bin = max(min_bin, min((min(intkeys) if intkeys else 0) for intkeys in intkeys_list))  # TODO: reuse min(intkeys)
+    max_bin = min(max_bin, max((max(intkeys) if intkeys else 0) for intkeys in intkeys_list))  # TODO: reuse max(intkeys)
+
+    histograms = []
+    for intkeys, counts in zip(intkeys_list, counters):
+        histograms += [OrderedDict()]
+        if not intkeys:
+            continue
+        if normalize:
+            N = sum(counts[c] for c in intkeys)
+            for c in intkeys:
+                counts[c] = float(counts[c]) / N
+        if cumulative:
+            for i in range(min_bin, max_bin + 1):
+                histograms[-1][i] = coun
