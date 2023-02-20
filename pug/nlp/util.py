@@ -995,4 +995,23 @@ def hist_from_values_list(values_list, fillers=(None,), normalize=False, cumulat
     return aligned_histograms
 
 
-def get_sim
+def get_similar(obj, labels, default=None, min_similarity=0.5):
+    """Similar to fuzzy_get, but allows non-string keys and a list of possible keys
+
+    Searches attributes in addition to keys and indexes to find the closest match.
+
+    See Also:
+        `fuzzy_get`
+
+    """
+    raise NotImplementedError("Unfinished implementation, needs to be incorporated into fuzzy_get where a list of scores and keywords is sorted.")
+    labels = listify(labels)
+
+    def not_found(*args, **kwargs):
+        return 0
+
+    min_score = int(min_similarity * 100)
+    for similarity_score in [100, 95, 90, 80, 70, 50, 30, 10, 5, 0]:
+        if similarity_score <= min_score:
+            similarity_score = min_score
+        for label in labels:
