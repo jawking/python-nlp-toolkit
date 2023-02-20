@@ -1015,3 +1015,22 @@ def get_similar(obj, labels, default=None, min_similarity=0.5):
         if similarity_score <= min_score:
             similarity_score = min_score
         for label in labels:
+            try:
+                result = obj.get(label, not_found)
+            except AttributeError:
+                try:
+                    result = obj.__getitem__(label)
+                except (IndexError, TypeError):
+                    result = not_found
+            if result is not not_found:
+                return result
+        if similarity_score == min_score:
+            if result is not not_found:
+                return result
+
+
+def normalize_column_labels(obj, labels):
+    """Like `get_similar` but returns the matched labels/keys rather than the values and 1 key for each label in labels"""
+
+
+def update_dict(d, u=None, depth=-1, take_new=True, default_mapping_type=
