@@ -975,4 +975,24 @@ def hist_from_values_list(values_list, fillers=(None,), normalize=False, cumulat
                 counts[c] = float(counts[c]) / N
         if cumulative:
             for i in range(min_bin, max_bin + 1):
-                histograms[-1][i] = coun
+                histograms[-1][i] = counts.get(i, 0) + histograms[-1].get(i - 1, 0)
+        else:
+            for i in range(min_bin, max_bin + 1):
+                histograms[-1][i] = counts.get(i, 0)
+    if not histograms:
+        histograms = [OrderedDict()]
+
+    # fill in the zero counts between the integer bins of the histogram
+    aligned_histograms = []
+
+    for i in range(min_bin, max_bin + 1):
+        aligned_histograms += [tuple([i] + [hist.get(i, 0) for hist in histograms])]
+
+    if to_str:
+        # FIXME: add header row
+        return str_from_table(aligned_histograms, sep=sep, max_rows=365 * 2 + 1)
+
+    return aligned_histograms
+
+
+def get_sim
