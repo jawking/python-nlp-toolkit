@@ -1033,4 +1033,15 @@ def normalize_column_labels(obj, labels):
     """Like `get_similar` but returns the matched labels/keys rather than the values and 1 key for each label in labels"""
 
 
-def update_dict(d, u=None, depth=-1, take_new=True, default_mapping_type=
+def update_dict(d, u=None, depth=-1, take_new=True, default_mapping_type=dict, prefer_update_type=False, copy=False):
+    """
+    Recursively merge (union or update) dict-like objects (Mapping) to the specified depth.
+
+    >>> update_dict({'k1': {'k2': 2}}, {'k1': {'k2': {'k3': 3}}, 'k4': 4})
+    {'k1': {'k2': {'k3': 3}}, 'k4': 4}
+    >>> update_dict(OrderedDict([('k1', OrderedDict([('k2', 2)]))]), {'k1': {'k2': {'k3': 3}}, 'k4': 4})
+    OrderedDict([('k1', OrderedDict([('k2', {'k3': 3})])), ('k4', 4)])
+    >>> update_dict(OrderedDict([('k1', dict([('k2', 2)]))]), {'k1': {'k2': {'k3': 3}}, 'k4': 4})
+    OrderedDict([('k1', {'k2': {'k3': 3}}), ('k4', 4)])
+    >>> orig = {'orig_key': 'orig_value'}
+    >>> upda
