@@ -1058,4 +1058,28 @@ def update_dict(d, u=None, depth=-1, take_new=True, default_mapping_type=dict, p
     {'k1': (), 'k4': 4}
     >>> # FIXME: this result is unexpected the same as for `take_new=False`
     >>> update_dict({'k1': {'k2': {'k3': 3}}, 'k4': 4}, {'k1': {'k2': 2}}, depth=1, take_new=True)
-  
+    {'k1': {'k2': 2}, 'k4': 4}
+    """
+    u = u or {}
+    orig_mapping_type = type(d)
+    if prefer_update_type and isinstance(u, Mapping):
+        dictish = type(u)
+    elif isinstance(d, Mapping):
+        dictish = orig_mapping_type
+    else:
+        dictish = default_mapping_type
+    if copy:
+        d = dictish(d)
+    for k, v in viewitems(u):
+        if isinstance(d, Mapping):
+            if isinstance(v, Mapping) and not depth == 0:
+                r = update_dict(d.get(k, dictish()), v, depth=max(depth - 1, -1), copy=copy)
+                d[k] = r
+            elif take_new:
+                d[k] = u[k]
+        elif take_new:
+            d = dictish([(k, u[k])])
+    return d
+
+
+# Fails on py
