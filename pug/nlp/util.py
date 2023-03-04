@@ -1044,4 +1044,18 @@ def update_dict(d, u=None, depth=-1, take_new=True, default_mapping_type=dict, p
     >>> update_dict(OrderedDict([('k1', dict([('k2', 2)]))]), {'k1': {'k2': {'k3': 3}}, 'k4': 4})
     OrderedDict([('k1', {'k2': {'k3': 3}}), ('k4', 4)])
     >>> orig = {'orig_key': 'orig_value'}
-    >>> upda
+    >>> updated = update_dict(orig, {'new_key': 'new_value'}, copy=True)
+    >>> updated == orig
+    False
+    >>> updated2 = update_dict(orig, {'new_key2': 'new_value2'})
+    >>> updated2 == orig
+    True
+    >>> update_dict({'k1': {'k2': {'k3': 3}}, 'k4': 4}, {'k1': {'k2': 2}}, depth=1, take_new=False)
+    {'k1': {'k2': 2}, 'k4': 4}
+    >>> update_dict({'k1': {'k2': {'k3': 3}}, 'k4': 4}, None)
+    {'k1': {'k2': {'k3': 3}}, 'k4': 4}
+    >>> update_dict({'k1': {'k2': {'k3': 3}}, 'k4': 4}, {'k1': ()})
+    {'k1': (), 'k4': 4}
+    >>> # FIXME: this result is unexpected the same as for `take_new=False`
+    >>> update_dict({'k1': {'k2': {'k3': 3}}, 'k4': 4}, {'k1': {'k2': 2}}, depth=1, take_new=True)
+  
