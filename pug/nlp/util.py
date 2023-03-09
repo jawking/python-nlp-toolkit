@@ -1082,4 +1082,22 @@ def update_dict(d, u=None, depth=-1, take_new=True, default_mapping_type=dict, p
     return d
 
 
-# Fails on py
+# Fails on py3-style map and list
+# def mapped_transposed_lists(lists, default=None):
+#     r"""
+#     Swap rows and columns in list of lists with different length rows/columns
+
+#     Pattern from
+#     http://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
+#     Replaces any zeros or Nones with default value.
+
+#     Examples:
+#     >>> l = mapped_transposed_lists([range(4), [4,5]], None)
+#     >>> l
+#     [[0, 4], [1, 5], [2, None], [3, None]]
+#     >>> mapped_transposed_lists(l)
+#     [[0, 1, 2, 3], [4, 5, None, None]]
+#     """
+#     if not lists:
+#         return []
+#     # return map(lambda *row: [elem or defval for elem in row], 
