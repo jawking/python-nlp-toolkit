@@ -1100,4 +1100,16 @@ def update_dict(d, u=None, depth=-1, take_new=True, default_mapping_type=dict, p
 #     """
 #     if not lists:
 #         return []
-#     # return map(lambda *row: [elem or defval for elem in row], 
+#     # return map(lambda *row: [elem or defval for elem in row], *lists)
+#     return list(map(lambda *row: [(el if isinstance(el, (float, int)) else default for el in row], *lists))
+
+
+def make_name(s, camel=None, lower=None, space='_', remove_prefix=None, language='python', string_type=str):
+    """Process a string to produce a valid python variable/class/type name
+
+    Arguments:
+      space (str): string to substitute for spaces ('' to delete all whitespace)
+      camel (bool): whether to camel-case names, Django Model Name style (first letter capitalized)
+      lower (bool): whether to lowercase all strings
+      language (str): case-insensitive language identifier (to deterimine allowable identifier characters)
+        e.g. 'Python', 'Python2
