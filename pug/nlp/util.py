@@ -1134,4 +1134,20 @@ def make_name(s, camel=None, lower=None, space='_', remove_prefix=None, language
     if camel is None and lower is None:
         lower = True
     if not s:
-        ret
+        return None
+    ecma_languages = ['ecma', 'javasc']
+    unicode_languages = ecma_languages
+    language = language or 'python'
+    language = language.lower().strip()[:6]
+    string_type = string_type or str
+    if language in unicode_languages:
+        string_type = str
+    s = string_type(s)  # TODO: encode in ASCII, UTF-8, or the charset used for this file!
+    if remove_prefix and s.startswith(remove_prefix):
+        s = s[len(remove_prefix):]
+    if camel:
+        if space and space == '_':
+            space = ''
+        if any(c in ' \t\n\r' + string.punctuation for c in s) or s.lower() == s:
+            if lower:
+                s = s
