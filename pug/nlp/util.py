@@ -1112,4 +1112,26 @@ def make_name(s, camel=None, lower=None, space='_', remove_prefix=None, language
       camel (bool): whether to camel-case names, Django Model Name style (first letter capitalized)
       lower (bool): whether to lowercase all strings
       language (str): case-insensitive language identifier (to deterimine allowable identifier characters)
-        e.g. 'Python', 'Python2
+        e.g. 'Python', 'Python2', 'Python3', 'Javascript', 'ECMA'
+
+    Examples:
+      Generate Django model names out of file names
+      >>> make_name('women in IT.csv', camel=True)
+      u'WomenInItCsv'
+
+      Generate Django field names out of CSV header strings
+      >>> make_name('ID Number (9-digits)')
+      u'id_number_9_digits_'
+      >>> make_name("PD / SZ")
+      u'pd_sz'
+
+      Generate Javscript object attribute names from CSV header strings
+      >>> make_name(u'pi (\u03C0)', space = '', language='javascript')
+      u'pi\u03c0'
+      >>> make_name(u'pi (\u03C0)', space = '', language='javascript')
+      u'pi\u03c0'
+    """
+    if camel is None and lower is None:
+        lower = True
+    if not s:
+        ret
