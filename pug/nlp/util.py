@@ -1150,4 +1150,17 @@ def make_name(s, camel=None, lower=None, space='_', remove_prefix=None, language
             space = ''
         if any(c in ' \t\n\r' + string.punctuation for c in s) or s.lower() == s:
             if lower:
-                s = s
+                s = s.lower()
+            s = s.title()
+    elif lower:
+        s = s.lower()
+    # TODO: add language Regexes to filter characters appropriately for python or javascript
+    space_escape = '\\' if space and space not in ' _' else ''
+    if language not in ecma_languages:
+        invalid_char_regex = re.compile('[^a-zA-Z0-9' + space_escape + space + ']+')
+    else:
+        # FIXME: Unicode categories and properties only works in Perl Regexes!
+        invalid_char_regex = re.compile('[\W' + space_escape + space + ']+', re.UNICODE)
+    if space is not None:
+        # get rid of all invalid characters, substitting the space-filler for them all
+        s = invalid_char_regex.
