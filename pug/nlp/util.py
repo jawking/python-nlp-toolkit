@@ -1163,4 +1163,19 @@ def make_name(s, camel=None, lower=None, space='_', remove_prefix=None, language
         invalid_char_regex = re.compile('[\W' + space_escape + space + ']+', re.UNICODE)
     if space is not None:
         # get rid of all invalid characters, substitting the space-filler for them all
-        s = invalid_char_regex.
+        s = invalid_char_regex.sub(space, s)
+        # get rid of duplicate space-filler characters
+        if space:
+            s = re.sub('[' + space_escape + space + ']{2,}', space, s)
+    return s
+make_name.DJANGO_FIELD = {'camel': False, 'lower': True, 'space': '_'}
+make_name.DJANGO_MODEL = {'camel': True, 'lower': False, 'space': '', 'remove_prefix': 'models'}
+
+
+def make_filename(s, space=None, language='msdos', strict=False, max_len=None, repeats=1024):
+    r"""Process string to remove any characters not allowed by the language specified (default: MSDOS)
+
+    In addition, optionally replace spaces with the indicated "space" character
+    (to make the path useful in a copy-paste without quoting).
+
+    U
