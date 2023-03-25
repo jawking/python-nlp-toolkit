@@ -1178,4 +1178,14 @@ def make_filename(s, space=None, language='msdos', strict=False, max_len=None, r
     In addition, optionally replace spaces with the indicated "space" character
     (to make the path useful in a copy-paste without quoting).
 
-    U
+    Uses the following regular expression to substitute spaces for invalid characters:
+
+        re.sub(r'[ :\\/?*&"<>|~`!]{1}', space, s)
+
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!', strict=False)
+    'Whatever-crazy-s-$h-7-n-m3-ou-can-come-up.-with.-txt-'
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!', strict=False, repeats=1)
+    'Whatever-crazy--s-$h-7-n-m3----ou--can-come-up.-with.-txt--'
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!', repeats=1)
+    'Whatever-crazy--s-$h-7-n-m3----ou--can-come-up.-with.-txt--'
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~
