@@ -1188,4 +1188,16 @@ def make_filename(s, space=None, language='msdos', strict=False, max_len=None, r
     'Whatever-crazy--s-$h-7-n-m3----ou--can-come-up.-with.-txt--'
     >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!', repeats=1)
     'Whatever-crazy--s-$h-7-n-m3----ou--can-come-up.-with.-txt--'
-    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!')
+    'Whatever-crazy-s-$h-7-n-m3-ou-can-come-up.-with.-txt-'
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!', strict=True, repeats=1)
+    u'Whatever_crazy_s_h_7_n_m3_ou_can_come_up_with_txt_'
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!', strict=True, repeats=1, max_len=14)
+    u'Whatever_crazy'
+    >>> make_filename(r'Whatever crazy &s $h!7 n*m3 ~\/ou/ can come up. with.`txt`!', max_len=14)
+    'Whatever-crazy'
+    """
+    filename = None
+    if strict or language.lower().strip() in ('strict', 'variable', 'expression', 'python'):
+        if space is None:
+            
