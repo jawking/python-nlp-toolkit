@@ -1220,4 +1220,21 @@ def make_filename(s, space=None, language='msdos', strict=False, max_len=None, r
         return filename
 
 
-def
+def update_file_ext(filename, ext='txt', sep='.'):
+    r"""Force the file or path str to end with the indicated extension
+
+    Note: a dot (".") is assumed to delimit the extension
+
+    >>> from __future__ import unicode_literals
+    >>> update_file_ext('/home/hobs/extremofile', 'bac')
+    '/home/hobs/extremofile.bac'
+    >>> update_file_ext('/home/hobs/piano.file/', 'music')
+    '/home/hobs/piano.file/.music'
+    >>> update_file_ext('/home/ninja.hobs/Anglofile', '.uk')
+    '/home/ninja.hobs/Anglofile.uk'
+    >>> update_file_ext('/home/ninja-corsi/audio', 'file', sep='-')
+    '/home/ninja-corsi/audio-file'
+    """
+    path, filename = os.path.split(filename)
+
+    if ext and ext
