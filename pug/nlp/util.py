@@ -1200,4 +1200,24 @@ def make_filename(s, space=None, language='msdos', strict=False, max_len=None, r
     filename = None
     if strict or language.lower().strip() in ('strict', 'variable', 'expression', 'python'):
         if space is None:
-            
+            space = '_'
+        elif not space:
+            space = ''
+        filename = make_name(s, space=space, lower=False)
+    else:
+        if space is None:
+            space = '-'
+        elif not space:
+            space = ''
+    if not filename:
+        if language.lower().strip() in ('posix', 'unix', 'linux', 'centos', 'ubuntu', 'fedora', 'redhat', 'rhel', 'debian', 'deb'):
+            filename = re.sub(r'[^0-9A-Za-z._-]' + '\{1,{0}\}'.format(repeats), space, s)
+        else:
+            filename = re.sub(r'[ :\\/?*&"<>|~`!]{' + ('1,{0}'.format(repeats)) + r'}', space, s)
+    if max_len and int(max_len) > 0 and filename:
+        return filename[:int(max_len)]
+    else:
+        return filename
+
+
+def
