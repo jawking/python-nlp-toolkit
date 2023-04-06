@@ -1237,4 +1237,18 @@ def update_file_ext(filename, ext='txt', sep='.'):
     """
     path, filename = os.path.split(filename)
 
-    if ext and ext
+    if ext and ext[0] == sep:
+        ext = ext[1:]
+    return os.path.join(path, sep.join(filename.split(sep)[:-1 if filename.count(sep) > 1 else 1] + [ext]))
+
+
+def tryconvert(value, desired_types=SCALAR_TYPES, default=None, empty='', strip=True):
+    """
+    Convert value to one of the desired_types specified (in order of preference) without raising an exception.
+
+    If value is empty is a string and Falsey, then return the `empty` value specified.
+    If value can't be converted to any of the desired_types requested, then return the `default` value specified.
+
+    >>> tryconvert('MILLEN2000', desired_types=float, default='GENX')
+    'GENX'
+    >>> tryconvert('1.23', desired_types=[int,float], def
