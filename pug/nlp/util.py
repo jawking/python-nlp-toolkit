@@ -1251,4 +1251,20 @@ def tryconvert(value, desired_types=SCALAR_TYPES, default=None, empty='', strip=
 
     >>> tryconvert('MILLEN2000', desired_types=float, default='GENX')
     'GENX'
-    >>> tryconvert('1.23', desired_types=[int,float], def
+    >>> tryconvert('1.23', desired_types=[int,float], default='default')
+    1.23
+    >>> tryconvert('-1.0', desired_types=[int,float])  # assumes you want a float if you have a trailing .0 in a str
+    -1.0
+    >>> tryconvert(-1.0, desired_types=[int,float])  # assumes you want an int if int type listed first
+    -1
+    >>> repr(tryconvert('1+1', desired_types=[int,float]))
+    'None'
+    """
+    if value in tryconvert.EMPTY:
+        if isinstance(value, basestring):
+            return type(value)(empty)
+        return empty
+    if isinstance(value, basestring):
+        # there may not be any "empty" strings that won't be caught by the `is ''` check above, but just in case
+        if not value:
+            return type(
