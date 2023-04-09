@@ -1283,4 +1283,23 @@ def tryconvert(value, desired_types=SCALAR_TYPES, default=None, empty='', strip=
         try:
             return t(value)
         except (ValueError, TypeError, InvalidOperation, InvalidContext):
-            
+            continue
+        # if any other weird exception happens then need to get out of here
+        return default
+    # if no conversions happened successfully then return the default value requested
+    return default
+tryconvert.EMPTY = ('', None, float('nan'))
+tryconvert.SCALAR = SCALAR_TYPES
+
+
+def transcode(infile, outfile=None, incoding="shift-jis", outcoding="utf-8"):
+    """Change encoding of text file"""
+    if not outfile:
+        outfile = os.path.basename(infile) + '.utf8'
+    with codecs.open(infile, "rb", incoding) as fpin:
+        with codecs.open(outfile, "wb", outcoding) as fpout:
+            fpout.write(fpin.read())
+
+
+def strip_br(s):
+    r""" Str
