@@ -1267,4 +1267,20 @@ def tryconvert(value, desired_types=SCALAR_TYPES, default=None, empty='', strip=
     if isinstance(value, basestring):
         # there may not be any "empty" strings that won't be caught by the `is ''` check above, but just in case
         if not value:
-            return type(
+            return type(value)(empty)
+        if strip:
+            value = value.strip()
+    if isinstance(desired_types, type):
+        desired_types = (desired_types,)
+    if desired_types is not None and len(desired_types) == 0:
+        desired_types = tryconvert.SCALAR
+    if len(desired_types):
+        if isinstance(desired_types, (list, tuple)) and len(desired_types) and isinstance(desired_types[0], (list, tuple)):
+            desired_types = desired_types[0]
+        elif isinstance(desired_types, type):
+            desired_types = [desired_types]
+    for t in desired_types:
+        try:
+            return t(value)
+        except (ValueError, TypeError, InvalidOperation, InvalidContext):
+            
