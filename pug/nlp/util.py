@@ -1320,4 +1320,25 @@ def strip_br(s):
     []
     >>> strip_br(())
     ()
-    >>> s
+    >>> strip_br(('one element<br>',))
+    ('one element',)
+    """
+
+    if isinstance(s, basestring):
+        return re.sub(r'\s*<\s*[Bb][Rr]\s*[/]?\s*>\s*$', '', s)
+    elif isinstance(s, (tuple, list)):
+        # strip just the last element in a list or tuple
+        try:
+            return type(s)(list(s)[:-1] + [strip_br(s[-1])])
+        except:  # len(s) == 0
+            return s
+    else:
+        try:
+            return type(s)(strip_br(str(s)))
+        except:  # s is None
+            return s
+
+
+def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
+             fieldnames=[], rowlimit=100000000, numbers=False, normalize_names=True, unique_names=True,
+             v
