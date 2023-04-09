@@ -1302,4 +1302,22 @@ def transcode(infile, outfile=None, incoding="shift-jis", outcoding="utf-8"):
 
 
 def strip_br(s):
-    r""" Str
+    r""" Strip the trailing html linebreak character (<BR />) from a string or sequence of strings
+
+    A sequence of strings is assumed to be a row in a CSV/TSV file or words from a line of text
+    so only the last element in a sequence is "stripped"
+
+    >>> strip_br(' Title <BR> ')
+    ' Title'
+    >>> strip_br(list(range(1, 4)))
+    [1, 2, 3]
+    >>> strip_br((' Column 1<br />', ' Last Column < br / >  '))
+    (' Column 1<br />', ' Last Column')
+    >>> strip_br(['name', 'rank', 'serial\nnumber', 'date <BR />'])
+    ['name', 'rank', 'serial\nnumber', 'date']
+    >>> strip_br(None)
+    >>> strip_br([])
+    []
+    >>> strip_br(())
+    ()
+    >>> s
