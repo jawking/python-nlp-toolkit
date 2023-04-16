@@ -1354,4 +1354,18 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
     Handles unquoted and quoted strings, quoted commas, quoted newlines (EOLs), complex numbers, times, dates, datetimes,
     >>> read_csv(u'"name\r\n",rank,"serial\nnumber",date <BR />\t\n"McCain, John","1","123456789",9/11/2001\n' +
     ...          u'Bob,big cheese,1-23,1/1/2001 12:00 GMT', format='header+values list', numbers=True)
-    [[u
+    [[u'name', u'rank', u'serial\nnumber', u'date'], ['McCain, John', 1.0, 123456789.0, '9/11/2001'],
+     ['Bob', 'big cheese', '1-23', '1/1/2001 12:00 GMT']]
+    """
+    if not csv_file:
+        return
+    if isinstance(csv_file, basestring):
+        # truncate `csv_file` in case it is a string buffer containing GBs of data
+        path = csv_file[:1025]
+        try:
+            # see http://stackoverflow.com/a/4169762/623735 before trying 'rU'
+            fpin = open(path, 'rUb')  # U = universal EOL reader, b = binary
+        except:
+            # truncate path more, in case path is used later as a file description:
+            path = csv_file[:128]
+            f
