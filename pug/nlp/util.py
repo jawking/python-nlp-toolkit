@@ -1402,4 +1402,22 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
         recs = []
     if verbosity > 0:
         logger.info('Field Names: ' + repr(norm_names if normalize_names else fieldnames))
-    rownum
+    rownum = 0
+    eof = False
+    pbar = None
+    start_seek_pos = fpin.tell() or 0
+    if verbosity > 1:
+        print('Starting at byte {} in file buffer.'.format(start_seek_pos))
+    fpin.seek(0, os.SEEK_END)
+    file_len = fpin.tell() - start_seek_pos  # os.fstat(fpin.fileno()).st_size
+    fpin.seek(start_seek_pos)
+
+    if verbosity > 1:
+        print('There appear to be {} bytes remaining in the file buffer. Resetting (seek) to starting position in file.'.format(file_len))
+    if verbosity > 0:
+        pbar = progressbar.ProgressBar(maxval=file_len)
+        pbar.start()
+    while csvr and rownum < rowlimit and not eof:
+        if pbar:
+            pbar.update(fpin.tell() - start_seek_pos)
+      
