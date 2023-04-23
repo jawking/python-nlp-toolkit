@@ -1387,4 +1387,19 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
         if verbosity > 0:
             logger.info('Column Labels: ' + repr(fieldnames))
     if unique_names:
-        norm_names = OrderedDict([(fldnm
+        norm_names = OrderedDict([(fldnm, fldnm) for fldnm in fieldnames])
+    else:
+        norm_names = OrderedDict([(num, fldnm) for num, fldnm in enumerate(fieldnames)])
+    if normalize_names:
+        norm_names = OrderedDict([(num, make_name(fldnm, **make_name.DJANGO_FIELD)) for num, fldnm in enumerate(fieldnames)])
+        # required for django-formatted json files
+        model_name = make_name(path, **make_name.DJANGO_MODEL)
+    if format in 'c':  # columnwise dict of lists
+        recs = OrderedDict((norm_name, []) for norm_name in list(norm_names.values()))
+    elif format in 'vh':
+        recs = [fieldnames]
+    else:
+        recs = []
+    if verbosity > 0:
+        logger.info('Field Names: ' + repr(norm_names if normalize_names else fieldnames))
+    rownum
