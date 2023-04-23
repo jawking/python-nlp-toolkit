@@ -1368,4 +1368,23 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
         except:
             # truncate path more, in case path is used later as a file description:
             path = csv_file[:128]
-            f
+            fpin = StringIO(str(csv_file))
+    else:
+        fpin = csv_file
+        try:
+            path = csv_file.name
+        except:
+            path = 'unknown file buffer path'
+
+    format = format or 'h'
+    format = format[0].lower()
+
+    # if fieldnames not specified then assume that first row of csv contains headings
+    csvr = csv.reader(fpin, dialect=csv.excel)
+    if not fieldnames:
+        while not fieldnames or not any(fieldnames):
+            fieldnames = strip_br([str(s).strip() for s in next(csvr)])
+        if verbosity > 0:
+            logger.info('Column Labels: ' + repr(fieldnames))
+    if unique_names:
+        norm_names = OrderedDict([(fldnm
