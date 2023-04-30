@@ -1420,4 +1420,22 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
     while csvr and rownum < rowlimit and not eof:
         if pbar:
             pbar.update(fpin.tell() - start_seek_pos)
-      
+        rownum += 1
+        row = []
+        row_dict = OrderedDict()
+        # skip rows with all empty strings as values,
+        while not row or not any(len(x) for x in row):
+            try:
+                row = next(csvr)
+                if verbosity > 1:
+                    logger.info('  row content: ' + repr(row))
+            except StopIteration:
+                eof = True
+                break
+        if eof:
+            break
+        if len(row) and isinstance(row[-1], basestring) and len(row[-1]):
+            row = strip_br(row)
+        if numbers:
+            # try to convert the type to a numerical scalar type (int, float etc)
+            row = [tryconvert(v, desired_types=NUMBERS_AND_D
