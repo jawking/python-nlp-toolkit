@@ -1438,4 +1438,15 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
             row = strip_br(row)
         if numbers:
             # try to convert the type to a numerical scalar type (int, float etc)
-            row = [tryconvert(v, desired_types=NUMBERS_AND_D
+            row = [tryconvert(v, desired_types=NUMBERS_AND_DATETIMES, empty=None, default=v) for v in row]
+        if row:
+            N = min(max(len(row), 0), len(norm_names))
+            row_dict = OrderedDict(
+                ((field_name, field_value) for field_name, field_value in zip(
+                    list(list(norm_names.values()) if unique_names else norm_names)[:N], row[:N])
+                    if (str(field_name).strip() or delete_empty_keys is False))
+            )
+            if format in 'dj':  # django json format
+                recs += [{"pk": rownum, "model": model_name, "fields": row_dict}]
+            elif format in 'vhl':  # list of lists of values, with header row (list of str)
+                recs += [[value for field_
