@@ -1449,4 +1449,20 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
             if format in 'dj':  # django json format
                 recs += [{"pk": rownum, "model": model_name, "fields": row_dict}]
             elif format in 'vhl':  # list of lists of values, with header row (list of str)
-                recs += [[value for field_
+                recs += [[value for field_name, value in viewitems(row_dict) if (field_name.strip() or delete_empty_keys is False)]]
+            elif format in 'c':  # columnwise dict of lists
+                for field_name in row_dict:
+                    recs[field_name] += [row_dict[field_name]]
+                if verbosity > 2:
+                    print([recs[field_name][-1] for field_name in row_dict])
+            else:
+                recs += [row_dict]
+            if verbosity > 2 and format not in 'c':
+                print(recs[-1])
+
+    if file_len > fpin.tell():
+        logger.info("Only %d of %d bytes were read and processed." % (fpin.tell(), file_len))
+    if pbar:
+        pbar.finish()
+    fpin.close()
+    if not unique_n
