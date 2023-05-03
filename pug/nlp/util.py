@@ -1465,4 +1465,35 @@ def read_csv(csv_file, ext='.csv', format=None, delete_empty_keys=False,
     if pbar:
         pbar.finish()
     fpin.close()
-    if not unique_n
+    if not unique_names:
+        return recs, norm_names
+    return recs
+
+
+# date and datetime separators
+COLUMN_SEP = re.compile(r'[,/;]')
+
+
+class Object(object):
+    """If your dict is "flat", this is a simple way to create an object from a dict
+
+    >>> obj = Object()
+    >>> obj.__dict__ = {'a': 1, 'b': 2}
+    >>> obj.a, obj.b
+    (1, 2)
+    """
+    pass
+
+
+# For a nested dict, you need to recursively update __dict__
+def dict2obj(d):
+    """Convert a dict to an object or namespace
+
+
+    >>> d = {'a': 1, 'b': {'c': 2}, 'd': ["hi", {'foo': "bar"}]}
+    >>> obj = dict2obj(d)
+    >>> obj.b.c
+    2
+    >>> obj.d
+    ['hi', {'foo': 'bar'}]
+    >>> d = {'a': 1, 'b': {'c': 2}, 'd': [("hi", {'foo'
