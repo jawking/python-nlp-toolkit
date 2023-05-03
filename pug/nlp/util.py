@@ -1496,4 +1496,34 @@ def dict2obj(d):
     2
     >>> obj.d
     ['hi', {'foo': 'bar'}]
-    >>> d = {'a': 1, 'b': {'c': 2}, 'd': [("hi", {'foo'
+    >>> d = {'a': 1, 'b': {'c': 2}, 'd': [("hi", {'foo': "bar"})]}
+    >>> obj = dict2obj(d)
+    >>> obj.d.hi.foo
+    'bar'
+    """
+    if isinstance(d, (Mapping, list, tuple)):
+        try:
+            d = dict(d)
+        except (ValueError, TypeError):
+            return d
+    else:
+        return d
+    obj = Object()
+    for k, v in viewitems(d):
+        obj.__dict__[k] = dict2obj(v)
+    return obj
+
+
+def any_generated(gen):
+    """like `any` but returns False for empty generators
+    >>> any_generated((v for v in (0,object())))
+    True
+    >>> any_generated((v for v in (0,False)))
+    False
+    >>> any_generated((v for v in ()))
+    False
+    """
+    for v in gen:
+        if bool(v):
+            return True
+    return False
