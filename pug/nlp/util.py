@@ -1527,3 +1527,31 @@ def any_generated(gen):
         if bool(v):
             return True
     return False
+
+
+def make_series(x, *args, **kwargs):
+    """Coerce a provided array/sequence/generator into a pandas.Series object
+    FIXME: Deal with CSR, COO, DOK and other sparse matrices like this:
+       pd.Series(csr.toarray()[:,0])
+         or, if csr.shape[1] == 2
+       pd.Series(csr.toarray()[:,1], index=csr.toarray()[:,0])
+    >>> make_series(range(1, 4))
+    0    1
+    1    2
+    2    3
+    dtype: int64
+    >>> make_series(xrange(1, 4))
+    0    1
+    1    2
+    2    3
+    dtype: int64
+    >>> make_series(list('ABC'))
+    0    A
+    1    B
+    2    C
+    dtype: object
+    >>> make_series({'a': .8, 'be': .6}, name=None)
+    a     0.8
+    be    0.6
+    dtype: float64
+ 
