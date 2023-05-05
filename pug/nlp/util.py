@@ -1554,4 +1554,18 @@ def make_series(x, *args, **kwargs):
     a     0.8
     be    0.6
     dtype: float64
- 
+    """
+    if isinstance(x, pd.Series):
+        return x
+    try:
+        if len(args) == 1 and 'pk' not in args:
+            # args is a tuple, so needs to be turned into a list to prepend pk for Series index
+            args = ['pk'] + list(args)
+        df = pd.DataFrame.from_records(getattr(x, 'objects', x).values(*args))
+        if len(df.columns) == 1:
+            return df[df.columns[0]]
+        elif len(df.columns) >= 2:
+            return df.set_index(df.columns[0], drop=False)[df.columns[1]]
+        logger.warn('Unable to coerce {} into a pd.Series using args {} and kwargs {}.'.format(x, args, kwargs))
+        return pd.Series()
+    except (A
