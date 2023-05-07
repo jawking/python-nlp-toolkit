@@ -1568,4 +1568,22 @@ def make_series(x, *args, **kwargs):
             return df.set_index(df.columns[0], drop=False)[df.columns[1]]
         logger.warn('Unable to coerce {} into a pd.Series using args {} and kwargs {}.'.format(x, args, kwargs))
         return pd.Series()
-    except (A
+    except (AttributeError, TypeError):
+        kwargs['name'] = getattr(x, 'name', None) if 'name' not in kwargs else kwargs['name']
+        if 'index' in kwargs:
+            x = list(x)
+        try:
+            return pd.Series(x, **kwargs)
+        except:
+            logger.debug(format_exc())
+            try:
+                return pd.Series(np.array(x), **kwargs)
+            except:
+                logger.debug(format_exc())
+                return pd.Series(x, **kwargs)
+
+
+def encode(obj):
+    r"""Encode all unicode/str objects in a dataframe in the encoding indicated (as a fun attribute)
+    similar to to_ascii, but doesn't return a None, even when it fails.
+    >>> encod
