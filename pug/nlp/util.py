@@ -1599,4 +1599,21 @@ def encode(obj):
         return ''.join([c for c in obj if c < MAX_CHR])
     # TODO: encode sequences of strings and dataframes of strings
     return obj
-encode.e
+encode.encoding = 'utf-8'
+
+
+def clean_series(series, *args, **kwargs):
+    """Ensure all datetimes are valid Timestamp objects and dtype is np.datetime64[ns]
+    >>> from datetime import timedelta
+    >>> clean_series(pd.Series([datetime.datetime(1, 1, 1), 9, '1942', datetime.datetime(1970, 10, 23)]))
+    0    1677-09-22 00:12:44+00:00
+    1                            9
+    2                         1942
+    3    1970-10-23 00:00:00+00:00
+    dtype: object
+    >>> clean_series(pd.Series([datetime.datetime(1, 1, 1), datetime.datetime(3000, 10, 23)]))
+    0             1677-09-22 00:12:44+00:00
+    1   2262-04-11 23:47:16.854775807+00:00
+    dtype: datetime64[ns, UTC]
+    """
+    
