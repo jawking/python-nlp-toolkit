@@ -1586,4 +1586,17 @@ def make_series(x, *args, **kwargs):
 def encode(obj):
     r"""Encode all unicode/str objects in a dataframe in the encoding indicated (as a fun attribute)
     similar to to_ascii, but doesn't return a None, even when it fails.
-    >>> encod
+    >>> encode(u'Is 2013 a year or a code point in the NeoMatch strings "\u2013"?')
+    'Is 2013 a year or a code point in the NeoMatch strings "\xe2\x80\x93"?'
+    """
+    try:
+        return obj.encode(encode.encoding)
+    except AttributeError:
+        pass
+    except UnicodeDecodeError:
+        logger.warning('Problem with byte sequence of type {}.'.format(type(obj)))
+        # TODO: Check PG for the proper encoding and fix Django ORM settings so that unicode can be UTF-8 encoded!
+        return ''.join([c for c in obj if c < MAX_CHR])
+    # TODO: encode sequences of strings and dataframes of strings
+    return obj
+encode.e
