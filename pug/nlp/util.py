@@ -1616,4 +1616,23 @@ def clean_series(series, *args, **kwargs):
     1   2262-04-11 23:47:16.854775807+00:00
     dtype: datetime64[ns, UTC]
     """
-    
+    if not series.dtype == np.dtype('O'):
+        return series
+    if any_generated((isinstance(v, datetime.datetime) for v in series)):
+        series = series.apply(clip_datetime)
+    if any_generated((isinstance(v, basestring) for v in series)):
+        series = series.apply(encode)
+    return series
+
+
+def make_dataframe(table, clean=True, verbose=False, **kwargs):
+    """Coerce a provided table (QuerySet, list of lists, list of Series)
+    >>> dt = datetime.datetime
+    >>> make_dataframe([[1,2,3],[4,5,6]])
+       0  1  2
+    0  1  2  3
+    1  4  5  6
+    >>> make_dataframe([])
+    Empty DataFrame
+    Columns: []
+    Index: 
