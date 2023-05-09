@@ -1635,4 +1635,20 @@ def make_dataframe(table, clean=True, verbose=False, **kwargs):
     >>> make_dataframe([])
     Empty DataFrame
     Columns: []
-    Index: 
+    Index: []
+    >>> make_dataframe([{'a': 2, 'b': 3}, PrettyDict([('a', 4), ('b', 5)])])
+       a  b
+    0  2  3
+    1  4  5
+    >>> make_dataframe([[dt(2700, 1, 1), dt(2015, 11, 2)], [(2700 - 2015) * 365.25 + 60, 1]]).T
+                                         0       1
+    0  2262-04-11 23:47:16.854775807+00:00  250256
+    1            2015-11-02 00:00:00+00:00       1
+    """
+    if hasattr(table, 'objects') and not callable(table.objects):
+        table = table.objects
+    if hasattr(table, 'filter') and callable(table.values):
+        table = pd.DataFrame.from_records(list(table.values()).all())
+    elif isinstance(table, basestring) and os.path.isfile(table):
+        table = pd.DataFrame.from_csv(table)
+    # elif isinstance(tab
