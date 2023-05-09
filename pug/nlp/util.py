@@ -1651,4 +1651,19 @@ def make_dataframe(table, clean=True, verbose=False, **kwargs):
         table = pd.DataFrame.from_records(list(table.values()).all())
     elif isinstance(table, basestring) and os.path.isfile(table):
         table = pd.DataFrame.from_csv(table)
-    # elif isinstance(tab
+    # elif isinstance(table, ValuesQuerySet) or (isinstance(table, (list, tuple)) and
+    #                                            len(table) and all(isinstance(v, Mapping) for v in table)):
+    #     table = pd.DataFrame.from_records(table)
+    try:
+        table = pd.DataFrame(table, **kwargs)
+    except:
+        table = pd.DataFrame(table)
+    if clean and len(table) and isinstance(table, pd.DataFrame):
+        if verbose:
+            print('Cleaning up OutOfBoundsDatetime values...')
+        for col in table.columns:
+            if any_generated((isinstance(v, DATETIME_TYPES) for v in table[col])):
+                table[col] = clean_series(table[col])
+        table = table.dropna(how='all')
+    return table
+    # # in case the args and kwargs are inten
