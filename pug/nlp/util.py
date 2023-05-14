@@ -1666,4 +1666,25 @@ def make_dataframe(table, clean=True, verbose=False, **kwargs):
                 table[col] = clean_series(table[col])
         table = table.dropna(how='all')
     return table
-    # # in case the args and kwargs are inten
+    # # in case the args and kwargs are intended for pd.DataFrame constructor rather than make_dataframe
+    # return pd.DataFrame(table, **kwargs)
+
+
+def column_name_to_date(name):
+    """
+    TODO: should probably assume a 2000 epoch for 2-digit dates
+
+    >>> column_name_to_date('10-Apr')
+    datetime.date(10, 4, 1)
+    >>> column_name_to_date('10_2011')
+    datetime.date(2011, 10, 1)
+    >>> column_name_to_date('apr_10')
+    datetime.date(10, 4, 1)
+    """
+    month_nums = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
+    year_month = re.split(r'[^0-9a-zA-Z]{1}', name)
+    try:
+        year = int(year_month[0])
+        month = year_month[1]
+    except:
+     
