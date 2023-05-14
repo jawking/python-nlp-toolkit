@@ -1687,4 +1687,26 @@ def column_name_to_date(name):
         year = int(year_month[0])
         month = year_month[1]
     except:
-     
+        year = int(year_month[1])
+        month = year_month[0]
+    month = month_nums.get(str(month).lower().title(), None)
+    if 0 <= year <= 2100 and 1 <= month <= 12:
+        return datetime.date(year, month, 1)
+    try:
+        year = int(year_month[1])
+        month = int(year_month[0])
+    except:
+        year. month = 0, 0
+    if 0 <= year <= 2100 and 1 <= month <= 12:
+        return datetime.date(year, month, 1)
+    try:
+        month = int(year_month[1])
+        year = int(year_month[0])
+    except:
+        year. month = 0, 0
+    if 0 <= year <= 2100 and 1 <= month <= 12:
+        return datetime.date(year, month, 1)
+
+
+def first_digits(s, default=0):
+    """Return the fist (l
