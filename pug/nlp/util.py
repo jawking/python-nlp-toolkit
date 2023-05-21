@@ -1730,4 +1730,26 @@ def int_pair(s, default=(0, None)):
     s = re.split(r'[^0-9]+', str(s).strip())
     if len(s) and len(s[0]):
         if len(s) > 1 and len(s[1]):
-            return (int(s[0]), int(s[
+            return (int(s[0]), int(s[1]))
+        return (int(s[0]), default[1])
+    return default
+
+
+def make_us_postal_code(s, allowed_lengths=(), allowed_digits=()):
+    """
+    >>> make_us_postal_code(1234)
+    '01234'
+    >>> make_us_postal_code(507.6009)
+    '507'
+    >>> make_us_postal_code(90210.0)
+    '90210'
+    >>> make_us_postal_code(39567.7226)
+    '39567-7226'
+    >>> make_us_postal_code(39567.7226)
+    '39567-7226'
+    """
+    allowed_lengths = allowed_lengths or tuple(N if N < 6 else N + 1 for N in allowed_digits)
+    allowed_lengths = allowed_lengths or (2, 3, 5, 10)
+    ints = int_pair(s)
+    z = str(ints[0]) if ints[0] else ''
+    z4 = '-' +
