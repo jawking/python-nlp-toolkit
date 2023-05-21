@@ -1709,4 +1709,25 @@ def column_name_to_date(name):
 
 
 def first_digits(s, default=0):
-    """Return the fist (l
+    """Return the fist (left-hand) digits in a string as a single integer, ignoring sign (+/-).
+    >>> first_digits('+123.456')
+    123
+    """
+    s = re.split(r'[^0-9]+', str(s).strip().lstrip('+-' + charlist.whitespace))
+    if len(s) and len(s[0]):
+        return int(s[0])
+    return default
+
+
+def int_pair(s, default=(0, None)):
+    """Return the digits to either side of a single non-digit character as a 2-tuple of integers
+
+    >>> int_pair('90210-007')
+    (90210, 7)
+    >>> int_pair('04321.0123')
+    (4321, 123)
+    """
+    s = re.split(r'[^0-9]+', str(s).strip())
+    if len(s) and len(s[0]):
+        if len(s) > 1 and len(s[1]):
+            return (int(s[0]), int(s[
