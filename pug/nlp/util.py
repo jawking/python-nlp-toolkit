@@ -1752,4 +1752,32 @@ def make_us_postal_code(s, allowed_lengths=(), allowed_digits=()):
     allowed_lengths = allowed_lengths or (2, 3, 5, 10)
     ints = int_pair(s)
     z = str(ints[0]) if ints[0] else ''
-    z4 = '-' +
+    z4 = '-' + str(ints[1]) if ints[1] else ''
+    if len(z) == 4:
+        z = '0' + z
+    if len(z + z4) in allowed_lengths:
+        return z + z4
+    elif len(z) in (min(l, 5) for l in allowed_lengths):
+        return z
+    return ''
+
+
+# TODO: create and check MYSQL_MAX_FLOAT constant
+def make_float(s, default='', ignore_commas=True):
+    r"""Coerce a string into a float
+
+    >>> make_float('12,345')
+    12345.0
+    >>> make_float('12.345')
+    12.345
+    >>> make_float('1+2')
+    3.0
+    >>> make_float('+42.0')
+    42.0
+    >>> make_float('\r\n-42?\r\n')
+    -42.0
+    >>> make_float('$42.42')
+    42.42
+    >>> make_float('B-52')
+    -52.0
+    >>> make_float('1
