@@ -1780,4 +1780,30 @@ def make_float(s, default='', ignore_commas=True):
     42.42
     >>> make_float('B-52')
     -52.0
-    >>> make_float('1
+    >>> make_float('1.2 x 10^34')
+    1.2e+34
+    >>> make_float(float('nan'))
+    nan
+    >>> make_float(float('-INF'))
+    -inf
+    """
+    if ignore_commas and isinstance(s, basestring):
+        s = s.replace(',', '')
+    try:
+        return float(s)
+    except:
+        try:
+            return float(str(s))
+        except ValueError:
+            try:
+                return float(normalize_scientific_notation(str(s), ignore_commas))
+            except ValueError:
+                try:
+                    return float(first_digits(s))
+                except ValueError:
+                    return default
+
+
+# TODO: create and check MYSQL_MAX_FLOAT constant
+def make_int(s, default='', ignore_commas=True):
+    r"
