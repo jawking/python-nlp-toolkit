@@ -1806,4 +1806,27 @@ def make_float(s, default='', ignore_commas=True):
 
 # TODO: create and check MYSQL_MAX_FLOAT constant
 def make_int(s, default='', ignore_commas=True):
-    r"
+    r"""Coerce a string into an integer (long ints will fail)
+
+    TODO:
+    - Ignore dashes and other punctuation within a long string of digits,
+       like a telephone number, partnumber, datecode or serial number.
+    - Use the Decimal type to allow infinite precision
+    - Use regexes to be more robust
+
+    >>> make_int('12345')
+    12345
+    >>> make_int('0000012345000       ')
+    12345000
+    >>> make_int(' \t\n123,450,00\n')
+    12345000
+    """
+    if ignore_commas and isinstance(s, basestring):
+        s = s.replace(',', '')
+    try:
+        return int(s)
+    except:
+        pass
+    try:
+        return int(re.split(str(s), '[^-0-9,.Ee]')[0])
+    exce
