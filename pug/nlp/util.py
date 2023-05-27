@@ -1829,4 +1829,20 @@ def make_int(s, default='', ignore_commas=True):
         pass
     try:
         return int(re.split(str(s), '[^-0-9,.Ee]')[0])
-    exce
+    except ValueError:
+        try:
+            return int(float(normalize_scientific_notation(str(s), ignore_commas)))
+        except (ValueError, TypeError):
+            try:
+                return int(first_digits(s))
+            except (ValueError, TypeError):
+                return default
+
+
+# FIXME: use locale and/or check that they occur ever 3 digits (1000's places) to decide whether to ignore commas
+def normalize_scientific_notation(s, ignore_commas=True, verbosity=1):
+    """Produce a string convertable with float(s), if possible, fixing some common scientific notations
+
+    Deletes commas and allows addition.
+    >>> normalize_scientific_notation(' -123 x 10^-45 ')
+    '-123e-45'
