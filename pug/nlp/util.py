@@ -1846,3 +1846,18 @@ def normalize_scientific_notation(s, ignore_commas=True, verbosity=1):
     Deletes commas and allows addition.
     >>> normalize_scientific_notation(' -123 x 10^-45 ')
     '-123e-45'
+    >>> normalize_scientific_notation(' -1+1,234 x 10^-5,678 ')
+    '1233e-5678'
+    >>> normalize_scientific_notation('$42.42')
+    '42.42'
+    """
+    s = s.lstrip(charlist.not_digits_nor_sign)
+    s = s.rstrip(charlist.not_digits)
+    # print s
+    # TODO: substitute ** for ^ and just eval the expression rather than insisting on a base-10 representation
+    num_strings = rex.scientific_notation_exponent.split(s, maxsplit=2)
+    # print num_strings
+    # get rid of commas
+    s = rex.re.sub(r"[^.0-9-+" + "," * int(not ignore_commas) + r"]+", '', num_strings[0])
+    # print s
+    # if this value gets so large that it requires an exponential notation, this will br
