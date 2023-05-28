@@ -1886,4 +1886,23 @@ def normalize_scientific_notation(s, ignore_commas=True, verbosity=1):
 def normalize_names(names):
     """Coerce a string or nested list of strings into a flat list of strings."""
     if isinstance(names, basestring):
-        names = names.split(',
+        names = names.split(',')
+    names = listify(names)
+    return [str(name).strip() for name in names]
+
+
+def string_stats(strs, valid_chars='012346789', left_pad='0', right_pad='', strip=True):
+    """Count the occurrence of a category of valid characters within an iterable of serial numbers, model numbers, or other strings"""
+    if left_pad is None:
+        left_pad = ''.join(c for c in rex.ASCII_CHARACTERS if c not in valid_chars)
+    if right_pad is None:
+        right_pad = ''.join(c for c in rex.ASCII_CHARACTERS if c not in valid_chars)
+
+    def normalize(s):
+        if strip:
+            s = s.strip()
+        s = s.lstrip(left_pad)
+        s = s.rstrip(right_pad)
+        return s
+
+    # should probably c
