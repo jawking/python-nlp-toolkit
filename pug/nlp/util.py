@@ -1860,4 +1860,30 @@ def normalize_scientific_notation(s, ignore_commas=True, verbosity=1):
     # get rid of commas
     s = rex.re.sub(r"[^.0-9-+" + "," * int(not ignore_commas) + r"]+", '', num_strings[0])
     # print s
-    # if this value gets so large that it requires an exponential notation, this will br
+    # if this value gets so large that it requires an exponential notation, this will break the conversion
+    if not s:
+        return None
+    try:
+        s = str(eval(s.strip().lstrip('0')))
+    except:
+        if verbosity > 1:
+            print('Unable to evaluate %s' % repr(s))
+        try:
+            s = str(float(s))
+        except:
+            print('Unable to float %s' % repr(s))
+            s = ''
+    # print s
+    if len(num_strings) > 1:
+        if not s:
+            s = '1'
+        s += 'e' + rex.re.sub(r'[^.0-9-+]+', '', num_strings[1])
+    if s:
+        return s
+    return None
+
+
+def normalize_names(names):
+    """Coerce a string or nested list of strings into a flat list of strings."""
+    if isinstance(names, basestring):
+        names = names.split(',
