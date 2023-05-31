@@ -1921,3 +1921,19 @@ def string_stats(strs, valid_chars='012346789', left_pad='0', right_pad='', stri
         counts[i] = counts[i] / long_enough_strings
         counts[-i - 1] = counts[-i - 1] / long_enough_strings
 
+    return counts
+
+
+def normalize_serial_number(sn,
+                            max_length=None, left_fill='0', right_fill=str(), blank=str(),
+                            valid_chars=' -0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                            invalid_chars=None,
+                            strip_whitespace=True, join=False, na=rex.nones):
+    r"""Make a string compatible with typical serial number requirements
+
+    # Default configuration strips internal and external whitespaces and retains only the last 10 characters
+
+    >>> normalize_serial_number('1C 234567890             ')
+    u'0234567890'
+
+    >>> normalize_serial_n
