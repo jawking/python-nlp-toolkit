@@ -1905,4 +1905,19 @@ def string_stats(strs, valid_chars='012346789', left_pad='0', right_pad='', stri
         s = s.rstrip(right_pad)
         return s
 
-    # should probably c
+    # should probably check to make sure memory not exceeded
+    strs = [normalize(s) for s in strs]
+    lengths = Counter(len(s) for s in strs)
+    counts = {}
+    max_length = max(lengths.keys())
+
+    for i in range(max_length):
+        # print i
+        for s in strs:
+            if i < len(s):
+                counts[i] = counts.get(i, 0) + int(s[i] in valid_chars)
+                counts[-i - 1] = counts.get(-i - 1, 0) + int(s[-i - 1] in valid_chars)
+        long_enough_strings = float(sum(c for l, c in list(lengths.items()) if l >= i))
+        counts[i] = counts[i] / long_enough_strings
+        counts[-i - 1] = counts[-i - 1] / long_enough_strings
+
