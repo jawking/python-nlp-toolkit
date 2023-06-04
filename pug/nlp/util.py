@@ -1952,4 +1952,19 @@ def normalize_serial_number(sn,
     >>> normalize_serial_number('Unknown', blank=False)
     '00000000000000000000'
     >>> normalize_serial_number(' \t1C\t-\t234567890 \x00\x7f', max_length=14, left_fill='0',
-    ...                         valid
+    ...                         valid_chars='0123456789ABC', invalid_chars=None, join=True)
+    u'1C\t-\t234567890'
+
+    Notice how the max_length setting carries over from the previous test!
+    >>> len(normalize_serial_number('Unknown', blank=False))
+    14
+
+    Restore the default max_length setting
+    >>> len(normalize_serial_number('Unknown', blank=False, max_length=10))
+    10
+    >>> normalize_serial_number('NO SERIAL', blank='--=--', left_fill='')  # doctest: +NORMALIZE_WHITESPACE
+    u'NO SERIAL'
+    >>> normalize_serial_number('NO SERIAL', blank='', left_fill='')  # doctest: +NORMALIZE_WHITESPACE
+    u'NO SERIAL'
+
+    >>> normalize_serial_number('1C 234567890             '
