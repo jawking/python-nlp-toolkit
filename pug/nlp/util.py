@@ -1936,4 +1936,20 @@ def normalize_serial_number(sn,
     >>> normalize_serial_number('1C 234567890             ')
     u'0234567890'
 
-    >>> normalize_serial_n
+    >>> normalize_serial_number('1C 234567890             ', max_length=20)
+    u'000000001C 234567890'
+    >>> normalize_serial_number('Unknown', blank=None, left_fill=str())
+    ''
+    >>> normalize_serial_number('N/A', blank='', left_fill=str())
+    u'A'
+
+    >>> normalize_serial_number('1C 234567890             ', max_length=20, left_fill='')
+    u'1C 234567890'
+
+    Notice how the max_length setting (20) carries over from the previous test!
+    >>> len(normalize_serial_number('Unknown', blank=False))
+    20
+    >>> normalize_serial_number('Unknown', blank=False)
+    '00000000000000000000'
+    >>> normalize_serial_number(' \t1C\t-\t234567890 \x00\x7f', max_length=14, left_fill='0',
+    ...                         valid
