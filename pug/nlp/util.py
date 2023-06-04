@@ -1967,4 +1967,23 @@ def normalize_serial_number(sn,
     >>> normalize_serial_number('NO SERIAL', blank='', left_fill='')  # doctest: +NORMALIZE_WHITESPACE
     u'NO SERIAL'
 
-    >>> normalize_serial_number('1C 234567890             '
+    >>> normalize_serial_number('1C 234567890             ', valid_chars='0123456789')
+    u'0234567890'
+    """
+    # All 9 kwargs have persistent default values stored as attributes of the funcion instance
+    if max_length is None:
+        max_length = normalize_serial_number.max_length
+    else:
+        normalize_serial_number.max_length = max_length
+    if left_fill is None:
+        left_fill = normalize_serial_number.left_fill
+    else:
+        normalize_serial_number.left_fill = left_fill
+    if right_fill is None:
+        right_fill = normalize_serial_number.right_fill
+    else:
+        normalize_serial_number.right_fill = right_fill
+    if blank is None:
+        blank = normalize_serial_number.blank
+    else:
+        normalize_serial_number.blank
