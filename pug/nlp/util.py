@@ -1986,4 +1986,21 @@ def normalize_serial_number(sn,
     if blank is None:
         blank = normalize_serial_number.blank
     else:
-        normalize_serial_number.blank
+        normalize_serial_number.blank = blank
+    if valid_chars is None:
+        valid_chars = normalize_serial_number.valid_chars
+    else:
+        normalize_serial_number.valid_chars = valid_chars
+    if invalid_chars is None:
+        invalid_chars = normalize_serial_number.invalid_chars
+    else:
+        normalize_serial_number.invalid_chars = invalid_chars
+    if strip_whitespace is None:
+        strip_whitespace = normalize_serial_number.strip_whitespace
+    else:
+        normalize_serial_number.strip_whitespace = strip_whitespace
+    if join is None:
+        join = normalize_serial_number.join
+    else:
+        normalize_serial_number.join = join
+ 
