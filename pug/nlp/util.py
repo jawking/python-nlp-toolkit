@@ -2023,4 +2023,22 @@ def normalize_serial_number(sn,
     if strip_whitespace:
         sn = sn.strip()
     if na:
-        if isinstance(na, (tuple, s
+        if isinstance(na, (tuple, set, dict, list)) and sn in na:
+            sn = ''
+        elif na.match(sn):
+            sn = ''
+    if not sn and not (blank is False):
+        return blank
+    if left_fill:
+        sn = left_fill * int(max_length - len(sn) / len(left_fill)) + sn
+    if right_fill:
+        sn = sn + right_fill * (max_length - len(sn) / len(right_fill))
+    return sn
+normalize_serial_number.max_length = 10
+normalize_serial_number.left_fill = '0'
+normalize_serial_number.right_fill = ''
+normalize_serial_number.blank = ''
+normalize_serial_number.valid_chars = ' -0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+normalize_serial_number.invalid_chars = None
+normalize_serial_number.strip_whitespace = True
+norma
