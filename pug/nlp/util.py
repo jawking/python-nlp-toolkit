@@ -2003,4 +2003,24 @@ def normalize_serial_number(sn,
         join = normalize_serial_number.join
     else:
         normalize_serial_number.join = join
- 
+    if na is None:
+        na = normalize_serial_number.na
+    else:
+        normalize_serial_number.na = na
+
+    if invalid_chars is None:
+        invalid_chars = (c for c in charlist.ascii if c not in valid_chars)
+    invalid_chars = ''.join(invalid_chars)
+    sn = str(sn).strip(invalid_chars)
+    if strip_whitespace:
+        sn = sn.strip()
+    if invalid_chars:
+        if join:
+            sn = sn.translate(dict(zip(invalid_chars, [''] * len(invalid_chars))))
+        else:
+            sn = multisplit(sn, invalid_chars)[-1]
+    sn = sn[-max_length:]
+    if strip_whitespace:
+        sn = sn.strip()
+    if na:
+        if isinstance(na, (tuple, s
