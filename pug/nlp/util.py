@@ -2041,4 +2041,20 @@ normalize_serial_number.blank = ''
 normalize_serial_number.valid_chars = ' -0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 normalize_serial_number.invalid_chars = None
 normalize_serial_number.strip_whitespace = True
-norma
+normalize_serial_number.join = False
+normalize_serial_number.na = rex.nones
+normalize_account_number = normalize_serial_number
+
+
+def multisplit(s, seps=list(string.punctuation) + list(string.whitespace), blank=True):
+    r"""Just like str.split(), except that a variety (list) of seperators is allowed.
+
+    >>> multisplit(r'1-2?3,;.4+-', string.punctuation)
+    [u'1', u'2', u'3', u'', u'', u'4', u'', u'']
+    >>> multisplit(r'1-2?3,;.4+-', string.punctuation, blank=False)
+    [u'1', u'2', u'3', u'4']
+    >>> multisplit(r'1C 234567890', '\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n' + string.punctuation)
+    [u'1C 234567890']
+    """
+    seps = str().join(seps)
+    return [s2 for s2 in s.translate(str().joi
