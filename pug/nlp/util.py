@@ -2075,4 +2075,24 @@ def make_real(list_of_lists):
 #     # 0.0...
 #     """
 #     if y is None:
-#     
+#         if len(x) == 2:
+#             y = x[1]
+#             x = x[0]
+#         elif len(x[0]) ==2:
+#             y = [yi for xi, yi in x]
+#             x = [xi for xi, yi in x]
+#         else:
+#             mat = np.cov(x, ddof=ddof)
+#             R = []
+#             N = len(mat)
+#             for i in range(N):
+#                 R += [[1.] * N]
+#                 for j in range(i+1,N):
+#                     R[i][j] = mat[i,j]
+#                     for k in range(N):
+#                         R[i][j] /= (mat[k,k] ** 0.5)
+#             return R
+#     return np.cov(x, y, ddof=ddof)[1,0] / np.std(x, ddof=ddof) / np.std(y, ddof=ddof)
+
+
+def imported_modul
