@@ -2057,4 +2057,22 @@ def multisplit(s, seps=list(string.punctuation) + list(string.whitespace), blank
     [u'1C 234567890']
     """
     seps = str().join(seps)
-    return [s2 for s2 in s.translate(str().joi
+    return [s2 for s2 in s.translate(str().join([(chr(i) if chr(i) not in seps else seps[0]) for i in range(256)])).split(seps[0]) if (blank or s2)]
+
+
+def make_real(list_of_lists):
+    for i, l in enumerate(list_of_lists):
+        for j, val in enumerate(l):
+            list_of_lists[i][j] = float(normalize_scientific_notation(str(val), ignore_commas=True))
+    return list_of_lists
+
+
+# def linear_correlation(x, y=None, ddof=0):
+#     """Pierson linear correlation coefficient (-1 <= plcf <= +1)
+#     >>> abs(linear_correlation(range(5), [1.2 * x + 3.4 for x in range(5)]) - 1.0) < 0.000001
+#     True
+#     # >>> abs(linear_correlation(sci.rand(2, 1000)))  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+#     # 0.0...
+#     """
+#     if y is None:
+#     
