@@ -2095,4 +2095,31 @@ def make_real(list_of_lists):
 #     return np.cov(x, y, ddof=ddof)[1,0] / np.std(x, ddof=ddof) / np.std(y, ddof=ddof)
 
 
-def imported_modul
+def imported_modules():
+    for name, val in viewitems(globals()):
+        if isinstance(val, types.ModuleType):
+            yield val
+
+
+def minmax_len_and_blackwhite_list(s, min_len=1, max_len=256, blacklist=None, whitelist=None, lower=False):
+    if min_len > len(s) or len(s) > max_len:
+        return False
+    if lower:
+        s = s.lower()
+    if blacklist and s in blacklist:
+        return False
+    if whitelist and s not in whitelist:
+        return False
+    return True
+
+
+def strip_HTML(s):
+    """Simple, clumsy, slow HTML tag stripper"""
+    result = ''
+    total = 0
+    for c in s:
+        if c == '<':
+            total = 1
+        elif c == '>':
+            total = 0
+        
