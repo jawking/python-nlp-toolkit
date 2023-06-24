@@ -2122,4 +2122,30 @@ def strip_HTML(s):
             total = 1
         elif c == '>':
             total = 0
-        
+            result += ' '
+        elif total == 0:
+            result += c
+    return result
+
+
+def strip_edge_punc(s, punc=None, lower=None, str_type=str):
+    if lower is None:
+        lower = strip_edge_punc.lower
+    if punc is None:
+        punc = strip_edge_punc.punc
+    if lower:
+        s = s.lower()
+    if not isinstance(s, basestring):
+        return [strip_edge_punc(str_type(s0), punc) for s0 in s]
+    return s.strip(punc)
+strip_edge_punc.lower = False
+strip_edge_punc.punc = PUNC
+
+
+def get_sentences(s, regex=rex.sentence_sep):
+    if isinstance(regex, basestring):
+        regex = re.compile(regex)
+    return [sent for sent in regex.split(s) if sent]
+
+
+# this regex assumes "s' " is
