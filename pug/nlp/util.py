@@ -2148,4 +2148,15 @@ def get_sentences(s, regex=rex.sentence_sep):
     return [sent for sent in regex.split(s) if sent]
 
 
-# this regex assumes "s' " is
+# this regex assumes "s' " is the end of a possessive word and not the end of an inner quotation, e.g. He said, "She called me 'Hoss'!"
+def get_words(s, splitter_regex=rex.word_sep_except_external_appostrophe,
+              preprocessor=strip_HTML, postprocessor=strip_edge_punc, min_len=None, max_len=None, blacklist=None, whitelist=None, lower=False,
+              filter_fun=None, str_type=str):
+    r"""Segment words (tokens), returning a list of all tokens
+
+    Does not return any separating whitespace or punctuation marks.
+    Attempts to return external apostrophes at the end of words.
+    Comparable to `nltk.word_toeknize`.
+
+    Arguments:
+      splitter_regex (str or re): compiled or uncompiled regular 
