@@ -2159,4 +2159,13 @@ def get_words(s, splitter_regex=rex.word_sep_except_external_appostrophe,
     Comparable to `nltk.word_toeknize`.
 
     Arguments:
-      splitter_regex (str or re): compiled or uncompiled regular 
+      splitter_regex (str or re): compiled or uncompiled regular expression
+        Applied to the input string using `re.split()`
+      preprocessor (function): defaults to a function that strips out all HTML tags
+      postprocessor (function): a function to apply to each token before return it as an element in the word list
+        Applied using the `map()` builtin
+      min_len (int): delete all words shorter than this number of characters
+      max_len (int): delete all words longer than this number of characters
+      blacklist and whitelist (list of str): words to delete or preserve
+      lower (bool): whether to convert all words to lowercase
+      str_type (type): typically `str` or `unicode`, any type constructor that should can be applied to
