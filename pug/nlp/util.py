@@ -2168,4 +2168,21 @@ def get_words(s, splitter_regex=rex.word_sep_except_external_appostrophe,
       max_len (int): delete all words longer than this number of characters
       blacklist and whitelist (list of str): words to delete or preserve
       lower (bool): whether to convert all words to lowercase
-      str_type (type): typically `str` or `unicode`, any type constructor that should can be applied to
+      str_type (type): typically `str` or `unicode`, any type constructor that should can be applied to all words before returning the list
+
+    Returns:
+      list of str: list of tokens
+
+    >>> get_words('He said, "She called me \'Hoss\'!". I didn\'t hear.')
+    ['He', 'said', 'She', 'called', 'me', 'Hoss', 'I', "didn't", 'hear']
+    >>> get_words('The foxes\' oh-so-tiny den was 2empty!')
+    ['The', 'foxes', 'oh-so-tiny', 'den', 'was', '2empty']
+    """
+    # TODO: Get rid of `lower` kwarg (and make sure code that uses it doesn't break)
+    #       That and other simple postprocessors can be done outside of get_words
+    postprocessor = postprocessor or str_type
+    preprocessor = preprocessor or str_type
+    if min_len is None:
+        min_len = get_words.min_len
+    if max_len is None:
+        max_len = get_words.max
