@@ -2209,4 +2209,25 @@ def get_words(s, splitter_regex=rex.word_sep_except_external_appostrophe,
     except:
         pass
     if isinstance(splitter_regex, basestring):
-        splitter_regex = re.co
+        splitter_regex = re.compile(splitter_regex)
+    s = list(map(postprocessor, splitter_regex.split(s)))
+    s = list(map(str_type, s))
+    if not filter_fun:
+        return s
+    return [word for word in s if filter_fun(word, min_len=min_len, max_len=max_len, blacklist=blacklist, whitelist=whitelist, lower=lower)]
+get_words.blacklist = ('', None, '\'', '.', '_', '-')
+get_words.whitelist = None
+get_words.min_len = 1
+get_words.max_len = 256
+get_words.lower = False
+get_words.filter_fun = minmax_len_and_blackwhite_list
+
+
+def pluralize_field_name(names=None, retain_prefix=False):
+    if not names:
+        return ''
+    elif isinstance(names, basestring):
+        if retain_prefix:
+            split_name = names
+        else:
+           
