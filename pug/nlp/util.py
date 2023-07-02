@@ -2230,4 +2230,21 @@ def pluralize_field_name(names=None, retain_prefix=False):
         if retain_prefix:
             split_name = names
         else:
-           
+            split_name = names.split('__')[-1]
+        if not split_name:
+            return names
+        elif 0 < len(split_name) < 4 or split_name.lower()[-4:] not in ('call', 'sale', 'turn'):
+            return split_name
+        else:
+            return split_name + 's'
+    else:
+        return [pluralize_field_name(name) for name in names]
+pluralize_field_names = pluralize_field_name
+
+
+def tabulate(lol, headers, eol='\n'):
+    """Use the pypi tabulate package instead!"""
+    yield '| %s |' % ' | '.join(headers) + eol
+    yield '| %s:|' % ':| '.join(['-' * len(w) for w in headers]) + eol
+    for row in lol:
+        yield '| %s |
