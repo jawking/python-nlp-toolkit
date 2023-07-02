@@ -2185,4 +2185,28 @@ def get_words(s, splitter_regex=rex.word_sep_except_external_appostrophe,
     if min_len is None:
         min_len = get_words.min_len
     if max_len is None:
-        max_len = get_words.max
+        max_len = get_words.max_len
+    blacklist = blacklist or get_words.blacklist
+    whitelist = whitelist or get_words.whitelist
+    filter_fun = filter_fun or get_words.filter_fun
+    lower = lower or get_words.lower
+    try:
+        s = open(s, 'r')
+    except:
+        pass
+    try:
+        s = s.read()
+    except:
+        pass
+    if not isinstance(s, basestring):
+        try:
+            # flatten the list of lists of words from each obj (file or string)
+            return [word for obj in s for word in get_words(obj)]
+        except:
+            pass
+    try:
+        s = preprocessor(s)
+    except:
+        pass
+    if isinstance(splitter_regex, basestring):
+        splitter_regex = re.co
