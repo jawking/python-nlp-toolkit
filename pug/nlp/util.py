@@ -2247,4 +2247,23 @@ def tabulate(lol, headers, eol='\n'):
     yield '| %s |' % ' | '.join(headers) + eol
     yield '| %s:|' % ':| '.join(['-' * len(w) for w in headers]) + eol
     for row in lol:
-        yield '| %s |
+        yield '| %s |' % '  |  '.join(str(c) for c in row) + eol
+
+
+def intify(obj, str_fun=str, use_ord=True, use_hash=True, use_len=True):
+    """FIXME: this is unpythonic and does things you don't expect!
+
+    FIXME: rename to "integer_from_category"
+
+    Returns an integer representative of a categorical object (string, dict, etc)
+
+    >>> intify('1.2345e10')
+    12345000000
+    >>> intify([12]), intify('[99]'), intify('(12,)')
+    (91, 91, 40)
+    >>> intify('A'), intify('a'), intify('AAA'), intify('B'), intify('BB')
+    (97, 97, 97, 98, 98)
+    >>> intify(272)
+    272
+    >>> intify(float('nan'), use_ord=False, use_hash=False, str_fun=None)
+    >>> intify(float('nan'), use_o
