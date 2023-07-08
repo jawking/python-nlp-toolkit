@@ -2266,4 +2266,21 @@ def intify(obj, str_fun=str, use_ord=True, use_hash=True, use_len=True):
     >>> intify(272)
     272
     >>> intify(float('nan'), use_ord=False, use_hash=False, str_fun=None)
-    >>> intify(float('nan'), use_o
+    >>> intify(float('nan'), use_ord=False, use_hash=False, use_len=False)
+    >>> intify(float('nan')), intify('n'), intify(None)
+    (110, 110, 110)
+    >>> intify(None, use_ord=False, use_hash=False, use_len=False)
+    >>> intify(None, use_ord=False, use_hash=False, str_fun=False)
+    >>> intify(None, use_hash=False, str_fun=False)
+    """
+    try:
+        return int(obj)
+    except:
+        pass
+    try:
+        float_obj = float(obj)
+        if float('-inf') < float_obj < float('inf'):
+            # WARN: This will increment sys.maxint by +1 and decrement sys.maxint by -1!!!!
+            #       But hopefully these cases will be dealt with as expected, above
+            return int(float_obj)
+   
