@@ -2283,4 +2283,35 @@ def intify(obj, str_fun=str, use_ord=True, use_hash=True, use_len=True):
             # WARN: This will increment sys.maxint by +1 and decrement sys.maxint by -1!!!!
             #       But hopefully these cases will be dealt with as expected, above
             return int(float_obj)
-   
+    except:
+        pass
+    if not str_fun:
+        def str_fun(x):
+            return x
+    if use_ord:
+        try:
+            return ord(str_fun(obj)[0].lower())
+        except:
+            pass
+    if use_hash:
+        try:
+            return hash(str_fun(obj))
+        except:
+            pass
+    if use_len:
+        try:
+            return len(obj)
+        except:
+            pass
+        try:
+            return len(str_fun(obj))
+        except:
+            pass
+    return None
+
+
+def listify(values, N=1, delim=None):
+    """Return an N-length list, with elements values, extrapolating as necessary.
+
+    >>> listify("don't split into characters")
+    ["don't split in
