@@ -2314,4 +2314,25 @@ def listify(values, N=1, delim=None):
     """Return an N-length list, with elements values, extrapolating as necessary.
 
     >>> listify("don't split into characters")
-    ["don't split in
+    ["don't split into characters"]
+    >>> listify("len = 3", 3)
+    ['len = 3', 'len = 3', 'len = 3']
+    >>> listify("But split on a delimeter, if requested.", delim=',')
+    ['But split on a delimeter', ' if requested.']
+    >>> listify(["obj 1", "obj 2", "len = 4"], N=4)
+    ['obj 1', 'obj 2', 'len = 4', 'len = 4']
+    >>> listify(iter("len=7"), N=7)
+    ['l', 'e', 'n', '=', '7', '7', '7']
+    >>> listify(iter("len=5"))
+    ['l', 'e', 'n', '=', '5']
+    >>> listify(None, 3)
+    [[], [], []]
+    >>> listify([None],3)
+    [None, None, None]
+    >>> listify([], 3)
+    [[], [], []]
+    >>> listify('', 2)
+    ['', '']
+    >>> listify(0)
+    [0]
+    >>> listify(False, 2
