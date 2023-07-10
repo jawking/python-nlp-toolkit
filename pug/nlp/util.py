@@ -2335,4 +2335,33 @@ def listify(values, N=1, delim=None):
     ['', '']
     >>> listify(0)
     [0]
-    >>> listify(False, 2
+    >>> listify(False, 2)
+    [False, False]
+    """
+    ans = [] if values is None else values
+
+    # convert non-string non-list iterables into a list
+    if hasattr(ans, '__iter__') and not isinstance(ans, basestring):
+        ans = list(ans)
+    else:
+        # split the string (if possible)
+        if isinstance(delim, basestring) and isinstance(ans, basestring):
+            try:
+                ans = ans.split(delim)
+            except:
+                ans = [ans]
+        else:
+            ans = [ans]
+
+    # pad the end of the list if a length has been specified
+    if len(ans):
+        if len(ans) < N and N > 1:
+            ans += [ans[-1]] * (N - len(ans))
+    else:
+        if N > 1:
+            ans = [[]] * N
+
+    return ans
+
+
+def tuplify(values, N=1, deli
