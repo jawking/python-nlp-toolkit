@@ -2364,4 +2364,29 @@ def listify(values, N=1, delim=None):
     return ans
 
 
-def tuplify(values, N=1, deli
+def tuplify(values, N=1, delim=None):
+    return tuple(listify(values, N=N, delim=delim))
+
+
+def unlistify(l, depth=1, typ=list, get=None):
+    """Return the desired element in a list ignoring the rest.
+
+    >>> unlistify([1,2,3])
+    1
+    >>> unlistify([1,[4, 5, 6],3], get=1)
+    [4, 5, 6]
+    >>> unlistify([1,[4, 5, 6],3], depth=2, get=1)
+    5
+    >>> unlistify([1,(4, 5, 6),3], depth=2, get=1)
+    (4, 5, 6)
+    >>> unlistify([1,2,(4, 5, 6)], depth=2, get=2)
+    (4, 5, 6)
+    >>> unlistify([1,2,(4, 5, 6)], depth=2, typ=(list, tuple), get=2)
+    6
+    """
+    i = 0
+    if depth is None:
+        depth = 1
+    index_desired = get or 0
+    while i < depth and isinstance(l, typ):
+       
