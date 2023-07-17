@@ -2413,3 +2413,17 @@ def is_ignorable_str(s, ignorable_strings=(), lower=True, filename=True, startsw
         elif s == ignorable:
             return True
 
+
+def strip_keys(d, nones=False, depth=0):
+    r"""Strip whitespace from all dictionary keys, to the depth indicated
+
+    >>> strip_keys({' a': ' a', ' b\t c ': {'d e  ': 'd e  '}}) == {'a': ' a', 'b\t c': {'d e  ': 'd e  '}}
+    True
+    >>> strip_keys({' a': ' a', ' b\t c ': {'d e  ': 'd e  '}}, depth=100) == {'a': ' a', 'b\t c': {'d e': 'd e  '}}
+    True
+    """
+    ans = type(d)((str(k).strip(), v) for (k, v) in viewitems(OrderedDict(d)) if (not nones or (str(k).strip() and str(k).strip() != 'None')))
+    if int(depth) < 1:
+        return ans
+    if int(depth) > strip_keys.MAX_DEPTH:
+        warnings.warn(RuntimeWarning("Maximum recursion depth allowance (%r) exceeded." % strip_keys.MAX
