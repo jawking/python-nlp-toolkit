@@ -2389,4 +2389,27 @@ def unlistify(l, depth=1, typ=list, get=None):
         depth = 1
     index_desired = get or 0
     while i < depth and isinstance(l, typ):
-       
+        if len(l):
+            if len(l) > index_desired:
+                l = l[index_desired]
+                i += 1
+        else:
+            return l
+    return l
+
+
+def is_ignorable_str(s, ignorable_strings=(), lower=True, filename=True, startswith=True):
+    ignorable_strings = listify(ignorable_strings)
+    if not (lower or filename or startswith):
+        return s in ignorable_strings
+    for ignorable in ignorable_strings:
+        if lower:
+            ignorable = ignorable.lower()
+            s = s.lower()
+        if filename:
+            s = s.split(os.path.sep)[-1]
+        if startswith and s.startswith(ignorable):
+            return True
+        elif s == ignorable:
+            return True
+
