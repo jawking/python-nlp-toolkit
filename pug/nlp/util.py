@@ -2426,4 +2426,22 @@ def strip_keys(d, nones=False, depth=0):
     if int(depth) < 1:
         return ans
     if int(depth) > strip_keys.MAX_DEPTH:
-        warnings.warn(RuntimeWarning("Maximum recursion depth allowance (%r) exceeded." % strip_keys.MAX
+        warnings.warn(RuntimeWarning("Maximum recursion depth allowance (%r) exceeded." % strip_keys.MAX_DEPTH))
+    for k, v in viewitems(ans):
+        if isinstance(v, Mapping):
+            ans[k] = strip_keys(v, nones=nones, depth=int(depth) - 1)
+    return ans
+strip_keys.MAX_DEPTH = 1e6
+
+
+def str_from_table(table, sep='\t', eol='\n', max_rows=100000000, max_cols=1000000):
+    max_rows = min(max_rows, len(table))
+    return eol.join([sep.join(list(str(field) for field in row[:max_cols])) for row in table[:max_rows]])
+
+
+def get_table_from_csv(filename='ssg_report_aarons_returns.csv', delimiter=',', dos=False):
+    """Dictionary of sequences from CSV file"""
+    table = []
+    with open(filename, 'rb') as f:
+        reader = csv.reader(f, dialect='excel', delimiter=delimiter)
+        for row in r
