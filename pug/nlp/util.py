@@ -2444,4 +2444,31 @@ def get_table_from_csv(filename='ssg_report_aarons_returns.csv', delimiter=',', 
     table = []
     with open(filename, 'rb') as f:
         reader = csv.reader(f, dialect='excel', delimiter=delimiter)
-        for row in r
+        for row in reader:
+            table += [row]
+    if not dos:
+        return table
+    return dos_from_table(table)
+
+
+def save_sheet(table, filename, ext='tsv', verbosity=0):
+    if ext.lower() == 'tsv':
+        sep = '\t'
+    else:
+        sep = ','
+    s = str_from_table(table, sep=sep)
+    if verbosity > 2:
+        print(s)
+    if verbosity > 0:
+        print('Saving ' + filename + '.' + ext)
+    with open(filename + '.' + ext, 'w') as fpout:
+        fpout.write(s)
+
+
+def save_sheets(tables, filename, ext='.tsv', verbosity=0):
+    for i, table in enumerate(tables):
+        save_sheet(table, filename + '_Sheet%d' % i, ext=ext, verbosity=verbosity)
+
+
+def shorten(s, max_len=16):
+    ""
