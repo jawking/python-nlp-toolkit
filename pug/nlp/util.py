@@ -2471,4 +2471,26 @@ def save_sheets(tables, filename, ext='.tsv', verbosity=0):
 
 
 def shorten(s, max_len=16):
-    ""
+    """Attempt to shorten a phrase by deleting words at the end of the phrase
+
+    >>> shorten('Hello World!')
+    u'Hello World'
+    >>> shorten("Hello World! I'll talk your ear off!", 15)
+    u'Hello World'
+    """
+    short = s
+    words = [abbreviate(word) for word in get_words(s)]
+    for i in range(len(words), 0, -1):
+        short = ' '.join(words[:i])
+        if len(short) <= max_len:
+            break
+    return short[:max_len]
+
+
+def abbreviate(s):
+    """Some basic abbreviations
+
+    TODO: load a large dictionary of abbreviations from NLTK, etc
+    """
+    return abbreviate.words.get(s, s)
+abbreviate.words = {'account': 'acct', 'number': 'num', 'custo
