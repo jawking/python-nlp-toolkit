@@ -2493,4 +2493,23 @@ def abbreviate(s):
     TODO: load a large dictionary of abbreviations from NLTK, etc
     """
     return abbreviate.words.get(s, s)
-abbreviate.words = {'account': 'acct', 'number': 'num', 'custo
+abbreviate.words = {'account': 'acct', 'number': 'num', 'customer': 'cust', 'member': 'membr',
+                    'building': 'bldg', 'serial number': 'SN', 'social security number': 'SSN'}
+
+
+def truncate(s, max_len=20, ellipsis='...'):
+    r"""Return string at most `max_len` characters or sequence elments appended with the `ellipsis` characters
+
+    >>> truncate(dict(zip(list('ABCDEFGH'), range(8))), 1)
+    u"{'A': 0..."
+    >>> truncate(list(range(5)), 3)
+    u'[0, 1, 2...'
+    >>> truncate(np.arange(5), 3)
+    u'[0, 1, 2...'
+    >>> truncate('Too verbose for its own good.', 11)
+    'Too verbose...'
+    """
+    if s is None:
+        return None
+    elif isinstance(s, basestring):
+      
