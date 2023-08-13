@@ -2530,4 +2530,30 @@ def remove_internal_vowels(s, space=''):
             strlen = len(s)
         else:
             break
-    re
+    return re.sub(r'\s', space, s)
+
+
+def normalize_year(y):
+    y = rex.not_digit_list.sub('', str(y))
+    try:
+        y = int(y)
+    except:
+        y = None
+    if 0 <= y < 70:
+        y += 2000
+    elif 70 <= y < 100:
+        y += 1900
+    return y
+
+
+def generate_kmers(seq, k=4):
+    """Return a generator of all the unique substrings (k-mer or q-gram strings) within a sequence/string
+
+    Not effiicent for large k and long strings.
+    Doesn't form substrings that are shorter than k, only exactly k-mers
+
+    Used for algorithms like UniqTag for genome unique identifier locality sensitive hashing.
+
+    jellyfish is a C implementation of k-mer counting
+
+ 
