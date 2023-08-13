@@ -2512,4 +2512,22 @@ def truncate(s, max_len=20, ellipsis='...'):
     if s is None:
         return None
     elif isinstance(s, basestring):
-      
+        return s[:min(len(s), max_len)] + ellipsis if len(s) > max_len else ''
+    elif isinstance(s, Mapping):
+        truncated_str = str(dict(islice(viewitems(s), max_len)))
+    else:
+        truncated_str = str(list(islice(s, max_len)))
+    return truncated_str[:-1] + '...' if len(s) > max_len else truncated_str
+
+
+def remove_internal_vowels(s, space=''):
+    # because this pattern overlaps for vowels separated by a single or no consonant, it must be run several times
+    internal_vowel = re.compile(r'([A-Za-z])[aeiou]([A-Za-z])')
+    strlen = len(s)
+    while True:
+        s = internal_vowel.sub(r'\1\2', s)
+        if len(s) < strlen:
+            strlen = len(s)
+        else:
+            break
+    re
