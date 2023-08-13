@@ -2556,4 +2556,16 @@ def generate_kmers(seq, k=4):
 
     jellyfish is a C implementation of k-mer counting
 
- 
+    If seq is a string generate a sequence of k-mer string
+    If seq is a sequence of strings then generate a sequence of generators or sequences of k-mer strings
+    If seq is a sequence of sequences of strings generate a sequence of sequence of generators ...
+
+    Default k = 4 because that's the length of a gene base-pair?
+
+    >>> ' '.join(generate_kmers('AGATAGATAGACACAGAAATGGGACCACAC'))
+    'AGAT GATA ATAG TAGA AGAT GATA ATAG TAGA AGAC GACA ACAC CACA ACAG CAGA AGAA GAAA AAAT AATG ATGG TGGG GGGA GGAC GACC ACCA CCAC CACA ACAC'
+    """
+    if isinstance(seq, basestring):
+        for i in range(len(seq) - k + 1):
+            yield seq[i:i + k]
+    elif isinstance(seq, (in
