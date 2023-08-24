@@ -2568,4 +2568,23 @@ def generate_kmers(seq, k=4):
     if isinstance(seq, basestring):
         for i in range(len(seq) - k + 1):
             yield seq[i:i + k]
-    elif isinstance(seq, (in
+    elif isinstance(seq, (int, float, Decimal)):
+        for s in generate_kmers(str(seq)):
+            yield s
+    else:
+        for s in seq:
+            yield generate_kmers(s, k)
+
+
+def datetime_histogram(seq):
+    """Plot a histogram of datetimes from a sequence (list, tuple, iterator) of date or datetimes"""
+    raise NotImplementedError()
+
+
+def kmer_tuple(seq, k=4):
+    """Return a tuple all the unique substrings (k-mer or q-gram strings) within a sequence/string
+
+    Not effiicent for large k and long strings.
+    Doesn't form substrings that are shorter than k, only exactly k-mers
+
+    Used for algorithms like UniqTag for genome unique identifier lo
