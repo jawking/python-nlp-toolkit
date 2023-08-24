@@ -2587,4 +2587,18 @@ def kmer_tuple(seq, k=4):
     Not effiicent for large k and long strings.
     Doesn't form substrings that are shorter than k, only exactly k-mers
 
-    Used for algorithms like UniqTag for genome unique identifier lo
+    Used for algorithms like UniqTag for genome unique identifier locality sensitive hashing.
+
+    jellyfish is a C implementation of k-mer counting
+
+    If seq is a string generate a sequence of k-mer string
+    If seq is a sequence of strings then generate a sequence of generators or sequences of k-mer strings
+    If seq is a sequence of sequences of strings generate a sequence of sequence of generators ...
+
+    Default k = 4 because that's the length of a gene base-pair?
+
+    Examples:
+        # >>> kmer_tuple(['AGATAGATAG', 'ACACAGAAAT', 'GGGACCACAC'], k=4)
+        # (('AGAT', 'GATA', 'ATAG', 'TAGA', 'AGAT', 'GATA', 'ATAG'),
+        #  ('ACAC', 'CACA', 'ACAG', 'CAGA', 'AGAA', 'GAAA', 'AAAT'),
+        #  ('GGGA', '
