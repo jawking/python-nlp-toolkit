@@ -2647,4 +2647,24 @@ def kmer_set(seq, k=4):
 # def kmer_frequency(seq_of_seq, km=None):
 #     """Count the number of sequences in seq_of_seq that contain a given kmer `km`
 
-#     From http://biorxiv.org/content/early/2014/08/01/0
+#     From http://biorxiv.org/content/early/2014/08/01/007583, implements the formula:
+#     f(t, S) = |{s | t ∈ C^k(s) ∧ s ∈ S}|
+#     where:
+#     t = km
+#     S = seq_of_seq
+#     >>> kmer_frequency(['AGATAGATAG', 'ACACAGAAAT', 'GGGACCACAC'], km=4)
+
+#     """
+#     if km and isinstance(km, basestring):
+#         return sum(km in counter for counter in kmer_counter(seq_of_seq, len(km)))
+#     km = int(km)
+#     counter = Counter()
+#     counter += Counter(tuple(sorted(set(kmer_counter(seq, km)))) for seq in seq_of_seq)
+#     return counter
+
+
+# def uniq_tag(seq, k=4, other_strings=None):
+#     """Hash that is the same for similar strings and can serve as an abbreviation for a string
+
+#     Based on UniqTag:
+#     http://biorxiv.org/content/early/2014/0
