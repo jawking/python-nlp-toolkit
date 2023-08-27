@@ -2601,4 +2601,19 @@ def kmer_tuple(seq, k=4):
         # >>> kmer_tuple(['AGATAGATAG', 'ACACAGAAAT', 'GGGACCACAC'], k=4)
         # (('AGAT', 'GATA', 'ATAG', 'TAGA', 'AGAT', 'GATA', 'ATAG'),
         #  ('ACAC', 'CACA', 'ACAG', 'CAGA', 'AGAA', 'GAAA', 'AAAT'),
-        #  ('GGGA', '
+        #  ('GGGA', 'GGAC', 'GACC', 'ACCA', 'CCAC', 'CACA', 'ACAC'))
+        >>> ' '.join(kmer_tuple('AGATAGATAGACACAGAAATGGGACCACAC'))
+        'AAAT AATG ACAC ACAC ACAG ACCA AGAA AGAC AGAT AGAT ATAG ATAG ATGG CACA CACA CAGA CCAC GAAA GACA GACC GATA GATA GGAC GGGA TAGA TAGA TGGG'
+    """
+    return tuple(sorted(generate_kmers(seq, k=k)))
+
+
+def kmer_counter(seq, k=4):
+    """Return a sequence of all the unique substrings (k-mer or q-gram) within a short (<128 symbol) string
+
+    Used for algorithms like UniqTag for genome unique identifier locality sensitive hashing.
+
+    jellyfish is a C implementation of k-mer counting
+
+    If seq is a string generate a sequence of k-mer string
+    If seq is a sequence of strings then generate 
