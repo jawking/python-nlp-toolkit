@@ -2630,4 +2630,21 @@ def kmer_counter(seq, k=4):
         return Counter(generate_kmers(seq, k))
 
 
-def kmer_set(seq,
+def kmer_set(seq, k=4):
+    """Return the set of unique k-length substrings within a the sequence/string `seq`
+
+    Implements formula:
+    C_k(s) = C(s) ∩ Σ^k
+    from http://biorxiv.org/content/early/2014/08/01/007583
+
+    >>> sorted(kmer_set('AGATAGATAGACACAGAAATGGGACCACAC'))  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    ['AAAT', 'AATG', 'ACAC', 'ACAG', 'ACCA', 'AGAA', 'AGAC', 'AGAT', 'ATAG', 'ATGG', 'CACA', 'CAGA', 'CCAC', 'GAAA', ...
+    """
+    if isinstance(seq, basestring):
+        return set(generate_kmers(seq, k))
+
+
+# def kmer_frequency(seq_of_seq, km=None):
+#     """Count the number of sequences in seq_of_seq that contain a given kmer `km`
+
+#     From http://biorxiv.org/content/early/2014/08/01/0
