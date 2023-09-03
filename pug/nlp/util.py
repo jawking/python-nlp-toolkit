@@ -2667,4 +2667,23 @@ def kmer_set(seq, k=4):
 #     """Hash that is the same for similar strings and can serve as an abbreviation for a string
 
 #     Based on UniqTag:
-#     http://biorxiv.org/content/early/2014/0
+#     http://biorxiv.org/content/early/2014/08/01/007583
+#     Which was inspired by MinHasH:
+#     http://en.wikipedia.org/wiki/MinHash
+
+#     t_u = min arg min t ∈ C k(s) f(t, S)
+#     uk(s, S) = min (arg_min((t ∈ C^k(s)), f(t, S))
+
+#     uk(s, S) = "the UniqTag, the lexicographically minimal k-mer of those k-mers of s that are least frequent in S."
+
+#     the "k-mers of s" can be found with kmer_set()
+#     the frequencies of those k-mers in other_stirngs, S, should be provided by kmer_frequency(other_strings, km) for km in kmer_set(s)
+
+#     >>> uniq_tag('Hello World')
+
+#     """
+#     # FIXME: UNTESTED!
+#     if not other_strings:
+#         if isinstance(seq, basestring):
+#             other_strings = (seq,)
+#     
