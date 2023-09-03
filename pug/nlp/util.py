@@ -2686,4 +2686,19 @@ def kmer_set(seq, k=4):
 #     if not other_strings:
 #         if isinstance(seq, basestring):
 #             other_strings = (seq,)
-#     
+#         else:
+#             other_strings = tuple(seq)
+#         return uniq_tag(other_strings[0], other_strings)
+#     other_strings = set(other_strings)
+#     if isinstance(seq, basestring):
+#         kms = kmer_set(seq)
+#         km_frequencies = ((sum(km in kmer_set(s, k), s) for s in other_strings) for km in kms)
+#         print min(km_frequencies)
+#         return min(km_frequencies)[1]
+#     return tuple(uniq_tag(s, other_strings) for s in seq)
+
+
+def count_duplicates(items):
+    """Return a dict of objects and thier counts (like a Counter), but only count > 1"""
+    c = Counter(items)
+    return dict((k, v) for (k, v) in viewitems(c) 
