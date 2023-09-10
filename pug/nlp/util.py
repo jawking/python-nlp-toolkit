@@ -2718,4 +2718,26 @@ def count_duplicates(items):
 #     return OrderedDict([
 #         ('lines', sum([bool(l.strip().strip('-').strip()) for l in doc.split('\n')])),
 #         ('pages', sum([bool(l.strip().startswith('---')) for l in doc.split('\n')]) + 1),
-#         ('tokens
+#         ('tokens', len(tokens)),
+#         ('sentences', len(sentences)),
+#         ('vocabulary', len(vocabulary.keys())),
+#         ])
+
+
+def slug_from_dict(d, max_len=128, delim='-'):
+    """Produce a slug (short URI-friendly string) from an iterable Mapping (dict, OrderedDict)
+
+    >>> slug_from_dict({'a': 1, 'b': 'beta', ' ': 'alpha'})
+    '1-alpha-beta'
+    """
+    return slug_from_iter(list(d.values()), max_len=max_len, delim=delim)
+
+
+def slug_from_iter(it, max_len=128, delim='-'):
+    """Produce a slug (short URI-friendly string) from an iterable (list, tuple, dict)
+
+    >>> slug_from_iter(['.a.', '=b=', '--alpha--'])
+    'a-b-alpha'
+    """
+
+    nonnull_values 
