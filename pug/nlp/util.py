@@ -2701,4 +2701,21 @@ def kmer_set(seq, k=4):
 def count_duplicates(items):
     """Return a dict of objects and thier counts (like a Counter), but only count > 1"""
     c = Counter(items)
-    return dict((k, v) for (k, v) in viewitems(c) 
+    return dict((k, v) for (k, v) in viewitems(c) if v > 1)
+
+
+# def markdown_stats(doc):
+#     """Compute statistics about the string or document provided.
+
+#     Returns:
+#         dict: e.g. {'pages': 24, 'words': 1234, 'vocabulary': 123, 'reaading level': 3, ...}
+#     """
+#     sentence_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+#     sentences = sentence_detector.tokenize(doc)
+#     tokens = nltk.tokenize.punkt.PunktWordTokenizer().tokenize(doc)
+#     vocabulary = Counter(tokens)
+
+#     return OrderedDict([
+#         ('lines', sum([bool(l.strip().strip('-').strip()) for l in doc.split('\n')])),
+#         ('pages', sum([bool(l.strip().startswith('---')) for l in doc.split('\n')]) + 1),
+#         ('tokens
