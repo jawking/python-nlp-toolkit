@@ -2755,4 +2755,17 @@ def shakeness(doc):
                               "to the ones in the sample doc (vocabulary similarity)")
 
 
-def slash_product(string_or_seq, slash=
+def slash_product(string_or_seq, slash='/', space=' '):
+    """Return a list of all possible meanings of a phrase containing slashes
+
+    TODO:
+        - Code is not in standard Sedgewick recursion form
+        - Simplify by removing one of the recursive calls?
+        - Simplify by using a list comprehension?
+
+    >>> slash_product("The challenging/confusing interview didn't end with success/offer")  # doctest: +NORMALIZE_WHITESPACE
+    ["The challenging interview didn't end with success",
+     "The challenging interview didn't end with offer",
+     "The confusing interview didn't end with success",
+     "The confusing interview didn't end with offer"]
+    >>> slash_product('I say goodbye/hello cruel/f
