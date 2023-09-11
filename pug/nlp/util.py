@@ -2740,4 +2740,19 @@ def slug_from_iter(it, max_len=128, delim='-'):
     'a-b-alpha'
     """
 
-    nonnull_values 
+    nonnull_values = [str(v) for v in it if v or ((isinstance(v, (int, float, Decimal)) and str(v)))]
+    return slugify(delim.join(shorten(v, max_len=int(float(max_len) / len(nonnull_values))) for v in nonnull_values), word_boundary=True)
+
+
+def tfidf(corpus):
+    """Compute a TFIDF matrix (Term Frequency and Inverse Document Freuqency matrix)"""
+    raise NotImplementedError("Google TFIDF for canonical implementations")
+
+
+def shakeness(doc):
+    """Determine how similar a document's vocabulary is to Shakespeare's"""
+    raise NotImplementedError("Import a Shakespear corpus and compare the distribution of words there " +
+                              "to the ones in the sample doc (vocabulary similarity)")
+
+
+def slash_product(string_or_seq, slash=
