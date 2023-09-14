@@ -2768,4 +2768,22 @@ def slash_product(string_or_seq, slash='/', space=' '):
      "The challenging interview didn't end with offer",
      "The confusing interview didn't end with success",
      "The confusing interview didn't end with offer"]
-    >>> slash_product('I say goodbye/hello cruel/f
+    >>> slash_product('I say goodbye/hello cruel/fun world.')  # doctest: +NORMALIZE_WHITESPACE
+    ['I say goodbye cruel world.',
+     'I say goodbye fun world.',
+     'I say hello cruel world.',
+     'I say hello fun world.']
+    >>> slash_product('I say goodbye/hello/bonjour cruelness/fun/world')  # doctest: +NORMALIZE_WHITESPACE
+    ['I say goodbye cruelness',
+     'I say goodbye fun',
+     'I say goodbye world',
+     'I say hello cruelness',
+     'I say hello fun',
+     'I say hello world',
+     'I say bonjour cruelness',
+     'I say bonjour fun',
+     'I say bonjour world']
+    """
+    # Terminating case is a sequence of strings without any slashes
+    if not isinstance(string_or_seq, basestring):
+        # If it's
