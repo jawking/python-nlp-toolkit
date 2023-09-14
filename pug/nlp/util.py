@@ -2786,4 +2786,17 @@ def slash_product(string_or_seq, slash='/', space=' '):
     """
     # Terminating case is a sequence of strings without any slashes
     if not isinstance(string_or_seq, basestring):
-        # If it's
+        # If it's not a string and has no slashes, we're done
+        if not any(slash in s for s in string_or_seq):
+            return list(string_or_seq)
+        ans = []
+        for s in string_or_seq:
+            # slash_product of a string will always return a flat list
+            ans += slash_product(s)
+        return slash_product(ans)
+    # Another terminating case is a single string without any slashes
+    if slash not in string_or_seq:
+        return [string_or_seq]
+    # The third case is a string with some slashes in it
+    i = string_or_seq.index(slash)
+    head, tail = string_or_seq[:i].split(space), string_or_seq[i + 1:].split
