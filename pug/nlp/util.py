@@ -2799,4 +2799,23 @@ def slash_product(string_or_seq, slash='/', space=' '):
         return [string_or_seq]
     # The third case is a string with some slashes in it
     i = string_or_seq.index(slash)
-    head, tail = string_or_seq[:i].split(space), string_or_seq[i + 1:].split
+    head, tail = string_or_seq[:i].split(space), string_or_seq[i + 1:].split(space)
+    alternatives = head[-1], tail[0]
+    head, tail = space.join(head[:-1]), space.join(tail[1:])
+    return slash_product([space.join([head, word, tail]).strip(space) for word in alternatives])
+
+
+def roundf(x, precision=0):
+    """Like round but works with large exponents in floats and high precision
+    Based on http://stackoverflow.com/a/6539677/623735
+    >>> 234042163./(2**24)
+    13.94999998807...
+    >>> roundf(234042163./(2**24), 5)
+    13.95
+    >>> roundf(1234.1234e-123, 5)
+    1.2341e-120
+    >>> roundf(1234.1234e-123, 3)
+    1.23e-120
+    >>> roundf(1234123.1234, 5)
+    1234100.0
+    >>> roundf(1234123.1234, 3)
