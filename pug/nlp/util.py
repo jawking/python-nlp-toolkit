@@ -2836,4 +2836,17 @@ class DatetimeEncoder(json.JSONEncoder):
     #     # self.clip = False
 
     def default(self, obj):
-        if isinstance(obj, tuple(list(DATETIME_TYPES) + [pd.tslib.Timestamp]))
+        if isinstance(obj, tuple(list(DATETIME_TYPES) + [pd.tslib.Timestamp])):
+            if getattr(self, 'clip', False):
+                return int(mktime(clip_datetime(make_tz_aware(obj)).timetuple()))
+            else:
+                return int(mktime(make_tz_aware(obj).timetuple()))
+        return json.JSONEncoder.default(self, obj)
+
+
+class PrettyDict(OrderedDict):
+    """Improved repr() for an OrderedDict, looks like dict but consistently ordered and prettier ;)
+    Arguments:
+      clip (bool): Whether to clip dates to a valid pd.tslib.Timestamp range
+      indent (int or None): Whether and how deep to insert LF + spaces to prettify string
+                            Passed directly through to json.dumps which interpret
