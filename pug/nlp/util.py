@@ -2819,3 +2819,21 @@ def roundf(x, precision=0):
     >>> roundf(1234123.1234, 5)
     1234100.0
     >>> roundf(1234123.1234, 3)
+    1230000.0
+    """
+    if precision > 0:
+        return float("{:.{}e}".format(x, precision - 1))
+    return x
+
+
+class DatetimeEncoder(json.JSONEncoder):
+
+    # def __init__(self, skipkeys=False, ensure_ascii=True,
+    #              check_circular=True, allow_nan=True, sort_keys=False,
+    #              indent=None, separators=None, encoding='utf-8', default=None):
+    # def __init__(self, *args, **kwargs):  # , **kwargs):
+    #     super(DatetimeEncoder, self).__init__(self, *args, **kwargs)
+    #     # self.clip = False
+
+    def default(self, obj):
+        if isinstance(obj, tuple(list(DATETIME_TYPES) + [pd.tslib.Timestamp]))
