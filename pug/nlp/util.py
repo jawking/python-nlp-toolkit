@@ -2849,4 +2849,14 @@ class PrettyDict(OrderedDict):
     Arguments:
       clip (bool): Whether to clip dates to a valid pd.tslib.Timestamp range
       indent (int or None): Whether and how deep to insert LF + spaces to prettify string
-                            Passed directly through to json.dumps which interpret
+                            Passed directly through to json.dumps which interprets it like this:
+                              `None`: minify the json (no line breaks or indentation whitespace
+                              `False` or `0`: line breaks between dict entries, but no indentation
+                              `1`+: number of spaces at begginning of each line for each level dict nesting
+      precision (int or None): precision of serialized floats
+
+    DatetimeEncoder behaves differently on travis (Time Zone?)
+    # FIXME: check the values and fix the discrepancy in default timezone for travis and local
+    >>> from pug.nlp.tutil import make_tz_aware
+    >>> PrettyDict([('scif', make_tz_aware(datetime.datetime(3015, 10, 21))),
+    ...             ('btfd', pd.tslib.
