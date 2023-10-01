@@ -2901,4 +2901,7 @@ class PrettyDict(OrderedDict):
             self.encoder.clip = self.clip
             # FIXME: will fail on unserializable objects like django.db.models.base.ModelState
             #        so need to optionally ignore '_state' keys in django models __dict__ attr
-            return json.dumps(PrettyDict([(k, floa
+            return json.dumps(PrettyDict([(k, float(roundf(v, self.precision)) if (self.precision and isinstance(v, FLOAT_TYPES)) else v)
+                              for k, v in viewitems(self)]), indent=self.indent, cls=self.encoder)
+        finally:
+            del _repr_running[call_key]
