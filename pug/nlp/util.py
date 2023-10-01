@@ -2877,4 +2877,20 @@ class PrettyDict(OrderedDict):
     def __init__(self, *args, **kwargs):
         clip = kwargs.pop('clip', kwargs.pop('clip_datetime', False))
         encoder = DatetimeEncoder
-        # self.encoder.clip 
+        # self.encoder.clip = self.clip
+        indent = kwargs.pop('indent', 2)
+        precision = kwargs.pop('precision', kwargs.pop('digits', 15))
+        super(PrettyDict, self).__init__(*args, **kwargs)
+        self.indent, self.precision, self.clip, self.encoder = indent, precision, clip, encoder
+
+    def __repr__(self, _repr_running={}):
+        'hod.__repr__() <==> repr(hod)'
+        call_key = id(self), _get_ident()
+        if call_key in _repr_running:
+            return '...'
+        _repr_running[call_key] = 1
+        try:
+            if not self:
+                return '{}'
+            # WARN: creates a duplicate PrettyDict temporarily doubling memory consumption!
+            # WARN: Fails on encoder.__init__ 
