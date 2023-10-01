@@ -2893,4 +2893,12 @@ class PrettyDict(OrderedDict):
             if not self:
                 return '{}'
             # WARN: creates a duplicate PrettyDict temporarily doubling memory consumption!
-            # WARN: Fails on encoder.__init__ 
+            # WARN: Fails on encoder.__init__ in dumps with `sort_keys=sort_keys, **kw).encode(obj)`
+            #       due to duplicate `skipkeys` arg (must be positional **and** kwarg in dumps to cause this)
+            #       dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True,
+            #                  allow_nan=True, cls=None, indent=None, separators=None,
+            #                  encoding='utf-8', default=None, sort_keys=False, **kw)
+            self.encoder.clip = self.clip
+            # FIXME: will fail on unserializable objects like django.db.models.base.ModelState
+            #        so need to optionally ignore '_state' keys in django models __dict__ attr
+            return json.dumps(PrettyDict([(k, floa
