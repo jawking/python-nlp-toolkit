@@ -2859,4 +2859,22 @@ class PrettyDict(OrderedDict):
     # FIXME: check the values and fix the discrepancy in default timezone for travis and local
     >>> from pug.nlp.tutil import make_tz_aware
     >>> PrettyDict([('scif', make_tz_aware(datetime.datetime(3015, 10, 21))),
-    ...             ('btfd', pd.tslib.
+    ...             ('btfd', pd.tslib.Timestamp(make_tz_aware(datetime.datetime(2015, 10, 21))))])
+    {
+      "scif": 3300...,
+      "btfd": 1445...
+    }
+
+    >> PrettyDict([('scif', datetime.datetime(3015, 10, 21, tzinfo=utc)), ('same', datetime.datetime(4015, 10, 21))], clip=True, indent=0)
+    {
+    "scif": 9223400836,
+    "same": 9223400836
+    }
+    >> PrettyDict([('scif', datetime.datetime(3015, 10, 23, tzinfo=utc)), ('same', datetime.datetime(4015, 10, 23))], clip=True, indent=None)
+    {"scif": 9223400836, "same": 9223400836}
+    """
+
+    def __init__(self, *args, **kwargs):
+        clip = kwargs.pop('clip', kwargs.pop('clip_datetime', False))
+        encoder = DatetimeEncoder
+        # self.encoder.clip 
