@@ -47,4 +47,4 @@ ignorable_suffixes = set(
 
 
 def synonyms(word):
-    return thesaurus.get(word.lower().st
+    return thesaurus.get(word.lower().strip(), [])
