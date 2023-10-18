@@ -3,4 +3,20 @@
 Uses the python unittest module to test this app with `python -m unittest pug.nlp`.
 """
 from __future__ import division, print_function, absolute_import
-from future imp
+from future import standard_library
+standard_library.install_aliases()  # noqa
+# from django.test import TestCase
+from unittest import TestCase, main
+import doctest
+from pug.nlp import util, http, regex, penn_treebank_tokenizer, detector_morse
+
+
+class NLPDocTest(TestCase):
+
+    def test_module(self, module=None):
+        if module:
+            failure_count, test_count = doctest.testmod(
+                module, optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE, raise_on_error=False, verbose=True)
+            msg = "Ran {0} tests in {3} and {1} passed ({2} failed)".format(test_count, test_count-failure_count, failure_count, module.__file__)
+            print(msg)
+            if failur
